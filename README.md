@@ -18,6 +18,21 @@ python3 -m http.server 8123 --directory .
 # then open http://localhost:8123/
 ```
 
+## Adding the APK download
+
+The **Download APK** and **Get the app** buttons already point to `tafcast.apk`
+(with a `download` attribute). To make the download live:
+
+1. Copy the built APK into this folder, named exactly `tafcast.apk`.
+2. Commit and push:
+   ```sh
+   git add tafcast.apk && git commit -m "Add APK" && git push
+   ```
+3. It will be downloadable at `https://supermarketpropaganda.github.io/tafcast/tafcast.apk`.
+
+Keep the file under 100 MB (GitHub's per-file limit). To ship a new version,
+overwrite `tafcast.apk` and push again.
+
 ## To do
 
-- Replace the placeholder `href="#"` on the **Download APK** and **Google Play** buttons with the real links.
+- Add the real **Google Play** URL (the button at `href="#"` in the hero is still a placeholder).
