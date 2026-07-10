@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tafcast.github.io/sitemap.xml

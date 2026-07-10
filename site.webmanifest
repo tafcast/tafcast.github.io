@@ -1,0 +1,12 @@
+{
+  "name": "TAFCast",
+  "short_name": "TAFCast",
+  "description": "Free aviation weather briefings for pilots — METAR, TAF, wind, crosswind and NOTAMs.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06111c",
+  "theme_color": "#06111c",
+  "icons": [
+    { "src": "/icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
