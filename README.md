@@ -2,7 +2,7 @@
 
 Static marketing/landing page for the TAFCast Android app, hosted on GitHub Pages.
 
-**Live:** https://supermarketpropaganda.github.io/tafcast/
+**Live:** https://tafcast.github.io/
 
 ## What's here
 
@@ -28,7 +28,7 @@ The **Download APK** and **Get the app** buttons already point to `tafcast.apk`
    ```sh
    git add tafcast.apk && git commit -m "Add APK" && git push
    ```
-3. It will be downloadable at `https://supermarketpropaganda.github.io/tafcast/tafcast.apk`.
+3. It will be downloadable at `https://tafcast.github.io/tafcast.apk`.
 
 Keep the file under 100 MB (GitHub's per-file limit). To ship a new version,
 overwrite `tafcast.apk` and push again.
