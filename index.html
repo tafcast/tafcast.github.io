@@ -103,6 +103,10 @@
     <a href="#widget" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Widget</a>
     <a href="#advisory" style="color:#e5901a" style-hover="color:#ffc46b;text-decoration:none">Advisory</a>
     <a href="#faq" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">FAQ</a>
+    <span role="group" aria-label="Language / Idioma" style="display:inline-flex;align-items:center;gap:2px;border:1px solid rgba(121,182,255,.35);border-radius:999px;padding:2px">
+      <button id="lang-en" type="button" onclick="setLang('en')" aria-pressed="true" style="border:none;cursor:pointer;background:#0a84ff;color:#ffffff;font-family:inherit;font-weight:700;font-size:11px;letter-spacing:.08em;padding:5px 9px;border-radius:999px">EN</button>
+      <button id="lang-pt" type="button" onclick="setLang('pt')" aria-pressed="false" style="border:none;cursor:pointer;background:transparent;color:#9fbdd9;font-family:inherit;font-weight:700;font-size:11px;letter-spacing:.08em;padding:5px 9px;border-radius:999px">PT</button>
+    </span>
     <a href="tafcast.apk" download style="display:inline-block;background:#0a84ff;color:#ffffff;font-weight:700;padding:9px 16px;border-radius:999px;letter-spacing:.1em" style-hover="background:#3fa0ff;color:#ffffff;text-decoration:none;transform:translateY(-1px)">Get the app</a>
   </nav>
 </header>
@@ -686,5 +690,190 @@
   }
 })();
 </script>
+<script>
+(function () {
+  "use strict";
+  // English source text -> Portugal Portuguese. Aviation codes (METAR/TAF/VFR/ICAO…) are intentionally left untranslated.
+  var PT = {
+    "Free": "Grátis",
+    "Advisory": "Aviso",
+    "Get the app": "Obter a app",
+    "By pilots, for pilots": "Por pilotos, para pilotos",
+    "The sky,": "O céu,",
+    "briefed.": "resumido.",
+    "METAR, TAF, a 24-hour wind outlook, runway crosswind and NOTAMs for your airports — one glance, live data, cached on your phone so it opens before the engine does. Free, forever.": "METAR, TAF, previsão de vento a 24 horas, vento cruzado na pista e NOTAM para os teus aeródromos — num relance, dados em tempo real, em cache no telemóvel para abrir antes do motor. Grátis, para sempre.",
+    "Download APK ↓": "Descarregar APK ↓",
+    "See how it works ↓": "Ver como funciona ↓",
+
+    "01 — The app": "01 — A app",
+    "The whole picture, before you taxi.": "O panorama completo, antes de taxiar.",
+    "Everything a pre-flight glance needs, as cards —": "Tudo o que um olhar pré-voo precisa, em cartões —",
+    "islands": "ilhas",
+    "— you can reorder your way. Decoded when you want it, raw when you trust your eyes.": "— que reordenas à tua maneira. Descodificado quando queres, em bruto quando confias nos teus olhos.",
+    "DECODED": "LEGÍVEL",
+    "RAW": "BRUTO",
+    "WIND": "VENTO",
+    "VISIBILITY": "VISIBILIDADE",
+    "TEMP / DEW": "TEMP / ORV.",
+    "CATEGORY · VFR": "CATEGORIA · VFR",
+    "Straight from NOAA / aviationweather.gov. No paraphrasing.": "Diretamente do NOAA / aviationweather.gov. Sem paráfrases.",
+    "TAF Timeline · LPBJ": "Linha temporal TAF · LPBJ",
+    "24h Wind Outlook · LPBJ": "Vento nas próximas 24h · LPBJ",
+    "Model winds from Open-Meteo, hour by hour — see the afternoon breeze coming.": "Vento do modelo Open-Meteo, hora a hora — vê a brisa da tarde a chegar.",
+    "Runway Wind · RWY 01": "Vento na pista · RWY 01",
+    "HEADWIND": "DE FRENTE",
+    "CROSSWIND": "CRUZADO",
+    "8 kt ← left": "8 kt ← esq.",
+    "Components computed for every runway at your field. Know your limits before you look them up.": "Componentes calculados para todas as pistas do teu campo. Conhece os teus limites antes de os teres de consultar.",
+    "Pulled from FAA and Autorouter, filtered to your fields. No 40-page briefing pack.": "Obtidos da FAA e do Autorouter, filtrados para os teus campos. Sem calhamaços de 40 páginas.",
+    "Islands · Your order": "Ilhas · A tua ordem",
+    "Hold, drag, done. Your briefing reads the way you fly.": "Prime, arrasta, pronto. O teu briefing lê-se como voas.",
+    "Conditions": "Condições",
+    "Runway wind": "Vento na pista",
+    "DRAGGING…": "A ARRASTAR…",
+    "TAF timeline": "Linha temporal TAF",
+
+    "02 — Ethos": "02 — Filosofia",
+    "Free to fly.": "Livre para voar.",
+    "Free to use.": "Livre para usar.",
+    "No subscription. No ads.": "Sem subscrição. Sem anúncios.",
+    "Every feature, every airport, 0 €. Not a trial — the deal.": "Todas as funções, todos os aeródromos, 0 €. Não é um teste — é o acordo.",
+    "No account. No lock-in.": "Sem conta. Sem dependência.",
+    "Install, add airports, fly. Your list lives on your phone, not our server.": "Instala, adiciona aeródromos, voa. A tua lista vive no teu telemóvel, não no nosso servidor.",
+    "Offline-first.": "Offline primeiro.",
+    "Every briefing is cached on device. Opens instantly at a field with one bar of signal — or none.": "Cada briefing fica em cache no dispositivo. Abre num instante num campo com uma barra de sinal — ou nenhuma.",
+    "Any airport, your order.": "Qualquer aeródromo, a tua ordem.",
+    "Europe, US, Brazil — add any field, drag your islands into the order you brief.": "Europa, EUA, Brasil — adiciona qualquer campo e arrasta as tuas ilhas para a ordem por que fazes o briefing.",
+
+    "Your ramp check, on your home screen.": "A tua verificação de rampa, no ecrã inicial.",
+    "A resizable Android widget with the latest TAF and a": "Um widget Android redimensionável com o TAF mais recente e um painel",
+    "panel from the newest METAR — paging through every airport you've saved. Try the arrows.": "do METAR mais recente — a percorrer todos os aeródromos que guardaste. Experimenta as setas.",
+    "RESIZABLE · AUTO-REFRESH · TAPS OPEN THE FULL BRIEFING": "REDIMENSIONÁVEL · ATUALIZAÇÃO AUTOMÁTICA · TOCA PARA ABRIR O BRIEFING COMPLETO",
+
+    "04 — Advisory TAF · Signature feature": "04 — TAF de aviso · Função emblemática",
+    "No station?": "Sem estação?",
+    "Still a picture.": "Ainda assim, um retrato.",
+    "Small Portuguese aerodromes often have no METAR, no TAF — no official weather at all. TAFCast builds a model-based": "Muitos aeródromos portugueses pequenos não têm METAR nem TAF — não têm meteorologia oficial nenhuma. O TAFCast constrói, com base num modelo, um",
+    "TAF from the nearest IPMA automatic-station observations, so you're not flying into a blank.": "TAF a partir das observações da estação automática do IPMA mais próxima, para não voares às cegas.",
+    "MODEL-BASED · NEAREST IPMA STATION 14 KM": "COM BASE EM MODELO · ESTAÇÃO IPMA MAIS PRÓXIMA 14 KM",
+    "Advisory — illustrative only": "Aviso — apenas ilustrativo",
+    "Never for flight decisions": "Nunca para decisões de voo",
+    "Computer-generated and it may be wrong. It is clearly labelled, always. Verify official sources before every flight — an advisory TAF is a picture, not a briefing.": "Gerado por computador e pode estar errado. É sempre claramente identificado. Verifica as fontes oficiais antes de cada voo — um TAF de aviso é um retrato, não um briefing.",
+
+    "Straight answers.": "Respostas diretas.",
+    "Where does the data come from — and how fresh is it?": "De onde vêm os dados — e quão recentes são?",
+    "METAR and TAF come from NOAA / aviationweather.gov, the 24-hour wind outlook from Open-Meteo, NOTAMs from FAA and Autorouter, and advisory TAFs are derived from IPMA automatic-station observations. Data refreshes every time you open the app or pull to refresh, and every card shows the age of what you are looking at.": "O METAR e o TAF vêm do NOAA / aviationweather.gov, a previsão de vento a 24 horas do Open-Meteo, os NOTAM da FAA e do Autorouter, e os TAF de aviso derivam de observações de estações automáticas do IPMA. Os dados são atualizados sempre que abres a app ou puxas para atualizar, e cada cartão mostra a idade daquilo que estás a ver.",
+    "Is it really free?": "É mesmo grátis?",
+    "Yes. No subscription, no ads, no account, no locked \"pro\" tier. Every feature works for every airport, at no cost. That is the whole deal.": "Sim. Sem subscrição, sem anúncios, sem conta, sem nível «pro» bloqueado. Todas as funções funcionam para todos os aeródromos, sem custos. É esse o acordo, por inteiro.",
+    "What happens when I have no signal?": "O que acontece quando não tenho sinal?",
+    "Every briefing is cached on your device the moment it loads. Offline, TAFCast opens instantly with the last data it fetched, clearly timestamped so you know exactly how old it is.": "Cada briefing fica em cache no teu dispositivo no momento em que carrega. Offline, o TAFCast abre num instante com os últimos dados obtidos, claramente datados para saberes exatamente quão antigos são.",
+    "What is an advisory TAF?": "O que é um TAF de aviso?",
+    "For small Portuguese aerodromes with no official weather station, TAFCast generates a model-based forecast from the nearest IPMA automatic-station observations. It is always labelled ADVISORY, it is illustrative only, it may be wrong, and it must never be used for flight decisions. Always verify official sources.": "Para pequenos aeródromos portugueses sem estação meteorológica oficial, o TAFCast gera uma previsão com base num modelo a partir das observações da estação automática do IPMA mais próxima. É sempre identificado como ADVISORY, é apenas ilustrativo, pode estar errado e nunca deve ser usado para decisões de voo. Verifica sempre as fontes oficiais.",
+    "Which airports can I add?": "Que aeródromos posso adicionar?",
+    "Any airport with an ICAO identifier across Europe, the United States, and Brazil — plus the Portuguese aerodromes covered by advisory TAFs. Add as many as you like and drag them into your own order.": "Qualquer aeródromo com identificador ICAO na Europa, nos Estados Unidos e no Brasil — além dos aeródromos portugueses cobertos pelos TAF de aviso. Adiciona quantos quiseres e arrasta-os para a tua própria ordem.",
+    "Is there an iOS version?": "Existe versão para iOS?",
+    "Not yet. TAFCast is Android-first, available as a direct APK download and on Google Play. iOS is on the wish list.": "Ainda não. O TAFCast é Android em primeiro lugar, disponível como descarga direta de APK e no Google Play. O iOS está na lista de desejos.",
+    "Is TAFCast certified or official?": "O TAFCast é certificado ou oficial?",
+    "No. TAFCast is not an official MET or AIS service, is not certified by any aviation authority, and is not for navigation or flight planning. It is a situational-awareness tool. The pilot in command is always responsible for obtaining an official briefing.": "Não. O TAFCast não é um serviço oficial MET ou AIS, não é certificado por nenhuma autoridade aeronáutica e não se destina a navegação ou planeamento de voo. É uma ferramenta de consciência situacional. O piloto comandante é sempre responsável por obter um briefing oficial.",
+
+    "06 — The fine print": "06 — Letras miudinhas",
+    "Short, honest, readable.": "Curto, honesto, legível.",
+    "Privacy Policy": "Política de Privacidade",
+    "EFFECTIVE 9 JULY 2026 · APPLIES TO THE TAFCAST ANDROID APP": "EM VIGOR DESDE 9 DE JULHO DE 2026 · APLICA-SE À APP ANDROID TAFCAST",
+    "No accounts, no identity.": "Sem contas, sem identidade.",
+    "TAFCast has no sign-up, no login, and no user profiles. We do not know who you are.": "O TAFCast não tem registo, início de sessão nem perfis de utilizador. Não sabemos quem és.",
+    "No personal data collected.": "Nenhum dado pessoal recolhido.",
+    "TAFCast does not collect, store, transmit, sell, or share any personal data. There are no analytics SDKs, no advertising SDKs, and no trackers in the app.": "O TAFCast não recolhe, armazena, transmite, vende nem partilha quaisquer dados pessoais. Não há SDK de análise, nem SDK de publicidade, nem rastreadores na app.",
+    "Your data stays on your device.": "Os teus dados ficam no teu dispositivo.",
+    "Your list of airports, your card order, and all cached weather data (METAR, TAF, wind forecasts, NOTAMs) are stored locally on your device only. Uninstalling the app deletes them.": "A tua lista de aeródromos, a ordem dos cartões e todos os dados meteorológicos em cache (METAR, TAF, previsões de vento, NOTAM) são guardados apenas localmente no teu dispositivo. Desinstalar a app elimina-os.",
+    "Network requests.": "Pedidos de rede.",
+    "To fetch weather, the app contacts public data sources — NOAA / aviationweather.gov (METAR and TAF), Open-Meteo (wind forecasts), IPMA (automatic-station observations used for advisory TAFs), and FAA / Autorouter (NOTAMs). These requests contain only the airport identifiers or coordinates needed to answer them. Those services may keep standard server logs (such as IP address) under their own privacy policies.": "Para obter a meteorologia, a app contacta fontes de dados públicas — NOAA / aviationweather.gov (METAR e TAF), Open-Meteo (previsões de vento), IPMA (observações de estações automáticas usadas nos TAF de aviso) e FAA / Autorouter (NOTAM). Estes pedidos contêm apenas os identificadores ou coordenadas dos aeródromos necessários para lhes responder. Esses serviços podem manter registos de servidor habituais (como o endereço IP) ao abrigo das suas próprias políticas de privacidade.",
+    "Permissions.": "Permissões.",
+    "The app requests Internet access and network-state access only — no location, no contacts, no storage beyond its own cache.": "A app pede apenas acesso à Internet e ao estado da rede — sem localização, sem contactos, sem armazenamento para além da sua própria cache.",
+    "Children.": "Crianças.",
+    "TAFCast collects no data from anyone, including children.": "O TAFCast não recolhe dados de ninguém, incluindo crianças.",
+    "Changes and contact.": "Alterações e contacto.",
+    "Updates to this policy will be posted on this page. Questions:": "As atualizações desta política serão publicadas nesta página. Questões:",
+
+    "Terms of Use": "Termos de Utilização",
+    "EFFECTIVE 9 JULY 2026 · READ BEFORE FLYING": "EM VIGOR DESDE 9 DE JULHO DE 2026 · LER ANTES DE VOAR",
+    "Acceptance.": "Aceitação.",
+    "By installing or using TAFCast you agree to these terms. If you do not agree, do not use the app.": "Ao instalar ou usar o TAFCast, aceitas estes termos. Se não concordares, não uses a app.",
+    "Not an official source.": "Não é uma fonte oficial.",
+    "TAFCast is": "O TAFCast",
+    "not": "não",
+    "an official meteorological or aeronautical information service. It is not certified, approved, or endorsed by any aviation authority, and it must not be used for navigation or as a primary means of flight planning. It is a situational-awareness tool only.": "é um serviço oficial de informação meteorológica ou aeronáutica. Não é certificado, aprovado nem endossado por qualquer autoridade aeronáutica e não pode ser usado para navegação nem como meio principal de planeamento de voo. É apenas uma ferramenta de consciência situacional.",
+    "Advisory TAFs.": "TAF de aviso.",
+    "Advisory TAFs are computer-generated estimates for aerodromes without official forecasts. They are illustrative only, may be wrong, and must never be used for flight decisions. Always obtain and verify an official briefing.": "Os TAF de aviso são estimativas geradas por computador para aeródromos sem previsões oficiais. São apenas ilustrativos, podem estar errados e nunca devem ser usados para decisões de voo. Obtém e verifica sempre um briefing oficial.",
+    "Pilot in command.": "Piloto comandante.",
+    "The pilot in command is always solely responsible for the safe conduct of every flight, including obtaining official weather, NOTAM, and aeronautical information from certified sources.": "O piloto comandante é sempre o único responsável pela condução segura de cada voo, incluindo a obtenção de meteorologia, NOTAM e informação aeronáutica oficiais a partir de fontes certificadas.",
+    "No warranty.": "Sem garantia.",
+    "TAFCast is provided \"as is\", without warranty of any kind. Data may be delayed, incomplete, or incorrect. To the maximum extent permitted by law, the developers accept no liability for any loss or damage arising from use of the app.": "O TAFCast é fornecido «tal como está», sem garantia de qualquer tipo. Os dados podem estar atrasados, incompletos ou incorretos. Na máxima medida permitida por lei, os programadores não aceitam qualquer responsabilidade por perdas ou danos decorrentes do uso da app.",
+    "Changes.": "Alterações.",
+    "These terms may be updated from time to time; continued use after an update constitutes acceptance.": "Estes termos podem ser atualizados periodicamente; a utilização continuada após uma atualização constitui aceitação.",
+
+    "· By pilots, for pilots": "· Por pilotos, para pilotos",
+    "TAFCast is not an official MET or AIS service and is not certified for navigation or flight planning. Situational awareness only — the pilot in command is always responsible.": "O TAFCast não é um serviço oficial MET ou AIS e não é certificado para navegação ou planeamento de voo. Apenas consciência situacional — o piloto comandante é sempre o responsável.",
+    "The app": "A app",
+    "Free and yours": "Grátis e teu",
+    "Advisory TAF": "TAF de aviso",
+    "Privacy": "Privacidade",
+    "Terms": "Termos",
+    "© 2026 TAFCAST · CLEAR SKIES ✈": "© 2026 TAFCAST · CÉUS LIMPOS ✈"
+  };
+
+  var TITLE = { en: document.title, pt: "TAFCast — O céu, resumido." };
+  var descEl = document.querySelector('meta[name="description"]');
+  var DESC = {
+    en: descEl ? descEl.getAttribute("content") : "",
+    pt: "O TAFCast é uma app Android gratuita para pilotos: METAR, TAF, previsão de vento a 24 horas, vento cruzado na pista e NOTAM para todos os aeródromos que voas — dados em tempo real, em cache no telemóvel. Grátis, para sempre."
+  };
+
+  function norm(s) { return s.replace(/ /g, " ").replace(/\s+/g, " ").trim(); }
+
+  var reg = [];
+  function collect(node) {
+    var c = node.childNodes, i, n;
+    for (i = 0; i < c.length; i++) {
+      n = c[i];
+      if (n.nodeType === 3) {
+        var raw = n.nodeValue || "";
+        var key = norm(raw);
+        if (key && Object.prototype.hasOwnProperty.call(PT, key)) {
+          var lead = (raw.match(/^\s*/) || [""])[0];
+          var trail = (raw.match(/\s*$/) || [""])[0];
+          reg.push({ node: n, en: raw, pt: lead + PT[key] + trail });
+        }
+      } else if (n.nodeType === 1) {
+        var tag = (n.tagName || "").toUpperCase();
+        if (tag !== "SCRIPT" && tag !== "STYLE") collect(n);
+      }
+    }
+  }
+  collect(document.body);
+
+  function paintButtons(lang) {
+    var en = document.getElementById("lang-en"), pt = document.getElementById("lang-pt");
+    if (en) { en.style.background = lang === "en" ? "#0a84ff" : "transparent"; en.style.color = lang === "en" ? "#ffffff" : "#9fbdd9"; en.setAttribute("aria-pressed", lang === "en" ? "true" : "false"); }
+    if (pt) { pt.style.background = lang === "pt" ? "#0a84ff" : "transparent"; pt.style.color = lang === "pt" ? "#ffffff" : "#9fbdd9"; pt.setAttribute("aria-pressed", lang === "pt" ? "true" : "false"); }
+  }
+
+  window.setLang = function (lang) {
+    lang = (lang === "pt") ? "pt" : "en";
+    for (var i = 0; i < reg.length; i++) { reg[i].node.nodeValue = (lang === "pt") ? reg[i].pt : reg[i].en; }
+    document.documentElement.setAttribute("lang", lang === "pt" ? "pt-PT" : "en");
+    document.title = TITLE[lang];
+    if (descEl) descEl.setAttribute("content", DESC[lang]);
+    paintButtons(lang);
+    try { localStorage.setItem("tafcast_lang", lang); } catch (e) {}
+  };
+
+  var saved;
+  try { saved = localStorage.getItem("tafcast_lang"); } catch (e) {}
+  var initial = saved || (((navigator.language || "").toLowerCase().indexOf("pt") === 0) ? "pt" : "en");
+  window.setLang(initial);
+})();
+</script>
+
 </body>
 </html>
