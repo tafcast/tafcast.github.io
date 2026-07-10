@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TAFCast — The sky, briefed.</title>
+<meta name="description" content="METAR, TAF, a 24-hour wind outlook, runway crosswind and NOTAMs for your airports — one glance, live data, cached on your phone so it opens before the engine does. Free, forever. Android.">
+<meta name="theme-color" content="#06111c">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%230a84ff'/><path fill='%23fff' d='M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z'/></svg>">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TAFCast — The sky, briefed.">
+<meta property="og:description" content="METAR, TAF, a 24-hour wind outlook, runway crosswind and NOTAMs for your airports. Live data, cached on your phone. Free, forever. Android.">
+<meta name="twitter:card" content="summary">
+</head>
+<body>
+<style>
+  html { background:#06111c; scroll-behavior:smooth; }
+  body { margin:0; background:#06111c; color:#e8eef5; font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  a { color:#79b6ff; text-decoration:none; }
+  a:hover { color:#b3d4ff; }
+  ::selection { background:#0a84ff; color:#fff; }
+  :focus-visible { outline:2px solid #0a84ff; outline-offset:3px; border-radius:4px; }
+  @keyframes tc-marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+  @keyframes tc-rise { from { opacity:0; transform:translateY(46px); } to { opacity:1; transform:none; } }
+  @keyframes tc-bob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
+  @keyframes tc-blink { 0%,100% { opacity:1; } 50% { opacity:.45; } }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+  }
+</style>
+
+<!-- ============ NAV ============ -->
+<header style="position:fixed;top:0;left:0;right:0;z-index:90;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px clamp(16px,4vw,48px);background:rgba(6,17,28,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(20,58,87,.6)">
+  <a href="#top" aria-label="TAFCast home" style="display:flex;align-items:center;gap:10px;color:#fff;font-weight:900;letter-spacing:-0.02em;font-size:1.05rem">
+    <span style="display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#0a84ff;flex:none">
+      <svg viewBox="0 0 24 24" width="18" height="18" role="img" aria-label="TAFCast airplane logo"><path fill="#ffffff" d="M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z"></path></svg>
+    </span>
+    TAFCast
+  </a>
+  <nav aria-label="Sections" style="display:flex;align-items:center;gap:clamp(10px,2.4vw,26px);font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;flex-wrap:wrap;justify-content:flex-end">
+    <a href="#app" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">App</a>
+    <a href="#free" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Free</a>
+    <a href="#widget" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Widget</a>
+    <a href="#advisory" style="color:#e5901a" style-hover="color:#ffc46b;text-decoration:none">Advisory</a>
+    <a href="#faq" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">FAQ</a>
+    <a href="#" style="display:inline-block;background:#0a84ff;color:#ffffff;font-weight:700;padding:9px 16px;border-radius:999px;letter-spacing:.1em" style-hover="background:#3fa0ff;color:#ffffff;text-decoration:none;transform:translateY(-1px)">Get the app</a>
+  </nav>
+</header>
+
+<!-- ============ 1 · HERO ============ -->
+<section id="top" data-screen-label="Hero" style="position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(165deg,#243456,#5b4f6b 70%,#a8806a);overflow:hidden">
+  <div aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(1200px 600px at 80% -10%, rgba(10,132,255,.28), transparent 60%), radial-gradient(900px 500px at 10% 110%, rgba(229,144,26,.22), transparent 60%)"></div>
+  <div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(110px,16vh,160px) clamp(20px,5vw,72px) clamp(90px,12vh,140px);max-width:1440px;margin:0 auto;width:100%;box-sizing:border-box">
+    <div>
+      <p style="margin:0 0 22px;display:inline-flex;align-items:center;gap:10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#ffffff;background:rgba(6,17,28,.42);border:1px solid rgba(255,255,255,.22);padding:9px 16px;border-radius:999px;animation:tc-rise .9s cubic-bezier(.2,.6,.2,1) both">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="#ffffff" d="M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z"></path></svg>
+        By pilots, for pilots
+      </p>
+      <h1 data-parallax="0.06" style="margin:0;font-weight:900;text-transform:uppercase;letter-spacing:-0.045em;line-height:.88;font-size:clamp(3.4rem,11.5vw,10.5rem);color:#ffffff">
+        <span style="display:block;animation:tc-rise .9s cubic-bezier(.2,.6,.2,1) .08s both">The sky,</span>
+        <span style="display:block;color:transparent;-webkit-text-stroke:2.5px #ffffff;animation:tc-rise .9s cubic-bezier(.2,.6,.2,1) .2s both">briefed.</span>
+      </h1>
+      <p style="margin:28px 0 0;max-width:52ch;font-size:clamp(1.05rem,1.6vw,1.3rem);line-height:1.6;color:rgba(255,255,255,.92);animation:tc-rise .9s cubic-bezier(.2,.6,.2,1) .32s both">
+        METAR, TAF, a 24-hour wind outlook, runway crosswind and NOTAMs for your airports — one glance, live data, cached on your phone so it opens before the engine does. Free, forever.
+      </p>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:34px;animation:tc-rise .9s cubic-bezier(.2,.6,.2,1) .44s both">
+        <a href="#" style="display:inline-block;background:#06111c;color:#ffffff;font-weight:800;font-size:1rem;padding:17px 30px;border-radius:999px;letter-spacing:.01em;transition:transform .25s cubic-bezier(.2,.6,.2,1),box-shadow .25s" style-hover="color:#ffffff;text-decoration:none;transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.35)">Download APK ↓</a>
+        <a href="#" style="display:inline-block;border:2px solid rgba(255,255,255,.75);color:#ffffff;font-weight:800;font-size:1rem;padding:15px 28px;border-radius:999px;transition:transform .25s cubic-bezier(.2,.6,.2,1),background .25s" style-hover="color:#ffffff;text-decoration:none;background:rgba(255,255,255,.14);transform:translateY(-3px)">Google Play</a>
+        <a href="#app" style="color:#ffffff;font-weight:600;font-size:.95rem;border-bottom:1px solid rgba(255,255,255,.5);padding-bottom:2px" style-hover="color:#ffffff;text-decoration:none;border-bottom:1px solid #ffffff">See how it works ↓</a>
+      </div>
+    </div>
+
+    <!-- hero phone -->
+    <div data-parallax="-0.05" style="display:flex;justify-content:center">
+      <div style="animation:tc-bob 7s ease-in-out infinite">
+        <div role="img" aria-label="Phone mockup showing a TAFCast briefing card for Beja airport, VFR conditions" style="width:min(320px,84vw);border-radius:42px;border:3px solid rgba(255,255,255,.18);background:#0b1b2b;box-shadow:0 40px 90px rgba(3,10,18,.55);padding:14px;box-sizing:border-box">
+          <div style="border-radius:30px;background:#06111c;overflow:hidden">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#8fb3d9">
+              <span>19:04</span><span>LTE ▮▮▮</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:10px 18px 4px">
+              <span style="display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:#0a84ff;flex:none"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="#ffffff" d="M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z"></path></svg></span>
+              <strong style="font-size:.95rem;letter-spacing:-0.02em">TAFCast</strong>
+              <span style="margin-left:auto;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;color:#5d81a3">⟳ 18:59Z</span>
+            </div>
+            <div style="margin:10px 12px;background:#0b1b2b;border:1px solid #143a57;border-radius:20px;padding:16px">
+              <div style="display:flex;align-items:baseline;gap:8px">
+                <strong style="font-size:1.4rem;letter-spacing:-0.02em">LPBJ</strong>
+                <span style="color:#7d9cba;font-size:.85rem">Beja</span>
+                <span style="margin-left:auto;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;font-weight:700;letter-spacing:.12em;color:#2BB24C;background:rgba(43,178,76,.14);border:1px solid rgba(43,178,76,.5);padding:4px 9px;border-radius:999px">VFR</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:18px;margin-top:12px">
+                <span style="font-size:3.1rem;font-weight:900;letter-spacing:-0.04em;line-height:1">34°</span>
+                <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:1.8;color:#a9c1d8">
+                  <div>WIND 300°/9KT</div>
+                  <div>CAVOK · NSC</div>
+                  <div>QNH 1015</div>
+                </div>
+              </div>
+              <p style="margin:14px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;line-height:1.6;color:#5d81a3;word-break:break-word">METAR LPBJ 081900Z 30009KT CAVOK 34/07 Q1015</p>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+                <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#e5901a;border:1px solid rgba(229,144,26,.6);padding:3px 7px;border-radius:6px;flex:none">ADVISORY TAF</span>
+                <div style="display:flex;flex:1;height:8px;border-radius:99px;overflow:hidden">
+                  <span style="flex:8;background:#2BB24C"></span>
+                  <span style="flex:2;background:repeating-linear-gradient(45deg,#2BB24C,#2BB24C 3px,#17542a 3px,#17542a 6px)"></span>
+                  <span style="flex:14;background:#2BB24C;opacity:.75"></span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin:0 12px 16px">
+              <div style="display:flex;align-items:center;gap:10px;background:#0b1b2b;border:1px solid #143a57;border-radius:14px;padding:10px 14px;font-size:.8rem;color:#a9c1d8"><span style="color:#39597a">⠿</span><strong style="color:#e8eef5">LPEV</strong> Évora <span style="margin-left:auto;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;color:#2BB24C">VFR 29006KT</span></div>
+              <div style="display:flex;align-items:center;gap:10px;background:#0b1b2b;border:1px solid #143a57;border-radius:14px;padding:10px 14px;font-size:.8rem;color:#a9c1d8"><span style="color:#39597a">⠿</span><strong style="color:#e8eef5">LPPT</strong> Lisbon <span style="margin-left:auto;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;color:#2BB24C">VFR 33012KT</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- METAR marquee -->
+  <div aria-label="Live METAR ticker" style="position:relative;background:#06111c;border-top:1px solid #143a57;border-bottom:1px solid #143a57;overflow:hidden;padding:14px 0">
+    <div data-marquee="1" style="display:inline-flex;white-space:nowrap;animation:tc-marquee 26s linear infinite;will-change:transform">
+      <span style="display:inline-flex;align-items:center;gap:30px;padding-right:30px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(.85rem,1.4vw,1.05rem);letter-spacing:.06em;color:#79b6ff">
+        <span>LPBJ 081900Z 30009KT CAVOK 34/07 Q1015</span><span style="color:#e5901a">✈</span>
+        <span>LPPT 081900Z 33012KT CAVOK 29/12 Q1016</span><span style="color:#e5901a">✈</span>
+        <span>LPEV 081900Z 29006KT CAVOK 33/08 Q1015</span><span style="color:#e5901a">✈</span>
+        <span>LPCS 081900Z 35010KT 9999 FEW025 27/14 Q1016</span><span style="color:#e5901a">✈</span>
+        <span>KJFK 081851Z 24008KT 10SM FEW250 28/17 A2996</span><span style="color:#e5901a">✈</span>
+        <span>SBGL 081900Z 14006KT 9999 SCT020 26/20 Q1014</span><span style="color:#e5901a">✈</span>
+      </span>
+      <span aria-hidden="true" style="display:inline-flex;align-items:center;gap:30px;padding-right:30px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(.85rem,1.4vw,1.05rem);letter-spacing:.06em;color:#79b6ff">
+        <span>LPBJ 081900Z 30009KT CAVOK 34/07 Q1015</span><span style="color:#e5901a">✈</span>
+        <span>LPPT 081900Z 33012KT CAVOK 29/12 Q1016</span><span style="color:#e5901a">✈</span>
+        <span>LPEV 081900Z 29006KT CAVOK 33/08 Q1015</span><span style="color:#e5901a">✈</span>
+        <span>LPCS 081900Z 35010KT 9999 FEW025 27/14 Q1016</span><span style="color:#e5901a">✈</span>
+        <span>KJFK 081851Z 24008KT 10SM FEW250 28/17 A2996</span><span style="color:#e5901a">✈</span>
+        <span>SBGL 081900Z 14006KT 9999 SCT020 26/20 Q1014</span><span style="color:#e5901a">✈</span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · THE APP IN MOTION ============ -->
+<section id="app" data-screen-label="The app in motion" style="padding:clamp(90px,13vw,170px) clamp(20px,5vw,72px);max-width:1440px;margin:0 auto;box-sizing:border-box">
+  <p data-reveal style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#0a84ff">01 — The app</p>
+  <h2 data-reveal data-reveal-delay="80" style="margin:16px 0 18px;font-weight:900;text-transform:uppercase;letter-spacing:-0.035em;line-height:.94;font-size:clamp(2.6rem,7vw,5.6rem);color:#ffffff;max-width:16ch">The whole picture, before you taxi.</h2>
+  <p data-reveal data-reveal-delay="140" style="margin:0 0 clamp(36px,5vw,64px);max-width:58ch;color:#a9c1d8;font-size:clamp(1rem,1.4vw,1.2rem);line-height:1.65">Everything a pre-flight glance needs, as cards — <em style="font-style:normal;color:#e8eef5;font-weight:700">islands</em> — you can reorder your way. Decoded when you want it, raw when you trust your eyes.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:clamp(14px,2vw,24px)">
+
+    <!-- METAR card -->
+    <article data-reveal style="background:#0b1b2b;border:1px solid #143a57;border-radius:24px;padding:clamp(20px,3vw,30px);transition:transform .35s cubic-bezier(.2,.6,.2,1),border-color .35s" style-hover="transform:translateY(-6px);border-color:#2a5c8a">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
+        <h3 style="margin:0;font-size:.8rem;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;letter-spacing:.2em;text-transform:uppercase;color:#7d9cba">METAR · LPBJ</h3>
+        <div role="group" aria-label="Toggle decoded or raw METAR" style="display:flex;border:1px solid #143a57;border-radius:999px;overflow:hidden">
+          <button id="btn-decoded" type="button" onclick="setMetar(false)" style="border:none;cursor:pointer;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.12em;padding:8px 14px;background:#0a84ff;color:#ffffff;font-weight:700">DECODED</button>
+          <button id="btn-raw" type="button" onclick="setMetar(true)" style="border:none;cursor:pointer;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.12em;padding:8px 14px;background:transparent;color:#7d9cba;font-weight:700">RAW</button>
+        </div>
+      </div>
+      <div id="metar-decoded">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="background:#0f2438;border-radius:14px;padding:14px"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.16em;color:#5d81a3">WIND</div><div style="font-size:1.25rem;font-weight:800;margin-top:4px">300° / 9 kt</div></div>
+          <div style="background:#0f2438;border-radius:14px;padding:14px"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.16em;color:#5d81a3">VISIBILITY</div><div style="font-size:1.25rem;font-weight:800;margin-top:4px">CAVOK</div></div>
+          <div style="background:#0f2438;border-radius:14px;padding:14px"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.16em;color:#5d81a3">TEMP / DEW</div><div style="font-size:1.25rem;font-weight:800;margin-top:4px">34° / 7°</div></div>
+          <div style="background:#0f2438;border-radius:14px;padding:14px"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.16em;color:#5d81a3">QNH</div><div style="font-size:1.25rem;font-weight:800;margin-top:4px">1015 hPa</div></div>
+        </div>
+        <div style="margin-top:14px;display:inline-block;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:.14em;color:#2BB24C;background:rgba(43,178,76,.14);border:1px solid rgba(43,178,76,.5);padding:6px 12px;border-radius:999px">CATEGORY · VFR</div>
+      </div>
+      <div id="metar-raw" style="display:none">
+        <p style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(.95rem,1.6vw,1.15rem);line-height:1.8;color:#79b6ff;word-break:break-word;background:#0f2438;border-radius:14px;padding:18px">METAR LPBJ 081900Z 30009KT CAVOK 34/07 Q1015</p>
+        <p style="margin:14px 0 0;font-size:.85rem;color:#5d81a3">Straight from NOAA / aviationweather.gov. No paraphrasing.</p>
+      </div>
+    </article>
+
+    <!-- TAF timeline card -->
+    <article data-reveal data-reveal-delay="60" style="background:#0b1b2b;border:1px solid #143a57;border-radius:24px;padding:clamp(20px,3vw,30px);transition:transform .35s cubic-bezier(.2,.6,.2,1),border-color .35s" style-hover="transform:translateY(-6px);border-color:#2a5c8a">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
+        <h3 style="margin:0;font-size:.8rem;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;letter-spacing:.2em;text-transform:uppercase;color:#7d9cba">TAF Timeline · LPBJ</h3>
+        <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#e5901a;border:1px solid rgba(229,144,26,.6);padding:4px 8px;border-radius:6px">ADVISORY</span>
+      </div>
+      <div style="display:flex;height:56px;border-radius:14px;overflow:hidden;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;font-weight:700;letter-spacing:.08em">
+        <div style="flex:8;display:grid;place-items:center;background:rgba(43,178,76,.22);color:#7fe09a;border-right:1px solid #06111c">27005KT CAVOK</div>
+        <div style="flex:3;display:grid;place-items:center;background:repeating-linear-gradient(45deg,rgba(43,178,76,.22),rgba(43,178,76,.22) 5px,rgba(43,178,76,.08) 5px,rgba(43,178,76,.08) 10px);color:#7fe09a;border-right:1px solid #06111c">BECMG</div>
+        <div style="flex:13;display:grid;place-items:center;background:rgba(43,178,76,.14);color:#7fe09a">28010KT</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;color:#5d81a3"><span>06Z</span><span>12Z</span><span>18Z</span><span>00Z</span><span>06Z</span></div>
+      <p style="margin:16px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;line-height:1.7;color:#5d81a3;word-break:break-word">TAF LPBJ 090513Z 0906/1006 27005KT CAVOK BECMG 0914/0916 28010KT</p>
+    </article>
+
+    <!-- Wind outlook card -->
+    <article data-reveal data-reveal-delay="120" style="background:#0b1b2b;border:1px solid #143a57;border-radius:24px;padding:clamp(20px,3vw,30px);transition:transform .35s cubic-bezier(.2,.6,.2,1),border-color .35s" style-hover="transform:translateY(-6px);border-color:#2a5c8a">
+      <h3 style="margin:0 0 18px;font-size:.8rem;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;letter-spacing:.2em;text-transform:uppercase;color:#7d9cba">24h Wind Outlook · LPBJ</h3>
+      <div id="wind-bars" style="display:flex;align-items:flex-end;gap:3px;height:96px" role="img" aria-label="Bar chart of forecast wind speed over the next 24 hours, peaking at 12 knots mid-afternoon"></div>
+      <div id="wind-labels" style="display:flex;gap:3px;margin-top:6px"></div>
+      <p style="margin:14px 0 0;font-size:.85rem;color:#5d81a3">Model winds from Open-Meteo, hour by hour — see the afternoon breeze coming.</p>
+    </article>
+
+    <!-- Runway wind card -->
+    <article data-reveal data-reveal-delay="60" style="background:#0b1b2b;border:1px solid #143a57;border-radius:24px;padding:clamp(20px,3vw,30px);transition:transform .35s cubic-bezier(.2,.6,.2,1),border-color .35s" style-hover="transform:translateY(-6px);border-color:#2a5c8a">
+      <h3 style="margin:0 0 14px;font-size:.8rem;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;letter-spacing:.2em;text-transform:uppercase;color:#7d9cba">Runway Wind · RWY 01</h3>
+      <div style="display:flex;align-items:center;gap:clamp(14px,2vw,26px);flex-wrap:wrap">
+        <svg viewBox="0 0 120 120" width="146" height="146" role="img" aria-label="Compass dial showing runway 01 and wind from 300 degrees at 9 knots" style="flex:none">
+          <circle cx="60" cy="60" r="55" fill="#0f2438" stroke="#143a57" stroke-width="2"></circle>
+          <text x="60" y="12" text-anchor="middle" fill="#5d81a3" font-size="9" font-family="monospace">N</text>
+          <g transform="rotate(10 60 60)">
+            <rect x="53" y="16" width="14" height="88" rx="3" fill="#152c40" stroke="#2a4a66"></rect>
+            <line x1="60" y1="26" x2="60" y2="94" stroke="#3a5a78" stroke-width="2" stroke-dasharray="6 6"></line>
+            <text x="60" y="100" text-anchor="middle" fill="#8fb3d9" font-size="8" font-family="monospace">01</text>
+          </g>
+          <g transform="rotate(300 60 60)">
+            <line x1="60" y1="14" x2="60" y2="34" stroke="#0a84ff" stroke-width="3"></line>
+            <polygon points="60,42 53,31 67,31" fill="#0a84ff"></polygon>
+          </g>
+        </svg>
+        <div style="display:flex;flex-direction:column;gap:10px;min-width:150px;flex:1">
+          <div style="background:#0f2438;border-radius:14px;padding:12px 16px"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.16em;color:#5d81a3">HEADWIND</div><div style="font-size:1.35rem;font-weight:800;color:#2BB24C">+3 kt</div></div>
+          <div style="background:#0f2438;border-radius:14px;padding:12px 16px"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.16em;color:#5d81a3">CROSSWIND</div><div style="font-size:1.35rem;font-weight:800;color:#e5901a">8 kt ← left</div></div>
+        </div>
+      </div>
+      <p style="margin:14px 0 0;font-size:.85rem;color:#5d81a3">Components computed for every runway at your field. Know your limits before you look them up.</p>
+    </article>
+
+    <!-- NOTAMs card -->
+    <article data-reveal data-reveal-delay="120" style="background:#0b1b2b;border:1px solid #143a57;border-radius:24px;padding:clamp(20px,3vw,30px);transition:transform .35s cubic-bezier(.2,.6,.2,1),border-color .35s" style-hover="transform:translateY(-6px);border-color:#2a5c8a">
+      <h3 style="margin:0 0 16px;font-size:.8rem;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;letter-spacing:.2em;text-transform:uppercase;color:#7d9cba">NOTAMs · LPBJ</h3>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:#0f2438;border-radius:14px;padding:14px 16px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:1.7;color:#a9c1d8"><span style="color:#FF453A;font-weight:700">A0713/26</span> — RWY 01R/19L CLSD DLY 2200–0600</div>
+        <div style="background:#0f2438;border-radius:14px;padding:14px 16px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:1.7;color:#a9c1d8"><span style="color:#e5901a;font-weight:700">A0698/26</span> — CRANE 1.4NM SE ARP 380FT AMSL LGTD</div>
+      </div>
+      <p style="margin:14px 0 0;font-size:.85rem;color:#5d81a3">Pulled from FAA and Autorouter, filtered to your fields. No 40-page briefing pack.</p>
+    </article>
+
+    <!-- Islands card -->
+    <article data-reveal data-reveal-delay="180" style="background:#0b1b2b;border:1px solid #143a57;border-radius:24px;padding:clamp(20px,3vw,30px);transition:transform .35s cubic-bezier(.2,.6,.2,1),border-color .35s" style-hover="transform:translateY(-6px);border-color:#2a5c8a">
+      <h3 style="margin:0 0 6px;font-size:.8rem;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;letter-spacing:.2em;text-transform:uppercase;color:#7d9cba">Islands · Your order</h3>
+      <p style="margin:0 0 16px;font-size:.9rem;color:#a9c1d8">Hold, drag, done. Your briefing reads the way you fly.</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:12px;background:#0f2438;border:1px solid #143a57;border-radius:14px;padding:13px 16px;font-weight:700;font-size:.92rem"><span style="color:#39597a" aria-hidden="true">⠿</span> Conditions <span style="margin-left:auto;color:#39597a">›</span></div>
+        <div style="display:flex;align-items:center;gap:12px;background:#143a57;border:1px solid #0a84ff;border-radius:14px;padding:13px 16px;font-weight:700;font-size:.92rem;transform:rotate(-1.6deg) translateX(10px);box-shadow:0 14px 30px rgba(3,10,18,.5)"><span style="color:#79b6ff" aria-hidden="true">⠿</span> Runway wind <span style="margin-left:auto;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;color:#79b6ff">DRAGGING…</span></div>
+        <div style="display:flex;align-items:center;gap:12px;background:#0f2438;border:1px solid #143a57;border-radius:14px;padding:13px 16px;font-weight:700;font-size:.92rem"><span style="color:#39597a" aria-hidden="true">⠿</span> TAF timeline <span style="margin-left:auto;color:#39597a">›</span></div>
+        <div style="display:flex;align-items:center;gap:12px;background:#0f2438;border:1px solid #143a57;border-radius:14px;padding:13px 16px;font-weight:700;font-size:.92rem"><span style="color:#39597a" aria-hidden="true">⠿</span> NOTAMs <span style="margin-left:auto;color:#39597a">›</span></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ 3 · FREE & YOURS ============ -->
+<section id="free" data-screen-label="Free and yours" style="background:#0a84ff;color:#06111c;overflow:hidden">
+  <div style="max-width:1440px;margin:0 auto;padding:clamp(90px,13vw,170px) clamp(20px,5vw,72px) clamp(60px,8vw,100px);box-sizing:border-box">
+    <p data-reveal style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#06111c;font-weight:700">02 — Ethos</p>
+    <h2 data-reveal data-reveal-delay="80" style="margin:16px 0 0;font-weight:900;text-transform:uppercase;letter-spacing:-0.04em;line-height:.9;font-size:clamp(3rem,9.5vw,8.5rem);color:#06111c">
+      Free to fly.<br>
+      <span style="color:transparent;-webkit-text-stroke:2.5px #06111c">Free to use.</span>
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:2px;margin-top:clamp(40px,6vw,72px);background:rgba(6,17,28,.25);border-radius:22px;overflow:hidden">
+      <div data-reveal style="background:#0a84ff;padding:26px 24px"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-weight:700;font-size:12px;letter-spacing:.18em">01</div><h3 style="margin:10px 0 8px;font-size:1.35rem;font-weight:900;letter-spacing:-0.02em">No subscription. No ads.</h3><p style="margin:0;line-height:1.55;color:rgba(6,17,28,.8)">Every feature, every airport, 0&nbsp;€. Not a trial — the deal.</p></div>
+      <div data-reveal data-reveal-delay="60" style="background:#0a84ff;padding:26px 24px"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-weight:700;font-size:12px;letter-spacing:.18em">02</div><h3 style="margin:10px 0 8px;font-size:1.35rem;font-weight:900;letter-spacing:-0.02em">No account. No lock-in.</h3><p style="margin:0;line-height:1.55;color:rgba(6,17,28,.8)">Install, add airports, fly. Your list lives on your phone, not our server.</p></div>
+      <div data-reveal data-reveal-delay="120" style="background:#0a84ff;padding:26px 24px"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-weight:700;font-size:12px;letter-spacing:.18em">03</div><h3 style="margin:10px 0 8px;font-size:1.35rem;font-weight:900;letter-spacing:-0.02em">Offline-first.</h3><p style="margin:0;line-height:1.55;color:rgba(6,17,28,.8)">Every briefing is cached on device. Opens instantly at a field with one bar of signal — or none.</p></div>
+      <div data-reveal data-reveal-delay="180" style="background:#0a84ff;padding:26px 24px"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-weight:700;font-size:12px;letter-spacing:.18em">04</div><h3 style="margin:10px 0 8px;font-size:1.35rem;font-weight:900;letter-spacing:-0.02em">Any airport, your order.</h3><p style="margin:0;line-height:1.55;color:rgba(6,17,28,.8)">Europe, US, Brazil — add any field, drag your islands into the order you brief.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 · WIDGET ============ -->
+<section id="widget" data-screen-label="Home-screen widget" style="padding:clamp(90px,13vw,170px) clamp(20px,5vw,72px);max-width:1440px;margin:0 auto;box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:clamp(30px,5vw,72px);align-items:center">
+  <div>
+    <p data-reveal style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#0a84ff">03 — Widget</p>
+    <h2 data-reveal data-reveal-delay="80" style="margin:16px 0 18px;font-weight:900;text-transform:uppercase;letter-spacing:-0.035em;line-height:.94;font-size:clamp(2.6rem,7vw,5.2rem);color:#ffffff;max-width:14ch">Your ramp check, on your home screen.</h2>
+    <p data-reveal data-reveal-delay="140" style="margin:0 0 22px;max-width:52ch;color:#a9c1d8;font-size:clamp(1rem,1.4vw,1.2rem);line-height:1.65">A resizable Android widget with the latest TAF and a <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;color:#e8eef5">WIND / CEILING / QNH</span> panel from the newest METAR — paging through every airport you've saved. Try the arrows.</p>
+    <p data-reveal data-reveal-delay="200" style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.14em;color:#5d81a3">RESIZABLE · AUTO-REFRESH · TAPS OPEN THE FULL BRIEFING</p>
+  </div>
+
+  <!-- home-screen phone -->
+  <div data-reveal data-reveal-delay="120" style="display:flex;justify-content:center">
+    <div style="width:min(340px,86vw);border-radius:42px;border:3px solid #1d2f42;background:#0b1b2b;box-shadow:0 40px 90px rgba(3,10,18,.55);padding:14px;box-sizing:border-box">
+      <div style="border-radius:30px;background:linear-gradient(165deg,#243456,#5b4f6b 70%,#a8806a);overflow:hidden;padding-bottom:18px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px 4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:rgba(255,255,255,.85)">
+          <span>07:12</span><span>LTE ▮▮▮</span>
+        </div>
+        <div style="padding:22px 20px 6px;color:#ffffff">
+          <div style="font-size:2.6rem;font-weight:200;letter-spacing:-0.02em;line-height:1">07:12</div>
+          <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:.18em;margin-top:6px;color:rgba(255,255,255,.8)">THU 9 JUL · 34° LATER</div>
+        </div>
+        <div style="margin:16px 14px 0;background:rgba(6,17,28,.82);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:16px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" style="flex:none"><path fill="#0a84ff" d="M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z"></path></svg>
+            <strong id="w-icao" style="font-size:.95rem;letter-spacing:-0.01em;color:#ffffff">LPBJ</strong>
+            <span id="w-name" style="color:#7d9cba;font-size:.8rem">Beja</span>
+            <span id="w-adv" style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:8px;font-weight:700;letter-spacing:.12em;color:#e5901a;border:1px solid rgba(229,144,26,.6);padding:2px 6px;border-radius:5px">ADVISORY</span>
+            <span id="w-page" style="margin-left:auto;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;color:#5d81a3">1 / 4</span>
+          </div>
+          <p id="w-taf" style="margin:12px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;line-height:1.7;color:#79b6ff;word-break:break-word;min-height:52px">TAF LPBJ 090513Z 0906/1006 27005KT CAVOK BECMG 0914/0916 28010KT</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px">
+            <div style="background:rgba(20,58,87,.55);border-radius:12px;padding:9px 10px;text-align:center"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:8.5px;letter-spacing:.14em;color:#7d9cba">WIND</div><div id="w-wind" style="font-weight:800;font-size:.95rem;margin-top:3px;color:#ffffff">300/9</div></div>
+            <div style="background:rgba(20,58,87,.55);border-radius:12px;padding:9px 10px;text-align:center"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:8.5px;letter-spacing:.14em;color:#7d9cba">CEILING</div><div id="w-ceil" style="font-weight:800;font-size:.95rem;margin-top:3px;color:#ffffff">NSC</div></div>
+            <div style="background:rgba(20,58,87,.55);border-radius:12px;padding:9px 10px;text-align:center"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:8.5px;letter-spacing:.14em;color:#7d9cba">QNH</div><div id="w-qnh" style="font-weight:800;font-size:.95rem;margin-top:3px;color:#ffffff">1015</div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+            <button type="button" onclick="widgetPage(-1)" aria-label="Previous airport" style="width:44px;height:44px;border-radius:12px;border:1px solid rgba(121,182,255,.35);background:rgba(20,58,87,.4);color:#79b6ff;font-size:1.15rem;cursor:pointer;transition:background .2s" style-hover="background:rgba(10,132,255,.35)">‹</button>
+            <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;letter-spacing:.2em;color:#5d81a3">TAFCAST WIDGET</span>
+            <button type="button" onclick="widgetPage(1)" aria-label="Next airport" style="width:44px;height:44px;border-radius:12px;border:1px solid rgba(121,182,255,.35);background:rgba(20,58,87,.4);color:#79b6ff;font-size:1.15rem;cursor:pointer;transition:background .2s" style-hover="background:rgba(10,132,255,.35)">›</button>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:center;gap:18px;margin-top:18px">
+          <span style="width:44px;height:44px;border-radius:50%;background:rgba(6,17,28,.5)"></span>
+          <span style="width:44px;height:44px;border-radius:50%;background:rgba(6,17,28,.5)"></span>
+          <span style="width:44px;height:44px;border-radius:50%;background:rgba(6,17,28,.5)"></span>
+          <span style="width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0a84ff"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="#ffffff" d="M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z"></path></svg></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 · ADVISORY TAF (pinned) ============ -->
+<div id="advisory" data-screen-label="Advisory TAF" data-adv-wrap="1" style="position:relative;height:320vh;background:#081521">
+  <div data-adv-sticky="1" style="position:sticky;top:0;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:hidden;padding:clamp(80px,10vh,120px) clamp(20px,5vw,72px);box-sizing:border-box">
+    <div data-adv-glow="1" aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(900px 600px at 50% 60%, rgba(229,144,26,.16), transparent 65%);pointer-events:none"></div>
+    <div data-adv-head="1" style="text-align:center;position:relative">
+      <p style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#e5901a">04 — Advisory TAF · Signature feature</p>
+      <h2 style="margin:16px 0 0;font-weight:900;text-transform:uppercase;letter-spacing:-0.04em;line-height:.9;font-size:clamp(2.8rem,8.5vw,7.5rem);color:#ffffff">
+        No station?<br><span style="color:transparent;-webkit-text-stroke:2.5px #e5901a">Still a picture.</span>
+      </h2>
+      <p style="margin:22px auto 0;max-width:62ch;color:#a9c1d8;font-size:clamp(1rem,1.4vw,1.2rem);line-height:1.65">Small Portuguese aerodromes often have no METAR, no TAF — no official weather at all. TAFCast builds a model-based <strong style="color:#e5901a">ADVISORY</strong> TAF from the nearest IPMA automatic-station observations, so you're not flying into a blank.</p>
+    </div>
+    <div data-adv-card="1" style="position:relative;margin-top:clamp(26px,4vh,44px);width:min(760px,100%)">
+      <div style="background:#0b1b2b;border:1px solid rgba(229,144,26,.45);border-radius:24px;padding:clamp(22px,3.5vw,36px);box-shadow:0 30px 80px rgba(3,10,18,.55)">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:.18em;color:#06111c;background:#e5901a;padding:6px 12px;border-radius:7px;animation:tc-blink 2.6s ease-in-out infinite">ADVISORY</span>
+          <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;letter-spacing:.14em;color:#5d81a3">MODEL-BASED · NEAREST IPMA STATION 14 KM</span>
+        </div>
+        <p style="margin:20px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(1rem,2.4vw,1.45rem);line-height:1.8;color:#ffc46b;word-break:break-word">
+          <span data-chunk="1" style="display:inline-block;margin-right:.55em">TAF LPBJ 090513Z</span>
+          <span data-chunk="1" style="display:inline-block;margin-right:.55em">0906/1006</span>
+          <span data-chunk="1" style="display:inline-block;margin-right:.55em">27005KT</span>
+          <span data-chunk="1" style="display:inline-block;margin-right:.55em">CAVOK</span>
+          <span data-chunk="1" style="display:inline-block;margin-right:.55em">BECMG 0914/0916</span>
+          <span data-chunk="1" style="display:inline-block;margin-right:.55em">28010KT</span>
+          <span data-chunk="1" style="display:inline-block">…</span>
+        </p>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:22px;flex-wrap:wrap;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;letter-spacing:.1em">
+          <span style="border:1px solid #143a57;color:#a9c1d8;padding:7px 12px;border-radius:999px">IPMA OBS</span><span style="color:#39597a">→</span>
+          <span style="border:1px solid #143a57;color:#a9c1d8;padding:7px 12px;border-radius:999px">MODEL</span><span style="color:#39597a">→</span>
+          <span style="border:1px solid rgba(229,144,26,.6);color:#e5901a;padding:7px 12px;border-radius:999px">ADVISORY TAF</span>
+        </div>
+      </div>
+      <div data-adv-stamp="1" style="position:absolute;right:clamp(-6px,1vw,18px);bottom:-26px;transform:rotate(-7deg);border:3px solid #e5901a;color:#e5901a;background:rgba(8,21,33,.92);border-radius:12px;padding:12px 18px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(.7rem,1.4vw,.85rem);font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.5;max-width:min(340px,80vw)">
+        Advisory — illustrative only<br>Never for flight decisions
+      </div>
+    </div>
+    <p data-adv-foot="1" style="margin:clamp(44px,6vh,60px) 0 0;max-width:66ch;text-align:center;font-size:.95rem;line-height:1.7;color:#7d9cba">Computer-generated and it may be wrong. It is clearly labelled, always. Verify official sources before every flight — an advisory TAF is a picture, not a briefing.</p>
+  </div>
+</div>
+
+<!-- ============ 6 · FAQ ============ -->
+<section id="faq" data-screen-label="FAQ" style="padding:clamp(90px,13vw,170px) clamp(20px,5vw,72px);max-width:1100px;margin:0 auto;box-sizing:border-box">
+  <p data-reveal style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#0a84ff">05 — FAQ</p>
+  <h2 data-reveal data-reveal-delay="80" style="margin:16px 0 clamp(30px,4vw,50px);font-weight:900;text-transform:uppercase;letter-spacing:-0.035em;line-height:.94;font-size:clamp(2.6rem,7vw,5.2rem);color:#ffffff">Straight answers.</h2>
+  <div id="faq-list" data-reveal data-reveal-delay="140" style="border-bottom:1px solid #143a57"></div>
+</section>
+
+<!-- ============ 7 · PRIVACY & TERMS ============ -->
+<section data-screen-label="Privacy and terms" style="background:#0b1b2b;border-top:1px solid #143a57;border-bottom:1px solid #143a57">
+  <div style="max-width:1440px;margin:0 auto;padding:clamp(80px,10vw,130px) clamp(20px,5vw,72px);box-sizing:border-box">
+    <p data-reveal style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#0a84ff">06 — The fine print</p>
+    <h2 data-reveal data-reveal-delay="80" style="margin:16px 0 clamp(30px,4vw,54px);font-weight:900;text-transform:uppercase;letter-spacing:-0.035em;line-height:.94;font-size:clamp(2.2rem,5.5vw,4.2rem);color:#ffffff">Short, honest, readable.</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:clamp(20px,3vw,40px)">
+
+      <article id="privacy" data-reveal style="background:#06111c;border:1px solid #143a57;border-radius:24px;padding:clamp(24px,3.5vw,40px)">
+        <h3 style="margin:0 0 6px;font-size:1.5rem;font-weight:900;letter-spacing:-0.02em">Privacy Policy</h3>
+        <p style="margin:0 0 20px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;color:#5d81a3">EFFECTIVE 9 JULY 2026 · APPLIES TO THE TAFCAST ANDROID APP</p>
+        <div style="display:flex;flex-direction:column;gap:16px;color:#a9c1d8;line-height:1.7;font-size:.95rem">
+          <p style="margin:0"><strong style="color:#e8eef5">No accounts, no identity.</strong> TAFCast has no sign-up, no login, and no user profiles. We do not know who you are.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">No personal data collected.</strong> TAFCast does not collect, store, transmit, sell, or share any personal data. There are no analytics SDKs, no advertising SDKs, and no trackers in the app.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Your data stays on your device.</strong> Your list of airports, your card order, and all cached weather data (METAR, TAF, wind forecasts, NOTAMs) are stored locally on your device only. Uninstalling the app deletes them.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Network requests.</strong> To fetch weather, the app contacts public data sources — NOAA / aviationweather.gov (METAR and TAF), Open-Meteo (wind forecasts), IPMA (automatic-station observations used for advisory TAFs), and FAA / Autorouter (NOTAMs). These requests contain only the airport identifiers or coordinates needed to answer them. Those services may keep standard server logs (such as IP address) under their own privacy policies.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Permissions.</strong> The app requests Internet access and network-state access only — no location, no contacts, no storage beyond its own cache.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Children.</strong> TAFCast collects no data from anyone, including children.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Changes and contact.</strong> Updates to this policy will be posted on this page. Questions: <a href="mailto:tafcast@outlook.com">tafcast@outlook.com</a>.</p>
+        </div>
+      </article>
+
+      <article id="terms" data-reveal data-reveal-delay="80" style="background:#06111c;border:1px solid #143a57;border-radius:24px;padding:clamp(24px,3.5vw,40px)">
+        <h3 style="margin:0 0 6px;font-size:1.5rem;font-weight:900;letter-spacing:-0.02em">Terms of Use</h3>
+        <p style="margin:0 0 20px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;color:#5d81a3">EFFECTIVE 9 JULY 2026 · READ BEFORE FLYING</p>
+        <div style="display:flex;flex-direction:column;gap:16px;color:#a9c1d8;line-height:1.7;font-size:.95rem">
+          <p style="margin:0"><strong style="color:#e8eef5">Acceptance.</strong> By installing or using TAFCast you agree to these terms. If you do not agree, do not use the app.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Not an official source.</strong> TAFCast is <strong style="color:#FF453A">not</strong> an official meteorological or aeronautical information service. It is not certified, approved, or endorsed by any aviation authority, and it must not be used for navigation or as a primary means of flight planning. It is a situational-awareness tool only.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Advisory TAFs.</strong> Advisory TAFs are computer-generated estimates for aerodromes without official forecasts. They are illustrative only, may be wrong, and must never be used for flight decisions. Always obtain and verify an official briefing.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Pilot in command.</strong> The pilot in command is always solely responsible for the safe conduct of every flight, including obtaining official weather, NOTAM, and aeronautical information from certified sources.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">No warranty.</strong> TAFCast is provided "as is", without warranty of any kind. Data may be delayed, incomplete, or incorrect. To the maximum extent permitted by law, the developers accept no liability for any loss or damage arising from use of the app.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Changes.</strong> These terms may be updated from time to time; continued use after an update constitutes acceptance.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 · FOOTER ============ -->
+<footer data-screen-label="Footer" style="background:#06111c;padding:clamp(70px,9vw,110px) clamp(20px,5vw,72px) 40px;max-width:1440px;margin:0 auto;box-sizing:border-box">
+  <div data-reveal style="font-weight:900;text-transform:uppercase;letter-spacing:-0.045em;line-height:.85;font-size:clamp(4rem,14vw,13rem);color:transparent;-webkit-text-stroke:2px #143a57;user-select:none" aria-hidden="true">TAFCast</div>
+  <div style="display:flex;flex-wrap:wrap;gap:clamp(20px,4vw,60px);justify-content:space-between;align-items:flex-start;margin-top:clamp(30px,4vw,50px)">
+    <div style="max-width:44ch">
+      <p style="margin:0;display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.1rem;color:#ffffff">
+        <span style="display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#0a84ff"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="#ffffff" d="M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z"></path></svg></span>
+        TAFCast <span style="font-weight:400;color:#5d81a3;font-size:.9rem">· By pilots, for pilots</span>
+      </p>
+      <p style="margin:14px 0 0;font-size:.85rem;line-height:1.7;color:#5d81a3">TAFCast is not an official MET or AIS service and is not certified for navigation or flight planning. Situational awareness only — the pilot in command is always responsible.</p>
+    </div>
+    <nav aria-label="Footer" style="display:flex;flex-direction:column;gap:10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase">
+      <a href="#app" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">The app</a>
+      <a href="#free" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Free and yours</a>
+      <a href="#widget" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Widget</a>
+      <a href="#advisory" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Advisory TAF</a>
+      <a href="#faq" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">FAQ</a>
+      <a href="#privacy" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Privacy</a>
+      <a href="#terms" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Terms</a>
+    </nav>
+    <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.1em;color:#5d81a3;line-height:2">
+      <div><a href="mailto:tafcast@outlook.com">tafcast@outlook.com</a></div>
+      <div>ANDROID · APK + GOOGLE PLAY</div>
+      <div>DATA · NOAA / OPEN-METEO / IPMA / FAA</div>
+    </div>
+  </div>
+  <p style="margin:clamp(40px,5vw,60px) 0 0;padding-top:22px;border-top:1px solid #143a57;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;color:#39597a">© 2026 TAFCAST · CLEAR SKIES ✈</p>
+</footer>
+
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- data ---------- */
+  var airports = [
+    { icao:'LPBJ', name:'Beja',    adv:true,  taf:'TAF LPBJ 090513Z 0906/1006 27005KT CAVOK BECMG 0914/0916 28010KT', wind:'300/9',  ceil:'NSC',      qnh:'1015' },
+    { icao:'LPEV', name:'Évora',   adv:true,  taf:'TAF LPEV 090513Z 0906/1006 29006KT CAVOK',                          wind:'290/6',  ceil:'NSC',      qnh:'1015' },
+    { icao:'LPPT', name:'Lisbon',  adv:false, taf:'TAF LPPT 090500Z 0906/1012 34012KT CAVOK TX31/0915Z TN18/1006Z',    wind:'330/12', ceil:'NSC',      qnh:'1016' },
+    { icao:'LPCS', name:'Cascais', adv:false, taf:'TAF LPCS 090500Z 0906/0915 35010KT 9999 FEW025',                    wind:'350/10', ceil:'FEW 2500', qnh:'1016' }
+  ];
+  var faqData = [
+    { q:'Where does the data come from — and how fresh is it?', a:'METAR and TAF come from NOAA / aviationweather.gov, the 24-hour wind outlook from Open-Meteo, NOTAMs from FAA and Autorouter, and advisory TAFs are derived from IPMA automatic-station observations. Data refreshes every time you open the app or pull to refresh, and every card shows the age of what you are looking at.' },
+    { q:'Is it really free?', a:'Yes. No subscription, no ads, no account, no locked "pro" tier. Every feature works for every airport, at no cost. That is the whole deal.' },
+    { q:'What happens when I have no signal?', a:'Every briefing is cached on your device the moment it loads. Offline, TAFCast opens instantly with the last data it fetched, clearly timestamped so you know exactly how old it is.' },
+    { q:'What is an advisory TAF?', a:'For small Portuguese aerodromes with no official weather station, TAFCast generates a model-based forecast from the nearest IPMA automatic-station observations. It is always labelled ADVISORY, it is illustrative only, it may be wrong, and it must never be used for flight decisions. Always verify official sources.' },
+    { q:'Which airports can I add?', a:'Any airport with an ICAO identifier across Europe, the United States, and Brazil — plus the Portuguese aerodromes covered by advisory TAFs. Add as many as you like and drag them into your own order.' },
+    { q:'Is there an iOS version?', a:'Not yet. TAFCast is Android-first, available as a direct APK download and on Google Play. iOS is on the wish list.' },
+    { q:'Is TAFCast certified or official?', a:'No. TAFCast is not an official MET or AIS service, is not certified by any aviation authority, and is not for navigation or flight planning. It is a situational-awareness tool. The pilot in command is always responsible for obtaining an official briefing.' }
+  ];
+
+  var byId = function (id) { return document.getElementById(id); };
+  var setText = function (id, v) { var el = byId(id); if (el) el.textContent = v; };
+  var MONO = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
+
+  /* ---------- METAR raw/decoded toggle ---------- */
+  window.setMetar = function (raw) {
+    var dec = byId('metar-decoded'), rawEl = byId('metar-raw'), bd = byId('btn-decoded'), br = byId('btn-raw');
+    if (dec) dec.style.display = raw ? 'none' : '';
+    if (rawEl) rawEl.style.display = raw ? '' : 'none';
+    if (bd) { bd.style.background = raw ? 'transparent' : '#0a84ff'; bd.style.color = raw ? '#7d9cba' : '#ffffff'; }
+    if (br) { br.style.background = raw ? '#0a84ff' : 'transparent'; br.style.color = raw ? '#ffffff' : '#7d9cba'; }
+  };
+
+  /* ---------- widget carousel ---------- */
+  var page = 0;
+  function renderWidget() {
+    var a = airports[page];
+    setText('w-icao', a.icao);
+    setText('w-name', a.name);
+    setText('w-taf', a.taf);
+    setText('w-wind', a.wind);
+    setText('w-ceil', a.ceil);
+    setText('w-qnh', a.qnh);
+    setText('w-page', (page + 1) + ' / ' + airports.length);
+    var adv = byId('w-adv'); if (adv) adv.style.display = a.adv ? '' : 'none';
+  }
+  window.widgetPage = function (d) {
+    page = (page + d + airports.length) % airports.length;
+    renderWidget();
+  };
+  renderWidget();
+
+  /* ---------- 24h wind bars ---------- */
+  (function () {
+    var speeds = [5,4,4,6,7,9,10,11,12,12,11,10,9,8,7,6,5,5,4,4,4,5,5,5];
+    var bars = byId('wind-bars'), labels = byId('wind-labels');
+    if (!bars || !labels) return;
+    speeds.forEach(function (v, i) {
+      var cell = document.createElement('div');
+      cell.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;gap:0';
+      var bar = document.createElement('div');
+      bar.style.cssText = 'width:100%;border-radius:4px 4px 0 0;background:' + (v >= 10 ? '#e5901a' : '#0a84ff') + ';height:' + (10 + v * 7) + 'px';
+      cell.appendChild(bar);
+      bars.appendChild(cell);
+      var lab = document.createElement('div');
+      lab.style.cssText = 'flex:1;text-align:center;font-family:' + MONO + ';font-size:9px;color:#5d81a3';
+      lab.textContent = (i % 6 === 0) ? ('0' + ((6 + i) % 24)).slice(-2) : '';
+      labels.appendChild(lab);
+    });
+  })();
+
+  /* ---------- FAQ accordion ---------- */
+  (function () {
+    var list = byId('faq-list');
+    if (!list) return;
+    var open = 0;
+    var items = faqData.map(function (f, i) {
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'border-top:1px solid #143a57';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-expanded', i === open ? 'true' : 'false');
+      btn.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;background:none;border:none;color:#e8eef5;text-align:left;padding:clamp(18px,2.6vw,26px) 4px;cursor:pointer;font-family:inherit;font-size:clamp(1.05rem,2vw,1.35rem);font-weight:700;letter-spacing:-0.01em;transition:color .2s';
+      var q = document.createElement('span'); q.textContent = f.q;
+      var sym = document.createElement('span'); sym.setAttribute('aria-hidden', 'true');
+      sym.style.cssText = 'font-family:' + MONO + ';color:#0a84ff;font-size:1.5rem;flex:none;line-height:1';
+      sym.textContent = i === open ? '−' : '+';
+      btn.appendChild(q); btn.appendChild(sym);
+      var panel = document.createElement('div');
+      panel.style.cssText = 'overflow:hidden;max-height:' + (i === open ? '420px' : '0px') + ';transition:max-height .5s cubic-bezier(.2,.6,.2,1)';
+      var p = document.createElement('p');
+      p.style.cssText = 'margin:0;padding:0 4px 26px;max-width:72ch;color:#a9c1d8;line-height:1.7;font-size:1rem';
+      p.textContent = f.a;
+      panel.appendChild(p);
+      btn.addEventListener('mouseenter', function () { btn.style.color = '#79b6ff'; });
+      btn.addEventListener('mouseleave', function () { btn.style.color = '#e8eef5'; });
+      btn.addEventListener('click', function () {
+        open = (open === i) ? -1 : i;
+        items.forEach(function (it, j) {
+          it.panel.style.maxHeight = (j === open) ? '420px' : '0px';
+          it.sym.textContent = (j === open) ? '−' : '+';
+          it.btn.setAttribute('aria-expanded', j === open ? 'true' : 'false');
+        });
+      });
+      wrap.appendChild(btn); wrap.appendChild(panel);
+      list.appendChild(wrap);
+      return { panel: panel, sym: sym, btn: btn };
+    });
+  })();
+
+  /* ---------- hover effects (style-hover attribute) ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('[style-hover]'), function (el) {
+    var base = el.getAttribute('style') || '';
+    var hov = el.getAttribute('style-hover') || '';
+    var on = function () { el.setAttribute('style', base + ';' + hov); };
+    var off = function () { el.setAttribute('style', base); };
+    el.addEventListener('mouseenter', on);
+    el.addEventListener('mouseleave', off);
+    el.addEventListener('focus', on);
+    el.addEventListener('blur', off);
+  });
+
+  /* ---------- scroll reveals ---------- */
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+  if (!reduce && 'IntersectionObserver' in window) {
+    reveals.forEach(function (el) {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      var d = el.getAttribute('data-reveal-delay') || '0';
+      el.style.transition = 'opacity .85s cubic-bezier(.2,.6,.2,1) ' + d + 'ms, transform .85s cubic-bezier(.2,.6,.2,1) ' + d + 'ms';
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.style.opacity = '1';
+          en.target.style.transform = 'none';
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- parallax + pinned advisory section ---------- */
+  var advWrap = document.querySelector('[data-adv-wrap]');
+  var advSticky = document.querySelector('[data-adv-sticky]');
+  var advHead = document.querySelector('[data-adv-head]');
+  var advCard = document.querySelector('[data-adv-card]');
+  var advStamp = document.querySelector('[data-adv-stamp]');
+  var advGlow = document.querySelector('[data-adv-glow]');
+  var advFoot = document.querySelector('[data-adv-foot]');
+  var chunks = Array.prototype.slice.call(document.querySelectorAll('[data-chunk]'));
+  var par = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]')).map(function (el) {
+    return { el: el, speed: parseFloat(el.getAttribute('data-parallax')) || 0 };
+  });
+
+  if (reduce) {
+    if (advWrap) advWrap.style.height = 'auto';
+    if (advSticky) advSticky.style.position = 'static';
+  } else {
+    if (advCard) advCard.style.opacity = '0';
+    if (advStamp) advStamp.style.opacity = '0';
+    if (advFoot) advFoot.style.opacity = '0';
+    chunks.forEach(function (c) { c.style.opacity = '0'; });
+
+    var clamp = function (v) { return Math.max(0, Math.min(1, v)); };
+    var effects = function () {
+      var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+      var vh = window.innerHeight;
+      if (y < vh * 1.3) {
+        par.forEach(function (pp) {
+          pp.el.style.transform = 'translate3d(0,' + (y * pp.speed * -1).toFixed(1) + 'px,0)';
+        });
+      }
+      if (!advWrap) return;
+      var total = advWrap.offsetHeight - vh;
+      var p = total > 0 ? clamp((y - advWrap.offsetTop) / total) : 0;
+      var seg = function (a, b) { return clamp((p - a) / (b - a)); };
+      var hOut = seg(0.22, 0.4);
+      if (advHead) { advHead.style.opacity = String(1 - hOut * 0.55); advHead.style.transform = 'translateY(' + (-hOut * 46).toFixed(1) + 'px) scale(' + (1 - hOut * 0.06).toFixed(3) + ')'; }
+      var cIn = seg(0.18, 0.36);
+      if (advCard) { advCard.style.opacity = String(cIn); advCard.style.transform = 'translateY(' + ((1 - cIn) * 90).toFixed(1) + 'px)'; }
+      chunks.forEach(function (c, i) { c.style.opacity = String(seg(0.34 + i * 0.05, 0.4 + i * 0.05)); });
+      var sIn = seg(0.74, 0.88);
+      if (advStamp) { advStamp.style.opacity = String(sIn); advStamp.style.transform = 'rotate(-7deg) scale(' + (2.1 - 1.1 * Math.min(1, sIn)).toFixed(3) + ')'; }
+      if (advFoot) advFoot.style.opacity = String(seg(0.86, 0.96));
+      if (advGlow) advGlow.style.opacity = String(0.25 + p * 0.75);
+    };
+    var ticking = false;
+    var onScroll = function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(function () { effects(); ticking = false; }); }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    effects();
+  }
+})();
+</script>
+</body>
+</html>
