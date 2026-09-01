@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TAFCast — Aviation Weather</title>
+    <!-- iOS / PWA Standalone Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TAFCast">
+    <meta name="theme-color" content="#0b1b2b">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+    <link rel="icon" type="image/svg+xml" href="./icon.svg">
+    <link rel="manifest" href="./manifest.json">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        #root {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <!-- React & ReactDOM (Development versions for Babel standalone) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel Standalone to transpile JSX on the fly -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- App Data and Primitives -->
+    <script src="./data.js"></script>
+    <script src="./theme.js"></script>
+    <script src="./legal.js"></script>  <!-- window.AV_LEGAL: disclaimer / terms / privacy -->
+
+
+    <!-- Components (Loaded as text/babel to be compiled on the fly) -->
+    <script type="text/babel" src="./icons.jsx"></script>
+    <script type="text/babel" src="./parts.jsx"></script>
+    <script type="text/babel" src="./ios-frame.jsx"></script>
+    <script type="text/babel" src="./widget.jsx"></script>
+    <script type="text/babel" src="./CardBriefing.jsx"></script>
+    <script type="text/babel" src="./screens.jsx"></script>
+    <script type="text/babel" src="./PhoneApp.jsx"></script>
+
+    <!-- Mount the App -->
+    <script type="text/babel">
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        // Initializing the app with full width (removed the IOSDevice wrapper dependency here, 
+        // PhoneApp will now render directly to root)
+        root.render(<window.PhoneApp />);
+    </script>
+</body>
+</html>

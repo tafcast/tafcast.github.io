@@ -60,7 +60,7 @@
       "operatingSystem": "Android",
       "applicationCategory": "TravelApplication",
       "url": "https://tafcast.github.io/",
-      "downloadUrl": "https://tafcast.github.io/tafcast.apk",
+      "url": "https://tafcast.github.io/app/",
       "image": "https://tafcast.github.io/og.png",
       "screenshot": "https://tafcast.github.io/og.png",
       "description": "TAFCast gives pilots a one-glance preflight picture: METAR, TAF, a 24-hour wind outlook, runway crosswind components and NOTAMs for every airport you fly, cached on your phone for offline use. Free, forever.",
@@ -107,7 +107,7 @@
       <button id="lang-en" type="button" onclick="setLang('en')" aria-pressed="true" style="border:none;cursor:pointer;background:#0a84ff;color:#ffffff;font-family:inherit;font-weight:700;font-size:11px;letter-spacing:.08em;padding:5px 9px;border-radius:999px">EN</button>
       <button id="lang-pt" type="button" onclick="setLang('pt')" aria-pressed="false" style="border:none;cursor:pointer;background:transparent;color:#9fbdd9;font-family:inherit;font-weight:700;font-size:11px;letter-spacing:.08em;padding:5px 9px;border-radius:999px">PT</button>
     </span>
-    <a href="tafcast.apk" download style="display:inline-block;background:#0a84ff;color:#ffffff;font-weight:700;padding:9px 16px;border-radius:999px;letter-spacing:.1em" style-hover="background:#3fa0ff;color:#ffffff;text-decoration:none;transform:translateY(-1px)">Get the app</a>
+    <button type="button" onclick="openIosModal()" style="display:inline-block;background:#0a84ff;color:#ffffff;font-weight:700;padding:9px 16px;border-radius:999px;letter-spacing:.1em;border:none;cursor:pointer;font-family:inherit;font-size:11px;text-transform:uppercase;transition:all .2s" style-hover="background:#3fa0ff;color:#ffffff;text-decoration:none;transform:translateY(-1px)">iOS Web App</button>
   </nav>
 </header>
 
@@ -128,9 +128,15 @@
         METAR, TAF, a 24-hour wind outlook, runway crosswind and NOTAMs for your airports — one glance, live data, cached on your phone so it opens before the engine does. Free, forever.
       </p>
       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:34px;animation:tc-rise .9s cubic-bezier(.2,.6,.2,1) .44s both">
-        <a href="tafcast.apk" download style="display:inline-block;background:#06111c;color:#ffffff;font-weight:800;font-size:1rem;padding:17px 30px;border-radius:999px;letter-spacing:.01em;transition:transform .25s cubic-bezier(.2,.6,.2,1),box-shadow .25s" style-hover="color:#ffffff;text-decoration:none;transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.35)">Download APK ↓</a>
-        <a href="#" style="display:inline-block;border:2px solid rgba(255,255,255,.75);color:#ffffff;font-weight:800;font-size:1rem;padding:15px 28px;border-radius:999px;transition:transform .25s cubic-bezier(.2,.6,.2,1),background .25s" style-hover="color:#ffffff;text-decoration:none;background:rgba(255,255,255,.14);transform:translateY(-3px)">Google Play</a>
-        <a href="#app" style="color:#ffffff;font-weight:600;font-size:.95rem;border-bottom:1px solid rgba(255,255,255,.5);padding-bottom:2px" style-hover="color:#ffffff;text-decoration:none;border-bottom:1px solid #ffffff">See how it works ↓</a>
+        <button type="button" onclick="openIosModal()" style="display:inline-flex;align-items:center;gap:10px;background:#06111c;color:#ffffff;font-weight:800;font-size:1rem;padding:16px 28px;border-radius:999px;letter-spacing:.01em;border:none;cursor:pointer;transition:transform .25s cubic-bezier(.2,.6,.2,1),box-shadow .25s" style-hover="color:#ffffff;text-decoration:none;transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.35)">
+          <svg viewBox="0 0 170 170" width="18" height="18" fill="#fff" aria-hidden="true"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.05-7.6-7.85-11.7-14.4-6.3-10.09-11.2-21.57-14.7-34.45-3.5-12.87-5.25-24.8-5.25-35.79 0-14.7 3.75-26.68 11.25-35.95 7.5-9.27 17.05-13.98 28.65-14.13 4.8 0 10.3 1.25 16.5 3.75 6.2 2.5 10.2 3.82 12 3.97 1.48-.22 5.64-1.63 12.49-4.22 6.85-2.6 12.65-3.77 17.4-3.53 13.05.8 23.35 5.65 30.9 14.55-11.7 7.1-17.45 16.85-17.25 29.25.2 9.8 4.05 18 11.55 24.6 7.5 6.6 16.45 10.35 26.85 11.25-2.2 6.6-4.75 13.1-7.65 19.5zM119.22 31.85c0-7.7 2.85-14.9 8.55-21.6 5.7-6.7 12.7-10.25 21-10.25.3 1.1.45 2.2.45 3.3 0 7.8-3.05 15.2-9.15 22.2-6.1 7-13.35 10.75-21.75 10.75-.3-.9-.45-2-.45-3.3z"/></svg>
+          <span>iOS Web App</span>
+        </button>
+        <div style="display:inline-flex;flex-direction:column;align-items:center;gap:4px">
+          <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.18);padding:2px 8px;border-radius:999px">Coming Soon</span>
+          <span style="display:inline-block;border:2px solid rgba(255,255,255,.3);color:rgba(255,255,255,.45);font-weight:800;font-size:1rem;padding:12px 26px;border-radius:999px;cursor:not-allowed;user-select:none">Google Play</span>
+        </div>
+        <a href="./app/index.html" style="color:#ffffff;font-weight:600;font-size:.95rem;border-bottom:1px solid rgba(255,255,255,.5);padding-bottom:2px" style-hover="color:#ffffff;text-decoration:none;border-bottom:1px solid #ffffff">Launch Web App →</a>
       </div>
     </div>
 
@@ -485,7 +491,7 @@
     </nav>
     <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.1em;color:#5d81a3;line-height:2">
       <div><a href="mailto:tafcast@outlook.com">tafcast@outlook.com</a></div>
-      <div>ANDROID · APK + GOOGLE PLAY</div>
+      <div>IOS (PWA) · GOOGLE PLAY COMING SOON</div>
       <div>DATA · NOAA / OPEN-METEO / IPMA / FAA</div>
     </div>
   </div>
@@ -511,7 +517,7 @@
     { q:'What happens when I have no signal?', a:'Every briefing is cached on your device the moment it loads. Offline, TAFCast opens instantly with the last data it fetched, clearly timestamped so you know exactly how old it is.' },
     { q:'What is an advisory TAF?', a:'For small Portuguese aerodromes with no official weather station, TAFCast generates a model-based forecast from the nearest IPMA automatic-station observations. It is always labelled ADVISORY, it is illustrative only, it may be wrong, and it must never be used for flight decisions. Always verify official sources.' },
     { q:'Which airports can I add?', a:'Any airport with an ICAO identifier across Europe, the United States, and Brazil — plus the Portuguese aerodromes covered by advisory TAFs. Add as many as you like and drag them into your own order.' },
-    { q:'Is there an iOS version?', a:'Not yet. TAFCast is Android-first, available as a direct APK download and on Google Play. iOS is on the wish list.' },
+    { q:'Is there an iOS version?', a:'Yes! TAFCast runs on iPhone and iPad as a full-screen Web App (PWA). Open TAFCast in Safari, tap the Share button, and select "Add to Home Screen". A native Google Play release is also coming soon.' },
     { q:'Is TAFCast certified or official?', a:'No. TAFCast is not an official MET or AIS service, is not certified by any aviation authority, and is not for navigation or flight planning. It is a situational-awareness tool. The pilot in command is always responsible for obtaining an official briefing.' }
   ];
 
@@ -707,6 +713,14 @@
     "METAR, TAF, a 24-hour wind outlook, runway crosswind and NOTAMs for your airports — one glance, live data, cached on your phone so it opens before the engine does. Free, forever.": "METAR, TAF, previsão de vento a 24 horas, vento cruzado na pista e NOTAM para os teus aeródromos — tudo num relance, com dados em tempo real guardados no telemóvel, prontos antes de ligares o motor. Grátis, para sempre.",
     "Download APK ↓": "Descarregar APK ↓",
     "See how it works ↓": "Ver como funciona ↓",
+    "iOS Web App": "Web App iOS",
+    "Coming Soon": "Em Breve",
+    "Launch Web App →": "Abrir Web App →",
+    "Install on iPhone / iPad": "Instalar no iPhone / iPad",
+    "Turn TAFCast into a full-screen app in 3 quick steps": "Transforma o TAFCast numa App em 3 passos rápidos",
+    "Tap Launch Web App below in Safari.": "Toca em Abrir Web App abaixo no Safari.",
+    "Select "Add to Home Screen"": "Escolhe "Adicionar ao Ecrã Principal"",
+    "Runs standalone in full-screen with offline caching.": "Funciona em ecrã inteiro com cache offline.",
 
     "01 — The app": "01 — A app",
     "The whole picture, before you taxi.": "O panorama completo, antes de taxiar.",
@@ -758,7 +772,7 @@
     "Which airports can I add?": "Que aeródromos posso adicionar?",
     "Any airport with an ICAO identifier across Europe, the United States, and Brazil — plus the Portuguese aerodromes covered by advisory TAFs. Add as many as you like and drag them into your own order.": "Qualquer aeródromo com identificador ICAO na Europa, nos Estados Unidos e no Brasil — além dos aeródromos portugueses cobertos pelos TAF de aviso. Adiciona quantos quiseres e arrasta-os para a tua própria ordem.",
     "Is there an iOS version?": "Existe versão para iOS?",
-    "Not yet. TAFCast is Android-first, available as a direct APK download and on Google Play. iOS is on the wish list.": "Ainda não. O TAFCast é, antes de mais, para Android — disponível por transferência direta do APK e no Google Play. O iOS está na lista de desejos.",
+    "Yes! TAFCast runs on iPhone and iPad as a full-screen Web App (PWA). Open TAFCast in Safari, tap the Share button, and select \"Add to Home Screen\". A native Google Play release is also coming soon.": "Sim! O TAFCast funciona no iPhone e iPad como Web App em ecrã inteiro (PWA). Abre o TAFCast no Safari, toca em Partilhar e seleciona \"Adicionar ao Ecrã Principal\". O lançamento no Google Play também sairá em breve.",
     "Is TAFCast certified or official?": "O TAFCast é certificado ou oficial?",
     "No. TAFCast is not an official MET or AIS service, is not certified by any aviation authority, and is not for navigation or flight planning. It is a situational-awareness tool. The pilot in command is always responsible for obtaining an official briefing.": "Não. O TAFCast não é um serviço oficial MET ou AIS, não é certificado por nenhuma autoridade aeronáutica e não se destina a navegação ou planeamento de voo. É uma ferramenta de consciência situacional. O piloto comandante é sempre responsável por obter um briefing oficial.",
 
@@ -859,6 +873,64 @@
   var initial = saved || (((navigator.language || "").toLowerCase().indexOf("pt") === 0) ? "pt" : "en");
   window.setLang(initial);
 })();
+</script>
+
+
+<!-- ============ iOS INSTALL MODAL (Option 1) ============ -->
+<div id="ios-modal" role="dialog" aria-modal="true" aria-labelledby="ios-modal-title" style="display:none;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;padding:20px;background:rgba(3,10,18,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)">
+  <div style="position:relative;max-width:520px;width:100%;background:#0b1b2b;border:1px solid #143a57;border-radius:28px;padding:32px 28px 26px;box-shadow:0 30px 80px rgba(0,0,0,.75);box-sizing:border-box;color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif">
+    <button type="button" onclick="closeIosModal()" aria-label="Close" style="position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:none;color:#9fbdd9;font-size:20px;display:grid;place-items:center;cursor:pointer;line-height:1">×</button>
+    
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+      <span style="display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#0a84ff;flex:none">
+        <svg viewBox="0 0 170 170" width="24" height="24" fill="#fff"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.05-7.6-7.85-11.7-14.4-6.3-10.09-11.2-21.57-14.7-34.45-3.5-12.87-5.25-24.8-5.25-35.79 0-14.7 3.75-26.68 11.25-35.95 7.5-9.27 17.05-13.98 28.65-14.13 4.8 0 10.3 1.25 16.5 3.75 6.2 2.5 10.2 3.82 12 3.97 1.48-.22 5.64-1.63 12.49-4.22 6.85-2.6 12.65-3.77 17.4-3.53 13.05.8 23.35 5.65 30.9 14.55-11.7 7.1-17.45 16.85-17.25 29.25.2 9.8 4.05 18 11.55 24.6 7.5 6.6 16.45 10.35 26.85 11.25-2.2 6.6-4.75 13.1-7.65 19.5zM119.22 31.85c0-7.7 2.85-14.9 8.55-21.6 5.7-6.7 12.7-10.25 21-10.25.3 1.1.45 2.2.45 3.3 0 7.8-3.05 15.2-9.15 22.2-6.1 7-13.35 10.75-21.75 10.75-.3-.9-.45-2-.45-3.3z"/></svg>
+      </span>
+      <div>
+        <h2 id="ios-modal-title" style="margin:0;font-size:1.35rem;font-weight:800;letter-spacing:-0.02em">Install on iPhone / iPad</h2>
+        <p style="margin:2px 0 0;font-size:.85rem;color:#7d9cba">Turn TAFCast into a full-screen app in 3 quick steps</p>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin:20px 0 24px">
+      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">1</span>
+        <span style="font-size:.9rem;color:#d5e4f3">Tap <strong>Launch Web App</strong> below in <strong>Safari</strong>.</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">2</span>
+        <span style="font-size:.9rem;color:#d5e4f3">In Safari (bottom toolbar on iPhone, top on iPad), tap <strong>Share</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8m-4-6l-4-4l-4 4m4-4v13"/></svg></span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">3</span>
+        <span style="font-size:.9rem;color:#d5e4f3">Select <strong>"Add to Home Screen"</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8m-4-4h8"/></svg></span></span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <a href="./app/index.html" style="display:block;text-align:center;background:#0a84ff;color:#ffffff;font-weight:800;font-size:1rem;padding:15px;border-radius:999px;text-decoration:none;transition:background .2s" style-hover="background:#3fa0ff;color:#ffffff;text-decoration:none">Launch Web App →</a>
+      <p style="margin:0;font-size:.8rem;color:#5d81a3;text-align:center">Runs standalone in full-screen with offline caching.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+window.openIosModal = function() {
+  var m = document.getElementById('ios-modal');
+  if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+};
+window.closeIosModal = function() {
+  var m = document.getElementById('ios-modal');
+  if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
+};
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') window.closeIosModal();
+});
+var modalBg = document.getElementById('ios-modal');
+if (modalBg) {
+  modalBg.addEventListener('click', function(e) {
+    if (e.target === modalBg) window.closeIosModal();
+  });
+}
 </script>
 
 </body>
