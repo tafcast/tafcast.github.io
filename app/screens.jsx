@@ -349,11 +349,13 @@
               <span style={{ flex: 1, font: `500 16px ${t.body}`, color: t.text }}>Airports</span>
               {window.Icon.chevR({ size: 16, color: t.textFaint, stroke: 2.4 })}
             </Row>
-            <Row t={t} onClick={onOpenWidget}>
-              <span style={{ width: 26, height: 26, borderRadius: 7, background: '#34c759', display: 'grid', placeItems: 'center' }}>{window.Icon.layers({ size: 16, color: '#fff', stroke: 2 })}</span>
-              <span style={{ flex: 1, font: `500 16px ${t.body}`, color: t.text }}>Widgets</span>
-              {window.Icon.chevR({ size: 16, color: t.textFaint, stroke: 2.4 })}
-            </Row>
+            {typeof window !== 'undefined' && window.AV_NATIVE && (
+              <Row t={t} onClick={onOpenWidget}>
+                <span style={{ width: 26, height: 26, borderRadius: 7, background: '#34c759', display: 'grid', placeItems: 'center' }}>{window.Icon.layers({ size: 16, color: '#fff', stroke: 2 })}</span>
+                <span style={{ flex: 1, font: `500 16px ${t.body}`, color: t.text }}>Widgets</span>
+                {window.Icon.chevR({ size: 16, color: t.textFaint, stroke: 2.4 })}
+              </Row>
+            )}
             <Row t={t} onClick={onOpenAlerts}>
               <span style={{ width: 26, height: 26, borderRadius: 7, background: '#f5a623', display: 'grid', placeItems: 'center' }}>{window.Icon.bell({ size: 16, color: '#fff', stroke: 2 })}</span>
               <span style={{ flex: 1, font: `500 16px ${t.body}`, color: t.text }}>Alerts</span>
