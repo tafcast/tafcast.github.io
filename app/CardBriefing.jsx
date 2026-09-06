@@ -13,7 +13,7 @@
     metar: 'METAR',
     ipma_ema: 'IPMA EMA',
     taf: 'TAF',
-    synthetic: 'Synthetic TAF',
+    synthetic: 'Airfield Outlook (SAO)',
     nearest: 'Nearest Station',
     wind: 'Wind outlook',
     runways: 'Runways',
@@ -501,7 +501,7 @@
     const amber = '#e5901a';
     return (
       <Card t={t} style={{ border: `1px solid ${t.dark ? 'rgba(245,166,35,0.35)' : 'rgba(245,166,35,0.45)'}` }}>
-        <SectionTitle t={t} badge="≈" title="Synthetic TAF" meta="ADVISORY" />
+        <SectionTitle t={t} badge="≈" title="Airfield Outlook (SAO)" meta="SYNTHETIC · ADVISORY" />
         <div style={{ font: `500 12.5px ${t.body}`, color: t.textDim, marginBottom: 10, lineHeight: 1.4 }}>
           Model forecast for {ap.icao}{o.station_name ? ` · neighbour obs: ${o.station_name}` : (s.station ? ` · neighbour obs: ${s.station}` : '')}.
         </div>
@@ -512,7 +512,7 @@
           background: t.dark ? 'rgba(245,166,35,0.16)' : 'rgba(245,166,35,0.12)', border: '1px solid rgba(245,166,35,0.28)' }}>
           <span style={{ color: amber, marginTop: 1 }}>{window.Icon.bell({ size: 16, stroke: 2.2 })}</span>
           <span style={{ flex: 1, font: `500 12.5px ${t.body}`, color: t.dark ? '#f3c073' : '#9a6a12', lineHeight: 1.4 }}>
-            <strong>Not for flight decisions — advisory only.</strong>
+            <strong>Synthetic Airfield Outlook (SAO) — not an official TAF. Not for flight decisions.</strong>
             {showNote && <> {s.advisory || 'Computer-generated model forecast for unmonitored sites.'} Always verify against official sources before flight.</>}
           </span>
           <span style={{ color: amber, opacity: 0.65, font: `700 11px ${t.body}`, marginTop: 2, whiteSpace: 'nowrap' }}>{showNote ? 'Less' : 'More'}</span>

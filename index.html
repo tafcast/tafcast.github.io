@@ -101,7 +101,7 @@
     <a href="#app" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">App</a>
     <a href="#free" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Free</a>
     <a href="#widget" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Widget</a>
-    <a href="#advisory" style="color:#e5901a" style-hover="color:#ffc46b;text-decoration:none">Advisory</a>
+    <a href="#advisory" style="color:#e5901a" style-hover="color:#ffc46b;text-decoration:none">Outlook (SAO)</a>
     <a href="#faq" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">FAQ</a>
     <span role="group" aria-label="Language / Idioma" style="display:inline-flex;align-items:center;gap:2px;border:1px solid rgba(121,182,255,.35);border-radius:999px;padding:2px">
       <button id="lang-en" type="button" onclick="setLang('en')" aria-pressed="true" style="border:none;cursor:pointer;background:#0a84ff;color:#ffffff;font-family:inherit;font-weight:700;font-size:11px;letter-spacing:.08em;padding:5px 9px;border-radius:999px">EN</button>
@@ -167,7 +167,7 @@
               </div>
               <p style="margin:14px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;line-height:1.6;color:#5d81a3;word-break:break-word">METAR LPBJ 081900Z 30009KT CAVOK 34/07 Q1015</p>
               <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
-                <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#e5901a;border:1px solid rgba(229,144,26,.6);padding:3px 7px;border-radius:6px;flex:none">ADVISORY TAF</span>
+                <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#e5901a;border:1px solid rgba(229,144,26,.6);padding:3px 7px;border-radius:6px;flex:none">AIRFIELD OUTLOOK (SAO)</span>
                 <div style="display:flex;flex:1;height:8px;border-radius:99px;overflow:hidden">
                   <span style="flex:8;background:#2BB24C"></span>
                   <span style="flex:2;background:repeating-linear-gradient(45deg,#2BB24C,#2BB24C 3px,#17542a 3px,#17542a 6px)"></span>
@@ -381,20 +381,20 @@
 </section>
 
 <!-- ============ 5 · ADVISORY TAF (pinned) ============ -->
-<div id="advisory" data-screen-label="Advisory TAF" data-adv-wrap="1" style="position:relative;height:320vh;background:#081521">
+<div id="advisory" data-screen-label="Synthetic Airfield Outlook (SAO)" data-adv-wrap="1" style="position:relative;height:320vh;background:#081521">
   <div data-adv-sticky="1" style="position:sticky;top:0;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:hidden;padding:clamp(80px,10vh,120px) clamp(20px,5vw,72px);box-sizing:border-box">
     <div data-adv-glow="1" aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(900px 600px at 50% 60%, rgba(229,144,26,.16), transparent 65%);pointer-events:none"></div>
     <div data-adv-head="1" style="text-align:center;position:relative">
-      <p style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#e5901a">04 — Advisory TAF · Signature feature</p>
+      <p style="margin:0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#e5901a">04 — Synthetic Airfield Outlook (SAO) · Signature feature</p>
       <h2 style="margin:16px 0 0;font-weight:900;text-transform:uppercase;letter-spacing:-0.04em;line-height:.9;font-size:clamp(2.8rem,8.5vw,7.5rem);color:#ffffff">
         No station?<br><span style="color:transparent;-webkit-text-stroke:2.5px #e5901a">Still a picture.</span>
       </h2>
-      <p style="margin:22px auto 0;max-width:62ch;color:#a9c1d8;font-size:clamp(1rem,1.4vw,1.2rem);line-height:1.65">Small Portuguese aerodromes often have no METAR, no TAF — no official weather at all. TAFCast builds a model-based <strong style="color:#e5901a">ADVISORY</strong> TAF from the nearest IPMA automatic-station observations, so you're not flying into a blank.</p>
+      <p style="margin:22px auto 0;max-width:62ch;color:#a9c1d8;font-size:clamp(1rem,1.4vw,1.2rem);line-height:1.65">Muitos pequenos aeródromos portugueses não têm METAR nem TAF — sem qualquer meteorologia oficial. O TAFCast constrói, com base num modelo, uma <strong style="color:#e5901a">Synthetic Airfield Outlook (SAO)</strong> from the nearest IPMA automatic-station observations, so you're not flying into a blank.</p>
     </div>
     <div data-adv-card="1" style="position:relative;margin-top:clamp(26px,4vh,44px);width:min(760px,100%)">
       <div style="background:#0b1b2b;border:1px solid rgba(229,144,26,.45);border-radius:24px;padding:clamp(22px,3.5vw,36px);box-shadow:0 30px 80px rgba(3,10,18,.55)">
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-          <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:.18em;color:#06111c;background:#e5901a;padding:6px 12px;border-radius:7px;animation:tc-blink 2.6s ease-in-out infinite">ADVISORY</span>
+          <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:.18em;color:#06111c;background:#e5901a;padding:6px 12px;border-radius:7px;animation:tc-blink 2.6s ease-in-out infinite">SYNTHETIC (SAO)</span>
           <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;letter-spacing:.14em;color:#5d81a3">MODEL-BASED · NEAREST IPMA STATION 14 KM</span>
         </div>
         <p style="margin:20px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(1rem,2.4vw,1.45rem);line-height:1.8;color:#ffc46b;word-break:break-word">
@@ -409,14 +409,14 @@
         <div style="display:flex;align-items:center;gap:10px;margin-top:22px;flex-wrap:wrap;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;letter-spacing:.1em">
           <span style="border:1px solid #143a57;color:#a9c1d8;padding:7px 12px;border-radius:999px">IPMA OBS</span><span style="color:#39597a">→</span>
           <span style="border:1px solid #143a57;color:#a9c1d8;padding:7px 12px;border-radius:999px">MODEL</span><span style="color:#39597a">→</span>
-          <span style="border:1px solid rgba(229,144,26,.6);color:#e5901a;padding:7px 12px;border-radius:999px">ADVISORY TAF</span>
+          <span style="border:1px solid rgba(229,144,26,.6);color:#e5901a;padding:7px 12px;border-radius:999px">SYNTHETIC OUTLOOK (SAO)</span>
         </div>
       </div>
       <div data-adv-stamp="1" style="position:absolute;right:clamp(-6px,1vw,18px);bottom:-26px;transform:rotate(-7deg);border:3px solid #e5901a;color:#e5901a;background:rgba(8,21,33,.92);border-radius:12px;padding:12px 18px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(.7rem,1.4vw,.85rem);font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.5;max-width:min(340px,80vw)">
-        Advisory — illustrative only<br>Never for flight decisions
+        Synthetic Outlook (SAO) — illustrative only<br>Never for flight decisions
       </div>
     </div>
-    <p data-adv-foot="1" style="margin:clamp(44px,6vh,60px) 0 0;max-width:66ch;text-align:center;font-size:.95rem;line-height:1.7;color:#7d9cba">Computer-generated and it may be wrong. It is clearly labelled, always. Verify official sources before every flight — an advisory TAF is a picture, not a briefing.</p>
+    <p data-adv-foot="1" style="margin:clamp(44px,6vh,60px) 0 0;max-width:66ch;text-align:center;font-size:.95rem;line-height:1.7;color:#7d9cba">Computer-generated and it may be wrong. It is clearly labelled as a Synthetic Airfield Outlook (SAO), always. Verify official sources before every flight — an airfield outlook is an illustrative picture, not an official TAF or briefing.</p>
   </div>
 </div>
 
@@ -441,7 +441,7 @@
           <p style="margin:0"><strong style="color:#e8eef5">No accounts, no identity.</strong> TAFCast has no sign-up, no login, and no user profiles. We do not know who you are.</p>
           <p style="margin:0"><strong style="color:#e8eef5">No tracking, no ads.</strong> There are no analytics SDKs, no advertising SDKs, and no trackers in the app. Nothing is sold or shared. The only personal data we ever receive is what you choose to include when sending feedback (below).</p>
           <p style="margin:0"><strong style="color:#e8eef5">Your data stays on your device.</strong> Your list of airports, your card order, settings, and all cached weather data (METAR, TAF, wind forecasts, NOTAMs) are stored locally on your device only. Uninstalling the app deletes them.</p>
-          <p style="margin:0"><strong style="color:#e8eef5">Network requests.</strong> The app fetches weather through the TAFCast backend, which queries public data sources — NOAA / aviationweather.gov (METAR and TAF), Open-Meteo (wind forecasts), IPMA (automatic-station observations used for advisory TAFs), and FAA / Autorouter (NOTAMs). Requests contain only the airport identifiers or coordinates needed to answer them; like any server, ours and theirs may keep standard transient logs (such as IP address) used to operate and protect the service.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Network requests.</strong> The app fetches weather through the TAFCast backend, which queries public data sources — NOAA / aviationweather.gov (METAR and TAF), Open-Meteo (wind forecasts), IPMA (automatic-station observations used for Synthetic Airfield Outlooks (SAO)), and FAA / Autorouter (NOTAMs). Requests contain only the airport identifiers or coordinates needed to answer them; like any server, ours and theirs may keep standard transient logs (such as IP address) used to operate and protect the service.</p>
           <p style="margin:0"><strong style="color:#e8eef5">Feedback you send.</strong> If you use the in-app feedback form, we receive your message, an optional reply-to email if you give one, and basic technical details (app version, Android version, device model and similar) attached to make problems diagnosable. Sent only when you tap Send; used solely to investigate and respond.</p>
           <p style="margin:0"><strong style="color:#e8eef5">Permissions.</strong> Internet and network-state access, plus notifications if you enable weather alerts (generated on your device) — no location, no contacts, no storage beyond the app's own cache.</p>
           <p style="margin:0"><strong style="color:#e8eef5">Children.</strong> TAFCast is a general-audience aviation utility and is not directed at children.</p>
@@ -456,7 +456,7 @@
         <div style="display:flex;flex-direction:column;gap:16px;color:#a9c1d8;line-height:1.7;font-size:.95rem">
           <p style="margin:0"><strong style="color:#e8eef5">Acceptance.</strong> By installing or using TAFCast you agree to these terms. If you do not agree, do not use the app.</p>
           <p style="margin:0"><strong style="color:#e8eef5">Not an official source.</strong> TAFCast is <strong style="color:#FF453A">not</strong> an official meteorological or aeronautical information service. It is not certified, approved, or endorsed by any aviation authority, and it must not be used for navigation or as a primary means of flight planning. It is a situational-awareness tool only.</p>
-          <p style="margin:0"><strong style="color:#e8eef5">Advisory TAFs.</strong> Advisory TAFs are computer-generated estimates for aerodromes without official forecasts. They are illustrative only, may be wrong, and must never be used for flight decisions. Always obtain and verify an official briefing.</p>
+          <p style="margin:0"><strong style="color:#e8eef5">Synthetic Airfield Outlooks (SAO).</strong> Synthetic Airfield Outlooks (SAO) are computer-generated estimates for aerodromes without official forecasts. They are illustrative only, may be wrong, and must never be used for flight decisions. Always obtain and verify an official briefing.</p>
           <p style="margin:0"><strong style="color:#e8eef5">Pilot in command.</strong> The pilot in command is always solely responsible for the safe conduct of every flight, including obtaining official weather, NOTAM, and aeronautical information from certified sources.</p>
           <p style="margin:0"><strong style="color:#e8eef5">No warranty.</strong> TAFCast is provided "as is", without warranty of any kind. Data may be delayed, incomplete, or incorrect. To the maximum extent permitted by law, the developers accept no liability for any loss or damage arising from use of the app.</p>
           <p style="margin:0"><strong style="color:#e8eef5">Changes.</strong> These terms may be updated from time to time; continued use after an update constitutes acceptance.</p>
@@ -482,7 +482,7 @@
       <a href="#app" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">The app</a>
       <a href="#free" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Free and yours</a>
       <a href="#widget" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Widget</a>
-      <a href="#advisory" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Advisory TAF</a>
+      <a href="#advisory" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Airfield Outlook (SAO)</a>
       <a href="#faq" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">FAQ</a>
       <a href="#privacy" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Privacy</a>
       <a href="#terms" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Terms</a>
@@ -510,11 +510,11 @@
     { icao:'LPCS', name:'Cascais', adv:false, taf:'TAF LPCS 090500Z 0906/0915 35010KT 9999 FEW025',                    wind:'350/10', ceil:'FEW 2500', qnh:'1016' }
   ];
   var faqData = [
-    { q:'Where does the data come from — and how fresh is it?', a:'METAR and TAF come from NOAA / aviationweather.gov, the 24-hour wind outlook from Open-Meteo, NOTAMs from FAA and Autorouter, and advisory TAFs are derived from IPMA automatic-station observations. Data refreshes every time you open the app or pull to refresh, and every card shows the age of what you are looking at.' },
+    { q:'Where does the data come from — and how fresh is it?', a:'METAR and TAF come from NOAA / aviationweather.gov, the 24-hour wind outlook from Open-Meteo, NOTAMs from FAA and Autorouter, and Synthetic Airfield Outlooks (SAO) are derived from IPMA automatic-station observations. Data refreshes every time you open the app or pull to refresh, and every card shows the age of what you are looking at.' },
     { q:'Is it really free?', a:'Yes. No subscription, no ads, no account, no locked "pro" tier. Every feature works for every airport, at no cost. That is the whole deal.' },
     { q:'What happens when I have no signal?', a:'Every briefing is cached on your device the moment it loads. Offline, TAFCast opens instantly with the last data it fetched, clearly timestamped so you know exactly how old it is.' },
-    { q:'What is an advisory TAF?', a:'For small Portuguese aerodromes with no official weather station, TAFCast generates a model-based forecast from the nearest IPMA automatic-station observations. It is always labelled ADVISORY, it is illustrative only, it may be wrong, and it must never be used for flight decisions. Always verify official sources.' },
-    { q:'Which airports can I add?', a:'Any airport with an ICAO identifier across Europe, the United States, and Brazil — plus the Portuguese aerodromes covered by advisory TAFs. Add as many as you like and drag them into your own order.' },
+    { q:'What is a Synthetic Airfield Outlook (SAO)?', a:'For small Portuguese aerodromes with no official weather station, TAFCast generates a model-based Synthetic Airfield Outlook (SAO) from the nearest IPMA automatic-station observations. It is always clearly labelled as a SYNTHETIC AIRFIELD OUTLOOK (SAO), it is illustrative only, it may be wrong, and it must never be used for flight decisions or substituted for an official TAF. Always verify official sources.' },
+    { q:'Which airports can I add?', a:'Any airport with an ICAO identifier across Europe, the United States, and Brazil — plus the Portuguese aerodromes covered by Synthetic Airfield Outlooks (SAO). Add as many as you like and drag them into your own order.' },
     { q:'Is there an iOS version?', a:'Yes! TAFCast runs on iPhone and iPad as a full-screen Web App (PWA). Open TAFCast in Safari, tap the Share button, and select "Add to Home Screen". A native Google Play release is also coming soon.' },
     { q:'Is TAFCast certified or official?', a:'No. TAFCast is not an official MET or AIS service, is not certified by any aviation authority, and is not for navigation or flight planning. It is a situational-awareness tool. The pilot in command is always responsible for obtaining an official briefing.' }
   ];
@@ -703,7 +703,7 @@
   // English source text -> Portugal Portuguese. Aviation codes (METAR/TAF/VFR/ICAO…) are intentionally left untranslated.
   var PT = {
     "Free": "Grátis",
-    "Advisory": "Aviso",
+    "Outlook (SAO)": "Previsão (SAO)",
     "Get the app": "Obter a app",
     "By pilots, for pilots": "Por pilotos, para pilotos",
     "The sky,": "O céu,",
@@ -748,27 +748,27 @@
     "panel from the newest METAR — paging through every airport you've saved. Try the arrows.": "do METAR mais recente — a percorrer todos os aeródromos que guardaste. Experimenta as setas.",
     "RESIZABLE · AUTO-REFRESH · TAPS OPEN THE FULL BRIEFING": "REDIMENSIONÁVEL · ATUALIZAÇÃO AUTOMÁTICA · TOCA PARA ABRIR O BRIEFING COMPLETO",
 
-    "04 — Advisory TAF · Signature feature": "04 — TAF de aviso · Funcionalidade emblemática",
+    "04 — Synthetic Airfield Outlook (SAO) · Signature feature": "04 — TAF de aviso · Funcionalidade emblemática",
     "No station?": "Sem estação?",
     "Still a picture.": "Ainda assim, um retrato.",
-    "Small Portuguese aerodromes often have no METAR, no TAF — no official weather at all. TAFCast builds a model-based": "Muitos pequenos aeródromos portugueses não têm METAR nem TAF — sem qualquer meteorologia oficial. O TAFCast constrói, com base num modelo, um",
-    "TAF from the nearest IPMA automatic-station observations, so you're not flying into a blank.": "TAF a partir das observações da estação automática do IPMA mais próxima, para não voares às cegas.",
+    "Muitos pequenos aeródromos portugueses não têm METAR nem TAF — sem qualquer meteorologia oficial. O TAFCast constrói, com base num modelo, uma": "Muitos pequenos aeródromos portugueses não têm METAR nem TAF — sem qualquer meteorologia oficial. O TAFCast constrói, com base num modelo, um",
+    "TAF from the nearest IPMA automatic-station observations, so you're not flying into a blank.": "Previsão Sintética de Aeródromo (SAO) a partir das observações da estação automática do IPMA mais próxima, para não voares às cegas.",
     "MODEL-BASED · NEAREST IPMA STATION 14 KM": "COM BASE EM MODELO · ESTAÇÃO IPMA MAIS PRÓXIMA 14 KM",
-    "Advisory — illustrative only": "Aviso — apenas ilustrativo",
+    "Synthetic Outlook (SAO) — illustrative only": "Previsão Sintética (SAO) — apenas ilustrativo",
     "Never for flight decisions": "Nunca para decisões de voo",
-    "Computer-generated and it may be wrong. It is clearly labelled, always. Verify official sources before every flight — an advisory TAF is a picture, not a briefing.": "Gerado por computador e pode estar errado. É sempre claramente identificado. Verifica as fontes oficiais antes de cada voo — um TAF de aviso é um retrato, não um briefing.",
+    "Computer-generated and it may be wrong. It is clearly labelled as a Synthetic Airfield Outlook (SAO), always. Verify official sources before every flight — an airfield outlook is an illustrative picture, not an official TAF or briefing.": "Gerado por computador e pode estar errado. É sempre claramente identificado. Verifica as fontes oficiais antes de cada voo — um TAF de aviso é um retrato, não um briefing.",
 
     "Straight answers.": "Respostas diretas.",
     "Where does the data come from — and how fresh is it?": "De onde vêm os dados — e quão recentes são?",
-    "METAR and TAF come from NOAA / aviationweather.gov, the 24-hour wind outlook from Open-Meteo, NOTAMs from FAA and Autorouter, and advisory TAFs are derived from IPMA automatic-station observations. Data refreshes every time you open the app or pull to refresh, and every card shows the age of what you are looking at.": "O METAR e o TAF vêm do NOAA / aviationweather.gov, a previsão de vento a 24 horas do Open-Meteo, os NOTAM da FAA e do Autorouter, e os TAF de aviso derivam de observações de estações automáticas do IPMA. Os dados são atualizados sempre que abres a app ou puxas para atualizar, e cada cartão mostra a idade daquilo que estás a ver.",
+    "METAR and TAF come from NOAA / aviationweather.gov, the 24-hour wind outlook from Open-Meteo, NOTAMs from FAA and Autorouter, and advisory TAFs are derived from IPMA automatic-station observations. Data refreshes every time you open the app or pull to refresh, and every card shows the age of what you are looking at.": "O METAR e o TAF vêm do NOAA / aviationweather.gov, a previsão de vento a 24 horas do Open-Meteo, os NOTAM da FAA e do Autorouter, e as Previsões Sintéticas de Aeródromo (SAO) derivam de observações de estações automáticas do IPMA. Os dados são atualizados sempre que abres a app ou puxas para atualizar, e cada cartão mostra a idade daquilo que estás a ver.",
     "Is it really free?": "É mesmo grátis?",
     "Yes. No subscription, no ads, no account, no locked \"pro\" tier. Every feature works for every airport, at no cost. That is the whole deal.": "Sim. Sem subscrição, sem anúncios, sem conta, sem nível «pro» bloqueado. Todas as funcionalidades estão disponíveis em todos os aeródromos, sem custos. É esse o acordo, por inteiro.",
     "What happens when I have no signal?": "O que acontece quando não tenho sinal?",
     "Every briefing is cached on your device the moment it loads. Offline, TAFCast opens instantly with the last data it fetched, clearly timestamped so you know exactly how old it is.": "Cada briefing fica em cache no teu dispositivo assim que carrega. Offline, o TAFCast abre num instante com os últimos dados obtidos, claramente datados para saberes exatamente quão antigos são.",
-    "What is an advisory TAF?": "O que é um TAF de aviso?",
-    "For small Portuguese aerodromes with no official weather station, TAFCast generates a model-based forecast from the nearest IPMA automatic-station observations. It is always labelled ADVISORY, it is illustrative only, it may be wrong, and it must never be used for flight decisions. Always verify official sources.": "Para pequenos aeródromos portugueses sem estação meteorológica oficial, o TAFCast gera uma previsão com base num modelo a partir das observações da estação automática do IPMA mais próxima. É sempre identificado como ADVISORY, é apenas ilustrativo, pode estar errado e nunca deve ser usado para decisões de voo. Verifica sempre as fontes oficiais.",
+    "What is a Synthetic Airfield Outlook (SAO)?": "O que é uma Previsão Sintética de Aeródromo (SAO)?",
+    "For small Portuguese aerodromes with no official weather station, TAFCast generates a model-based forecast from the nearest IPMA automatic-station observations. It is always labelled ADVISORY, it is illustrative only, it may be wrong, and it must never be used for flight decisions. Always verify official sources.": "Para pequenos aeródromos portugueses sem estação meteorológica oficial, o TAFCast gera uma Previsão Sintética de Aeródromo (SAO) com base num modelo a partir das estações automáticas do IPMA. É sempre identificada como SYNTHETIC AIRFIELD OUTLOOK (SAO), é apenas ilustrativa, pode estar errada e nunca deve ser usada para decisões de voo nem como substituto de um TAF oficial. Verifica sempre as fontes oficiais.",
     "Which airports can I add?": "Que aeródromos posso adicionar?",
-    "Any airport with an ICAO identifier across Europe, the United States, and Brazil — plus the Portuguese aerodromes covered by advisory TAFs. Add as many as you like and drag them into your own order.": "Qualquer aeródromo com identificador ICAO na Europa, nos Estados Unidos e no Brasil — além dos aeródromos portugueses cobertos pelos TAF de aviso. Adiciona quantos quiseres e arrasta-os para a tua própria ordem.",
+    "Any airport with an ICAO identifier across Europe, the United States, and Brazil — plus the Portuguese aerodromes covered by Synthetic Airfield Outlooks (SAO). Add as many as you like and drag them into your own order.": "Qualquer aeródromo com identificador ICAO na Europa, nos Estados Unidos e no Brasil — além dos aeródromos portugueses cobertos pelas Previsões Sintéticas de Aeródromo (SAO). Adiciona quantos quiseres e arrasta-os para a tua própria ordem.",
     "Is there an iOS version?": "Existe versão para iOS?",
     "Yes! TAFCast runs on iPhone and iPad as a full-screen Web App (PWA). Open TAFCast in Safari, tap the Share button, and select \"Add to Home Screen\". A native Google Play release is also coming soon.": "Sim! O TAFCast funciona no iPhone e iPad como Web App em ecrã inteiro (PWA). Abre o TAFCast no Safari, toca em Partilhar e seleciona \"Adicionar ao Ecrã Principal\". O lançamento no Google Play também sairá em breve.",
     "Is TAFCast certified or official?": "O TAFCast é certificado ou oficial?",
@@ -785,7 +785,7 @@
     "Your data stays on your device.": "Os teus dados ficam no teu dispositivo.",
     "Your list of airports, your card order, and all cached weather data (METAR, TAF, wind forecasts, NOTAMs) are stored locally on your device only. Uninstalling the app deletes them.": "A tua lista de aeródromos, a ordem dos cartões e todos os dados meteorológicos em cache (METAR, TAF, previsões de vento, NOTAM) são guardados apenas localmente no teu dispositivo. Desinstalar a app elimina-os.",
     "Network requests.": "Pedidos de rede.",
-    "To fetch weather, the app contacts public data sources — NOAA / aviationweather.gov (METAR and TAF), Open-Meteo (wind forecasts), IPMA (automatic-station observations used for advisory TAFs), and FAA / Autorouter (NOTAMs). These requests contain only the airport identifiers or coordinates needed to answer them. Those services may keep standard server logs (such as IP address) under their own privacy policies.": "Para obter a meteorologia, a app contacta fontes de dados públicas — NOAA / aviationweather.gov (METAR e TAF), Open-Meteo (previsões de vento), IPMA (observações de estações automáticas usadas nos TAF de aviso) e FAA / Autorouter (NOTAM). Estes pedidos contêm apenas os identificadores ou coordenadas dos aeródromos necessários para lhes responder. Esses serviços podem manter registos de servidor habituais (como o endereço IP) ao abrigo das suas próprias políticas de privacidade.",
+    "To fetch weather, the app contacts public data sources — NOAA / aviationweather.gov (METAR and TAF), Open-Meteo (wind forecasts), IPMA (automatic-station observations used for Synthetic Airfield Outlooks (SAO)), and FAA / Autorouter (NOTAMs). These requests contain only the airport identifiers or coordinates needed to answer them. Those services may keep standard server logs (such as IP address) under their own privacy policies.": "Para obter a meteorologia, a app contacta fontes de dados públicas — NOAA / aviationweather.gov (METAR e TAF), Open-Meteo (previsões de vento), IPMA (observações de estações automáticas usadas nas Previsões Sintéticas de Aeródromo (SAO)) e FAA / Autorouter (NOTAM). Estes pedidos contêm apenas os identificadores ou coordenadas dos aeródromos necessários para lhes responder. Esses serviços podem manter registos de servidor habituais (como o endereço IP) ao abrigo das suas próprias políticas de privacidade.",
     "Permissions.": "Permissões.",
     "The app requests Internet access and network-state access only — no location, no contacts, no storage beyond its own cache.": "A app pede apenas acesso à Internet e ao estado da rede — sem localização, sem contactos, sem armazenamento para além da sua própria cache.",
     "Children.": "Crianças.",
@@ -801,8 +801,8 @@
     "TAFCast is": "O TAFCast",
     "not": "não",
     "an official meteorological or aeronautical information service. It is not certified, approved, or endorsed by any aviation authority, and it must not be used for navigation or as a primary means of flight planning. It is a situational-awareness tool only.": "é um serviço oficial de informação meteorológica ou aeronáutica. Não é certificado, aprovado nem endossado por qualquer autoridade aeronáutica e não pode ser usado para navegação nem como meio principal de planeamento de voo. É apenas uma ferramenta de consciência situacional.",
-    "Advisory TAFs.": "TAF de aviso.",
-    "Advisory TAFs are computer-generated estimates for aerodromes without official forecasts. They are illustrative only, may be wrong, and must never be used for flight decisions. Always obtain and verify an official briefing.": "Os TAF de aviso são estimativas geradas por computador para aeródromos sem previsões oficiais. São apenas ilustrativos, podem estar errados e nunca devem ser usados para decisões de voo. Obtém e verifica sempre um briefing oficial.",
+    "Synthetic Airfield Outlooks (SAO).": "Previsões Sintéticas de Aeródromo (SAO).",
+    "Advisory TAFs are computer-generated estimates for aerodromes without official forecasts. They are illustrative only, may be wrong, and must never be used for flight decisions. Always obtain and verify an official briefing.": "As Previsões Sintéticas de Aeródromo (SAO) são estimativas geradas por computador para aeródromos sem previsões oficiais. São apenas ilustrativos, podem estar errados e nunca devem ser usados para decisões de voo. Obtém e verifica sempre um briefing oficial.",
     "Pilot in command.": "Piloto comandante.",
     "The pilot in command is always solely responsible for the safe conduct of every flight, including obtaining official weather, NOTAM, and aeronautical information from certified sources.": "O piloto comandante é sempre o único responsável pela condução segura de cada voo, incluindo a obtenção de meteorologia, NOTAM e informação aeronáutica oficiais a partir de fontes certificadas.",
     "No warranty.": "Sem garantia.",
@@ -814,7 +814,7 @@
     "TAFCast is not an official MET or AIS service and is not certified for navigation or flight planning. Situational awareness only — the pilot in command is always responsible.": "O TAFCast não é um serviço oficial MET ou AIS e não é certificado para navegação ou planeamento de voo. Apenas consciência situacional — o piloto comandante é sempre o responsável.",
     "The app": "A app",
     "Free and yours": "Grátis e teu",
-    "Advisory TAF": "TAF de aviso",
+    "Airfield Outlook (SAO)": "Previsão Sintética (SAO)",
     "Privacy": "Privacidade",
     "Terms": "Termos",
     "© 2026 TAFCAST · CLEAR SKIES ✈": "© 2026 TAFCAST · CÉUS LIMPOS ✈"

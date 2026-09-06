@@ -31,8 +31,8 @@
         { h: 'Always use official sources', p: [
           'Before every flight, obtain and rely on the official AIS / MET briefing for your route — for example your national AIS, an approved self-briefing service, or an authorised flight-service station. Where this app and an official source disagree, the official source governs.'
         ]},
-        { h: 'Synthetic ("ADVISORY") TAFs', p: [
-          'For some aerodromes without an official weather station, the app shows a model-generated forecast clearly labelled "ADVISORY". This output is computer-generated, is NOT an official ICAO TAF, may be wrong, and must not be used for flight decisions. Treat it as illustrative only.'
+        { h: 'Synthetic Airfield Outlook (SAO) ("ADVISORY")', p: [
+          'For some aerodromes without an official weather station, the app shows a model-generated forecast clearly labelled "SYNTHETIC AIRFIELD OUTLOOK (SAO)". This output is computer-generated, is NOT an official ICAO TAF, may be wrong, and must not be used for flight decisions. Treat it as illustrative only.'
         ]},
         { h: 'Data may be wrong, delayed, or missing', p: [
           'Weather, forecasts, NOTAMs, and airport/runway data come from third-party services and may be inaccurate, incomplete, out of date, or unavailable. You are solely responsible for confirming all information and for the safe conduct of every flight. The pilot in command remains responsible at all times.'
@@ -57,7 +57,7 @@
           'THE APP AND ALL DATA ARE PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY, AVAILABILITY, AND NON-INFRINGEMENT. We do not warrant that the App or its data will be accurate, complete, timely, uninterrupted, or error-free.'
         ]},
         { h: '5. Limitation of liability', p: [
-          'To the maximum extent permitted by law, the developer shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages, or for any loss of, or damage to, life, property, profits, or data, arising out of or relating to your use of, or inability to use, the App or its data — including any reliance on weather, forecast, NOTAM, or airport information, and including any "ADVISORY" synthetic product. Your sole and exclusive remedy is to stop using the App.'
+          'To the maximum extent permitted by law, the developer shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages, or for any loss of, or damage to, life, property, profits, or data, arising out of or relating to your use of, or inability to use, the App or its data — including any reliance on weather, forecast, NOTAM, or airport information, and including any Synthetic Airfield Outlook (SAO) product. Your sole and exclusive remedy is to stop using the App.'
         ]},
         { h: '6. Acceptable use', p: [
           'You agree not to misuse the App or the backing service, including by attempting to overload, disrupt, scrape in bulk, or gain unauthorised access to it, or by using it in any unlawful way or in breach of any third-party data provider’s terms.'
@@ -91,7 +91,7 @@
           'When the App fetches data, it contacts the backend server. As with any internet request, the backend necessarily receives your device’s IP address and the airport ICAO code(s) and search terms you look up, plus standard request metadata (timestamp, user-agent). These may appear in transient server logs used for operating, debugging, rate-limiting, and protecting the service from abuse. We do not use this data to build advertising or marketing profiles, and we do not sell it.'
         ]},
         { h: 'Third-party data sources', p: [
-          'To answer your requests the backend queries third-party providers, which receive the relevant airport coordinates/ICAO needed to return data: NOAA Aviation Weather Center (METAR/TAF), Open-Meteo (wind forecast), autorouter.aero (NOTAMs, if enabled), IPMA (Portuguese automatic-station observations, for synthetic TAFs), and the OurAirports dataset (airport/runway catalog). These providers have their own privacy practices, which we do not control.'
+          'To answer your requests the backend queries third-party providers, which receive the relevant airport coordinates/ICAO needed to return data: NOAA Aviation Weather Center (METAR/TAF), Open-Meteo (wind forecast), autorouter.aero (NOTAMs, if enabled), IPMA (Portuguese automatic-station observations, for Synthetic Airfield Outlooks (SAO)), and the OurAirports dataset (airport/runway catalog). These providers have their own privacy practices, which we do not control.'
         ]},
         { h: 'Notifications', p: [
           'If you enable weather alerts, the App schedules background checks on your device and posts local notifications. Notifications are generated on-device; we do not operate a push-messaging service that targets you.'

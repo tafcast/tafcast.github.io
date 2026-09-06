@@ -378,7 +378,7 @@
             <Row t={t} onClick={() => setNearest(!nearest)}>
               <span style={{ flex: 1 }}>
                 <div style={{ font: `500 16px ${t.body}`, color: t.text }}>Nearest-station estimate</div>
-                <div style={{ font: `400 13px ${t.body}`, color: t.textDim, marginTop: 1, lineHeight: 1.35 }}>For fields with no weather station, show the closest reporting airport's METAR and TAF alongside IPMA EMA and Synthetic TAF</div>
+                <div style={{ font: `400 13px ${t.body}`, color: t.textDim, marginTop: 1, lineHeight: 1.35 }}>For fields with no weather station, show the closest reporting airport's METAR and TAF alongside IPMA EMA and Synthetic Airfield Outlook (SAO)</div>
               </span>
               <Switch on={!!nearest} onChange={setNearest} t={t} />
             </Row>
@@ -442,7 +442,7 @@
             A quick pre-flight picture for your airports — METAR, TAF, wind, runways and NOTAMs in one place.
           </div>
           {bullet('refresh', 'Live, free data', 'METAR/TAF from NOAA, wind from Open-Meteo, NOTAMs from autorouter. The last-seen data is cached on your device so the app opens instantly, even offline.')}
-          {bullet('layers', 'Fields with no station', 'For Portuguese aerodromes with no official weather station, the app shows the nearest IPMA automatic-station observation and a model-generated, clearly-labelled ADVISORY TAF — illustrative only, never for flight decisions.')}
+          {bullet('layers', 'Fields with no station', 'For Portuguese aerodromes with no official weather station, the app shows the nearest IPMA automatic-station observation and a model-generated, clearly-labelled SYNTHETIC AIRFIELD OUTLOOK (SAO) — illustrative only, never for flight decisions.')}
           {bullet('x', 'For situational awareness only', 'Not for navigation or flight planning. Always verify against official sources before flight. This app is not an official MET/AIS service, is not certified by any aviation authority, and must never be the sole basis for any flight decision — the pilot in command is always responsible.')}
           <div style={{ marginTop: 6, padding: '12px 14px', borderRadius: 12, background: t.inset, font: `500 12.5px ${t.body}`, color: t.textDim, lineHeight: 1.5 }}>
             By tapping “I agree”, you accept the <button onClick={onShowLegal} style={{ all: 'unset', cursor: 'pointer', color: t.accent, fontWeight: 700 }}>Terms of Use &amp; Privacy Policy</button>. Data is provided “as is”, with no warranty; the app is supplied without liability for any flight or operational decision.

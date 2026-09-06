@@ -1,7 +1,7 @@
 {
   "name": "TAFCast — Aviation Weather",
   "short_name": "TAFCast",
-  "description": "Glanceable METAR, TAF, Synthetic TAF forecasts, runway crosswinds and NOTAMs for pilots.",
+  "description": "Glanceable METAR, TAF, Synthetic Airfield Outlook (SAO), runway crosswinds and NOTAMs for pilots.",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
