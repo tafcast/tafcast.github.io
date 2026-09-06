@@ -497,6 +497,43 @@
 </footer>
 
 
+<!-- ============ iOS INSTALL MODAL (Option 1) ============ -->
+<div id="ios-modal" role="dialog" aria-modal="true" aria-labelledby="ios-modal-title" style="display:none;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;padding:20px;background:rgba(3,10,18,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)">
+  <div style="position:relative;max-width:520px;width:100%;background:#0b1b2b;border:1px solid #143a57;border-radius:28px;padding:32px 28px 26px;box-shadow:0 30px 80px rgba(0,0,0,.75);box-sizing:border-box;color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif">
+    <button type="button" onclick="closeIosModal()" aria-label="Close" style="position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:none;color:#9fbdd9;font-size:20px;display:grid;place-items:center;cursor:pointer;line-height:1">×</button>
+    
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+      <span style="display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#0a84ff;flex:none">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#fff" aria-hidden="true"><path d="M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z"/></svg>
+      </span>
+      <div>
+        <h2 id="ios-modal-title" style="margin:0;font-size:1.35rem;font-weight:800;letter-spacing:-0.02em">Install on iPhone / iPad</h2>
+        <p style="margin:2px 0 0;font-size:.85rem;color:#7d9cba">Turn TAFCast into a full-screen app in 3 quick steps</p>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin:20px 0 24px">
+      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">1</span>
+        <span style="font-size:.9rem;color:#d5e4f3">Tap <strong>Launch Web App</strong> below in <strong>Safari.</strong></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">2</span>
+        <span style="font-size:.9rem;color:#d5e4f3">In Safari (bottom toolbar on iPhone, top on iPad), tap <strong>Share</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8m-4-6l-4-4l-4 4m4-4v13"/></svg></span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">3</span>
+        <span style="font-size:.9rem;color:#d5e4f3">Select <strong>"Add to Home Screen"</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8m-4-4h8"/></svg></span></span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <a href="./app/index.html" style="display:block;text-align:center;background:#0a84ff;color:#ffffff;font-weight:800;font-size:1rem;padding:15px;border-radius:999px;text-decoration:none;transition:background .2s" style-hover="background:#3fa0ff;color:#ffffff;text-decoration:none">Launch Web App →</a>
+      <p style="margin:0;font-size:.8rem;color:#5d81a3;text-align:center">Runs standalone in full-screen with offline caching.</p>
+    </div>
+  </div>
+</div>
+
 <script>
 (function () {
   "use strict";
@@ -770,7 +807,7 @@
     "Where does the data come from — and how fresh is it?": "De onde vêm os dados — e quão recentes são?",
     "METAR and TAF come from NOAA / aviationweather.gov, the 24-hour wind outlook from Open-Meteo, NOTAMs from FAA and Autorouter, and Synthetic Airfield Outlooks (SAO) are derived from IPMA automatic-station observations. Data refreshes every time you open the app or pull to refresh, and every card shows the age of what you are looking at.": "O METAR e o TAF vêm do NOAA / aviationweather.gov, a previsão de vento a 24 horas do Open-Meteo, os NOTAM da FAA e do Autorouter, e as Previsões Sintéticas de Aeródromo (SAO) derivam de observações de estações automáticas do IPMA. Os dados são atualizados sempre que abres a app ou puxas para atualizar, e cada cartão mostra a idade daquilo que estás a ver.",
     "Is it really free?": "É mesmo grátis?",
-    "Yes. No subscription, no ads, no account, no locked "pro" tier. Every feature works for every airport, at no cost. That is the whole deal.": "Sim. Sem subscrição, sem anúncios, sem conta, sem nível «pro» bloqueado. Todas as funcionalidades estão disponíveis em todos os aeródromos, sem custos. É esse o acordo, por inteiro.",
+    "Yes. No subscription, no ads, no account, no locked \"pro\" tier. Every feature works for every airport, at no cost. That is the whole deal.": "Sim. Sem subscrição, sem anúncios, sem conta, sem nível «pro» bloqueado. Todas as funcionalidades estão disponíveis em todos os aeródromos, sem custos. É esse o acordo, por inteiro.",
     "What happens when I have no signal?": "O que acontece quando não tenho sinal?",
     "Every briefing is cached on your device the moment it loads. Offline, TAFCast opens instantly with the last data it fetched, clearly timestamped so you know exactly how old it is.": "Cada briefing fica em cache no teu dispositivo assim que carrega. Offline, o TAFCast abre num instante com os últimos dados obtidos, claramente datados para saberes exatamente quão antigos são.",
     "What is a Synthetic Airfield Outlook (SAO)?": "O que é uma Previsão Sintética de Aeródromo (SAO)?",
@@ -778,7 +815,7 @@
     "Which airports can I add?": "Que aeródromos posso adicionar?",
     "Any airport with an ICAO identifier across Europe, the United States, and Brazil — plus the Portuguese aerodromes covered by Synthetic Airfield Outlooks (SAO). Add as many as you like and drag them into your own order.": "Qualquer aeródromo com identificador ICAO na Europa, nos Estados Unidos e no Brasil — além dos aeródromos portugueses cobertos pelas Previsões Sintéticas de Aeródromo (SAO). Adiciona quantos quiseres e arrasta-os para a tua própria ordem.",
     "Is there an iOS version?": "Existe versão para iOS?",
-    "Yes! TAFCast runs on iPhone and iPad as a full-screen Web App (PWA). Open TAFCast in Safari, tap the Share button, and select "Add to Home Screen". A native Google Play release is also coming soon.": "Sim! O TAFCast funciona no iPhone e iPad como Web App em ecrã inteiro (PWA). Abre o TAFCast no Safari, toca em Partilhar e seleciona "Adicionar ao Ecrã Principal". O lançamento no Google Play também sairá em breve.",
+    "Yes! TAFCast runs on iPhone and iPad as a full-screen Web App (PWA). Open TAFCast in Safari, tap the Share button, and select \"Add to Home Screen\". A native Google Play release is also coming soon.": "Sim! O TAFCast funciona no iPhone e iPad como Web App em ecrã inteiro (PWA). Abre o TAFCast no Safari, toca em Partilhar e seleciona \"Adicionar ao Ecrã Principal\". O lançamento no Google Play também sairá em breve.",
     "Is TAFCast certified or official?": "O TAFCast é certificado ou oficial?",
     "No. TAFCast is not an official MET or AIS service, is not certified by any aviation authority, and is not for navigation or flight planning. It is a situational-awareness tool. The pilot in command is always responsible for obtaining an official briefing.": "Não. O TAFCast não é um serviço oficial MET ou AIS, não é certificado por nenhuma autoridade aeronáutica e não se destina a navegação ou planeamento de voo. É uma ferramenta de consciência situacional. O piloto comandante é sempre responsável por obter um briefing oficial.",
 
@@ -894,69 +931,29 @@
     try { localStorage.setItem("tafcast_lang", lang); } catch (e) {}
   };
 
+  window.openIosModal = function() {
+    var m = document.getElementById('ios-modal');
+    if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+  };
+  window.closeIosModal = function() {
+    var m = document.getElementById('ios-modal');
+    if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
+  };
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') window.closeIosModal();
+  });
+  var modalBg = document.getElementById('ios-modal');
+  if (modalBg) {
+    modalBg.addEventListener('click', function(e) {
+      if (e.target === modalBg) window.closeIosModal();
+    });
+  }
+
   var saved;
   try { saved = localStorage.getItem("tafcast_lang"); } catch (e) {}
   var initial = saved || (((navigator.language || "").toLowerCase().indexOf("pt") === 0) ? "pt" : "en");
   window.setLang(initial);
 })();
-</script>
-
-
-<!-- ============ iOS INSTALL MODAL (Option 1) ============ -->
-<div id="ios-modal" role="dialog" aria-modal="true" aria-labelledby="ios-modal-title" style="display:none;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;padding:20px;background:rgba(3,10,18,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)">
-  <div style="position:relative;max-width:520px;width:100%;background:#0b1b2b;border:1px solid #143a57;border-radius:28px;padding:32px 28px 26px;box-shadow:0 30px 80px rgba(0,0,0,.75);box-sizing:border-box;color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif">
-    <button type="button" onclick="closeIosModal()" aria-label="Close" style="position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:none;color:#9fbdd9;font-size:20px;display:grid;place-items:center;cursor:pointer;line-height:1">×</button>
-    
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
-      <span style="display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#0a84ff;flex:none">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="#fff" aria-hidden="true"><path d="M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z"/></svg>
-      </span>
-      <div>
-        <h2 id="ios-modal-title" style="margin:0;font-size:1.35rem;font-weight:800;letter-spacing:-0.02em">Install on iPhone / iPad</h2>
-        <p style="margin:2px 0 0;font-size:.85rem;color:#7d9cba">Turn TAFCast into a full-screen app in 3 quick steps</p>
-      </div>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:10px;margin:20px 0 24px">
-      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
-        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">1</span>
-        <span style="font-size:.9rem;color:#d5e4f3">Tap <strong>Launch Web App</strong> below in <strong>Safari</strong>.</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
-        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">2</span>
-        <span style="font-size:.9rem;color:#d5e4f3">In Safari (bottom toolbar on iPhone, top on iPad), tap <strong>Share</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8m-4-6l-4-4l-4 4m4-4v13"/></svg></span></span>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
-        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">3</span>
-        <span style="font-size:.9rem;color:#d5e4f3">Select <strong>"Add to Home Screen"</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8m-4-4h8"/></svg></span></span>
-      </div>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <a href="./app/index.html" style="display:block;text-align:center;background:#0a84ff;color:#ffffff;font-weight:800;font-size:1rem;padding:15px;border-radius:999px;text-decoration:none;transition:background .2s" style-hover="background:#3fa0ff;color:#ffffff;text-decoration:none">Launch Web App →</a>
-      <p style="margin:0;font-size:.8rem;color:#5d81a3;text-align:center">Runs standalone in full-screen with offline caching.</p>
-    </div>
-  </div>
-</div>
-
-<script>
-window.openIosModal = function() {
-  var m = document.getElementById('ios-modal');
-  if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-};
-window.closeIosModal = function() {
-  var m = document.getElementById('ios-modal');
-  if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
-};
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') window.closeIosModal();
-});
-var modalBg = document.getElementById('ios-modal');
-if (modalBg) {
-  modalBg.addEventListener('click', function(e) {
-    if (e.target === modalBg) window.closeIosModal();
-  });
-}
 </script>
 
 </body>
