@@ -490,13 +490,13 @@
     );
   }
 
-  // Advisory model-generated TAF for aerodromes with no official station.
+  // Advisory model-generated Synthetic Airfield Outlook for aerodromes with no official station.
   function SyntheticTafCard({ ap, t }) {
     const s = ap.syntheticTaf;
     const [showNote, setShowNote] = useState(false);
     if (!s) return null;
-    const rawTaf = s.raw || s.taf;
-    if (!rawTaf) return null;
+    const rawSao = (s.raw || s.taf || '').replace(/^TAF\b/i, 'SAO').trim();
+    if (!rawSao) return null;
     const o = s.obs || {};
     const amber = '#e5901a';
     return (
@@ -506,14 +506,14 @@
           Model forecast for {ap.icao}{o.station_name ? ` · neighbour obs: ${o.station_name}` : (s.station ? ` · neighbour obs: ${s.station}` : '')}.
         </div>
         <div style={{ font: `500 13.5px ${t.mono}`, color: t.text, lineHeight: 1.6, whiteSpace: 'pre-wrap',
-          background: t.inset, borderRadius: 12, padding: 14 }}>{rawTaf}</div>
+          background: t.inset, borderRadius: 12, padding: 14 }}>{rawSao}</div>
         <div onClick={() => setShowNote(v => !v)} role="button"
           style={{ display: 'flex', gap: 8, marginTop: 12, padding: '10px 12px', borderRadius: 12, cursor: 'pointer',
           background: t.dark ? 'rgba(245,166,35,0.16)' : 'rgba(245,166,35,0.12)', border: '1px solid rgba(245,166,35,0.28)' }}>
           <span style={{ color: amber, marginTop: 1 }}>{window.Icon.bell({ size: 16, stroke: 2.2 })}</span>
           <span style={{ flex: 1, font: `500 12.5px ${t.body}`, color: t.dark ? '#f3c073' : '#9a6a12', lineHeight: 1.4 }}>
-            <strong>Synthetic Airfield Outlook (SAO) — not an official TAF. Not for flight decisions.</strong>
-            {showNote && <> {s.advisory || 'Computer-generated model forecast for unmonitored sites.'} Always verify against official sources before flight.</>}
+            <strong>Synthetic Airfield Outlook (SAO) — advisory only, not an official ICAO forecast. Not for flight decisions.</strong>
+            {showNote && <> {(s.advisory || 'Computer-generated model forecast for unmonitored sites.').replace(/\bTAF\b/g, 'SAO')} Always verify against official sources before flight.</>}
           </span>
           <span style={{ color: amber, opacity: 0.65, font: `700 11px ${t.body}`, marginTop: 2, whiteSpace: 'nowrap' }}>{showNote ? 'Less' : 'More'}</span>
         </div>

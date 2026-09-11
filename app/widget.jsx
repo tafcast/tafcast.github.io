@@ -56,9 +56,9 @@
       ? (mode === 'decoded'
           ? (ap.taf.periods || []).map(p => `${p.label}\n  ${p.wind}${p.text ? '  ' + p.text : ''}`).join('\n')
           : ap.taf.raw)
-      : (ap.syntheticTaf && ap.syntheticTaf.raw) ? ap.syntheticTaf.raw   // advisory model TAF when no official one
+      : (ap.syntheticTaf && ap.syntheticTaf.raw) ? (ap.syntheticTaf.raw || '').replace(/^TAF\b/i, 'SAO')   // advisory model SAO when no official TAF
       : (ap.nearestStation && ap.nearestStation.taf && ap.nearestStation.taf.raw) ? ap.nearestStation.taf.raw
-      : 'No TAF available.';
+      : 'No forecast available.';
     return (
       <div style={{ width: 338, height: 158, borderRadius: radius, background: bg, padding: 15, boxSizing: 'border-box',
         display: 'flex', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.25)' }}>
