@@ -171,7 +171,7 @@
               </div>
               <p style="margin:14px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;line-height:1.6;color:#5d81a3;word-break:break-word">METAR LPBJ 081900Z 30009KT CAVOK 34/07 Q1015</p>
               <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
-                <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#e5901a;border:1px solid rgba(229,144,26,.6);padding:3px 7px;border-radius:6px;flex:none">AIRFIELD OUTLOOK (SAO)</span>
+                <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#79b6ff;border:1px solid rgba(121,182,255,.5);padding:3px 7px;border-radius:6px;flex:none">TAF TIMELINE</span>
                 <div style="display:flex;flex:1;height:8px;border-radius:99px;overflow:hidden">
                   <span style="flex:8;background:#2BB24C"></span>
                   <span style="flex:2;background:repeating-linear-gradient(45deg,#2BB24C,#2BB24C 3px,#17542a 3px,#17542a 6px)"></span>
@@ -247,8 +247,7 @@
     <!-- TAF timeline card -->
     <article data-reveal data-reveal-delay="60" style="background:#0b1b2b;border:1px solid #143a57;border-radius:24px;padding:clamp(20px,3vw,30px);transition:transform .35s cubic-bezier(.2,.6,.2,1),border-color .35s" style-hover="transform:translateY(-6px);border-color:#2a5c8a">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
-        <h3 style="margin:0;font-size:.8rem;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;letter-spacing:.2em;text-transform:uppercase;color:#7d9cba">Airfield Outlook (SAO) · LPBJ</h3>
-        <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;font-weight:700;letter-spacing:.14em;color:#e5901a;border:1px solid rgba(229,144,26,.6);padding:4px 8px;border-radius:6px">ADVISORY</span>
+        <h3 style="margin:0;font-size:.8rem;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;letter-spacing:.2em;text-transform:uppercase;color:#7d9cba">TAF Timeline · LPBJ</h3>
       </div>
       <div style="display:flex;height:56px;border-radius:14px;overflow:hidden;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;font-weight:700;letter-spacing:.08em">
         <div style="flex:8;display:grid;place-items:center;background:rgba(43,178,76,.22);color:#7fe09a;border-right:1px solid #06111c">27005KT CAVOK</div>
@@ -256,7 +255,7 @@
         <div style="flex:13;display:grid;place-items:center;background:rgba(43,178,76,.14);color:#7fe09a">28010KT</div>
       </div>
       <div style="display:flex;justify-content:space-between;margin-top:8px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;color:#5d81a3"><span>06Z</span><span>12Z</span><span>18Z</span><span>00Z</span><span>06Z</span></div>
-      <p style="margin:16px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;line-height:1.7;color:#5d81a3;word-break:break-word">SAO LPBJ 090513Z 0906/1006 27005KT CAVOK BECMG 0914/0916 28010KT</p>
+      <p style="margin:16px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;line-height:1.7;color:#5d81a3;word-break:break-word">TAF LPBJ 090500Z 0906/1006 27005KT CAVOK BECMG 0914/0916 28010KT</p>
     </article>
 
     <!-- Wind outlook card -->
@@ -358,10 +357,10 @@
             <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" style="flex:none"><path fill="#0a84ff" d="M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z"></path></svg>
             <strong id="w-icao" style="font-size:.95rem;letter-spacing:-0.01em;color:#ffffff">LPBJ</strong>
             <span id="w-name" style="color:#7d9cba;font-size:.8rem">Beja</span>
-            <span id="w-adv" style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:8px;font-weight:700;letter-spacing:.12em;color:#e5901a;border:1px solid rgba(229,144,26,.6);padding:2px 6px;border-radius:5px">ADVISORY</span>
+            <span id="w-adv" style="display:none;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:8px;font-weight:700;letter-spacing:.12em;color:#e5901a;border:1px solid rgba(229,144,26,.6);padding:2px 6px;border-radius:5px">ADVISORY</span>
             <span id="w-page" style="margin-left:auto;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;color:#5d81a3">1 / 4</span>
           </div>
-          <p id="w-taf" style="margin:12px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;line-height:1.7;color:#79b6ff;word-break:break-word;min-height:52px">SAO LPBJ 090513Z 0906/1006 27005KT CAVOK BECMG 0914/0916 28010KT</p>
+          <p id="w-taf" style="margin:12px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;line-height:1.7;color:#79b6ff;word-break:break-word;min-height:52px">TAF LPBJ 090500Z 0906/1006 27005KT CAVOK BECMG 0914/0916 28010KT</p>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px">
             <div style="background:rgba(20,58,87,.55);border-radius:12px;padding:9px 10px;text-align:center"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:8.5px;letter-spacing:.14em;color:#7d9cba">WIND</div><div id="w-wind" style="font-weight:800;font-size:.95rem;margin-top:3px;color:#ffffff">300/9</div></div>
             <div style="background:rgba(20,58,87,.55);border-radius:12px;padding:9px 10px;text-align:center"><div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:8.5px;letter-spacing:.14em;color:#7d9cba">CEILING</div><div id="w-ceil" style="font-weight:800;font-size:.95rem;margin-top:3px;color:#ffffff">NSC</div></div>
@@ -393,7 +392,7 @@
       <h2 style="margin:16px 0 0;font-weight:900;text-transform:uppercase;letter-spacing:-0.04em;line-height:.9;font-size:clamp(2.8rem,8.5vw,7.5rem);color:#ffffff">
         No station?<br><span style="color:transparent;-webkit-text-stroke:2.5px #e5901a">Still a picture.</span>
       </h2>
-      <p style="margin:22px auto 0;max-width:62ch;color:#a9c1d8;font-size:clamp(1rem,1.4vw,1.2rem);line-height:1.65">Small Portuguese aerodromes often have no METAR, no TAF — no official weather at all. TAFCast builds a model-based <strong style="color:#e5901a">Synthetic Airfield Outlook (SAO)</strong> from the nearest IPMA automatic-station observations, so you're not flying into a blank.</p>
+      <p style="margin:22px auto 0;max-width:62ch;color:#a9c1d8;font-size:clamp(1rem,1.4vw,1.2rem);line-height:1.65">Small aerodromes often have no METAR, no TAF — no official weather at all. TAFCast builds a model-based <strong style="color:#e5901a">Synthetic Airfield Outlook (SAO)</strong> from the nearest IPMA automatic-station observations, so you're not flying into a blank.</p>
     </div>
     <div data-adv-card="1" style="position:relative;margin-top:clamp(26px,4vh,44px);width:min(760px,100%)">
       <div style="background:#0b1b2b;border:1px solid rgba(229,144,26,.45);border-radius:24px;padding:clamp(22px,3.5vw,36px);box-shadow:0 30px 80px rgba(3,10,18,.55)">
@@ -402,7 +401,7 @@
           <span style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;letter-spacing:.14em;color:#5d81a3">MODEL-BASED · NEAREST IPMA STATION 14 KM</span>
         </div>
         <p style="margin:20px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(1rem,2.4vw,1.45rem);line-height:1.8;color:#ffc46b;word-break:break-word">
-          <span data-chunk="1" style="display:inline-block;margin-right:.55em">SAO LPBJ 090513Z</span>
+          <span data-chunk="1" style="display:inline-block;margin-right:.55em">SAO LPEV 090513Z</span>
           <span data-chunk="1" style="display:inline-block;margin-right:.55em">0906/1006</span>
           <span data-chunk="1" style="display:inline-block;margin-right:.55em">27005KT</span>
           <span data-chunk="1" style="display:inline-block;margin-right:.55em">CAVOK</span>
@@ -569,7 +568,7 @@
 
   /* ---------- data ---------- */
   var airports = [
-    { icao:'LPBJ', name:'Beja',    adv:true,  taf:'SAO LPBJ 090513Z 0906/1006 27005KT CAVOK BECMG 0914/0916 28010KT', wind:'300/9',  ceil:'NSC',      qnh:'1015' },
+    { icao:'LPBJ', name:'Beja',    adv:false, taf:'TAF LPBJ 090500Z 0906/1006 27005KT CAVOK BECMG 0914/0916 28010KT', wind:'300/9',  ceil:'NSC',      qnh:'1015' },
     { icao:'LPEV', name:'Évora',   adv:true,  taf:'SAO LPEV 090513Z 0906/1006 29006KT CAVOK',                          wind:'290/6',  ceil:'NSC',      qnh:'1015' },
     { icao:'LPPT', name:'Lisbon',  adv:false, taf:'TAF LPPT 090500Z 0906/1012 34012KT CAVOK TX31/0915Z TN18/1006Z',    wind:'330/12', ceil:'NSC',      qnh:'1016' },
     { icao:'LPCS', name:'Cascais', adv:false, taf:'TAF LPCS 090500Z 0906/0915 35010KT 9999 FEW025',                    wind:'350/10', ceil:'FEW 2500', qnh:'1016' }
@@ -795,6 +794,7 @@
     "Runway wind": "Vento na pista",
     "DRAGGING…": "A ARRASTAR…",
     "TAF timeline": "Linha temporal TAF",
+    "TAF TIMELINE": "LINHA TEMPORAL TAF",
     "Airfield Outlook (SAO) · LPBJ": "Previsão de Aeródromo (SAO) · LPBJ",
     "NOTAMs": "NOTAMs",
 
@@ -821,7 +821,7 @@
     "04 — Synthetic Airfield Outlook (SAO) · Signature feature": "04 — Previsão Sintética de Aeródromo (SAO) · Funcionalidade emblemática",
     "No station?": "Sem estação?",
     "Still a picture.": "Ainda assim, um retrato.",
-    "Small Portuguese aerodromes often have no METAR, no TAF — no official weather at all. TAFCast builds a model-based": "Muitos pequenos aeródromos portugueses não têm METAR nem TAF — sem qualquer meteorologia oficial. O TAFCast constrói, com base num modelo, uma",
+    "Small aerodromes often have no METAR, no TAF — no official weather at all. TAFCast builds a model-based": "Muitos pequenos aeródromos não têm METAR nem TAF — sem qualquer meteorologia oficial. O TAFCast constrói, com base num modelo, uma",
     "Synthetic Airfield Outlook (SAO)": "Previsão Sintética de Aeródromo (SAO)",
     "from the nearest IPMA automatic-station observations, so you're not flying into a blank.": "a partir das observações da estação automática do IPMA mais próxima, para não voares às cegas.",
     "MODEL-BASED · NEAREST IPMA STATION 14 KM": "COM BASE EM MODELO · ESTAÇÃO IPMA MAIS PRÓXIMA 14 KM",
