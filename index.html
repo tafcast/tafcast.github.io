@@ -192,21 +192,21 @@
   <!-- METAR marquee -->
   <div aria-label="Live METAR ticker" style="position:relative;background:#06111c;border-top:1px solid #143a57;border-bottom:1px solid #143a57;overflow:hidden;padding:14px 0">
     <div data-marquee="1" style="display:inline-flex;white-space:nowrap;animation:tc-marquee 26s linear infinite;will-change:transform">
-      <span style="display:inline-flex;align-items:center;gap:30px;padding-right:30px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(.85rem,1.4vw,1.05rem);letter-spacing:.06em;color:#79b6ff">
-        <span>LPBJ 081900Z 30009KT CAVOK 34/07 Q1015</span><span style="color:#e5901a">✈</span>
-        <span>LPPT 081900Z 33012KT CAVOK 29/12 Q1016</span><span style="color:#e5901a">✈</span>
-        <span>LPEV 081900Z 29006KT CAVOK 33/08 Q1015</span><span style="color:#e5901a">✈</span>
-        <span>LPCS 081900Z 35010KT 9999 FEW025 27/14 Q1016</span><span style="color:#e5901a">✈</span>
-        <span>KJFK 081851Z 24008KT 10SM FEW250 28/17 A2996</span><span style="color:#e5901a">✈</span>
-        <span>SBGL 081900Z 14006KT 9999 SCT020 26/20 Q1014</span><span style="color:#e5901a">✈</span>
+      <span class="metar-ticker-track" style="display:inline-flex;align-items:center;gap:30px;padding-right:30px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(.85rem,1.4vw,1.05rem);letter-spacing:.06em;color:#79b6ff">
+        <span>LPBJ 021200Z 16008KT 120V220 9999 FEW040 28/14 Q1020</span><span style="color:#e5901a">✈</span>
+        <span>LPPT 021200Z VRB05KT CAVOK 24/14 Q1020 NOSIG</span><span style="color:#e5901a">✈</span>
+        <span>LPEV 021100Z 18009KT 26/16 Q1020</span><span style="color:#e5901a">✈</span>
+        <span>LPCS 021200Z 22005KT 180V250 CAVOK 25/14 Q1020</span><span style="color:#e5901a">✈</span>
+        <span>KJFK 021151Z 22007KT 10SM FEW160 BKN250 19/17 A2995</span><span style="color:#e5901a">✈</span>
+        <span>SBGL 021200Z 25004KT 8000 FEW010 SCT034 BKN080 24/21 Q1016</span><span style="color:#e5901a">✈</span>
       </span>
-      <span aria-hidden="true" style="display:inline-flex;align-items:center;gap:30px;padding-right:30px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(.85rem,1.4vw,1.05rem);letter-spacing:.06em;color:#79b6ff">
-        <span>LPBJ 081900Z 30009KT CAVOK 34/07 Q1015</span><span style="color:#e5901a">✈</span>
-        <span>LPPT 081900Z 33012KT CAVOK 29/12 Q1016</span><span style="color:#e5901a">✈</span>
-        <span>LPEV 081900Z 29006KT CAVOK 33/08 Q1015</span><span style="color:#e5901a">✈</span>
-        <span>LPCS 081900Z 35010KT 9999 FEW025 27/14 Q1016</span><span style="color:#e5901a">✈</span>
-        <span>KJFK 081851Z 24008KT 10SM FEW250 28/17 A2996</span><span style="color:#e5901a">✈</span>
-        <span>SBGL 081900Z 14006KT 9999 SCT020 26/20 Q1014</span><span style="color:#e5901a">✈</span>
+      <span class="metar-ticker-track" aria-hidden="true" style="display:inline-flex;align-items:center;gap:30px;padding-right:30px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:clamp(.85rem,1.4vw,1.05rem);letter-spacing:.06em;color:#79b6ff">
+        <span>LPBJ 021200Z 16008KT 120V220 9999 FEW040 28/14 Q1020</span><span style="color:#e5901a">✈</span>
+        <span>LPPT 021200Z VRB05KT CAVOK 24/14 Q1020 NOSIG</span><span style="color:#e5901a">✈</span>
+        <span>LPEV 021100Z 18009KT 26/16 Q1020</span><span style="color:#e5901a">✈</span>
+        <span>LPCS 021200Z 22005KT 180V250 CAVOK 25/14 Q1020</span><span style="color:#e5901a">✈</span>
+        <span>KJFK 021151Z 22007KT 10SM FEW160 BKN250 19/17 A2995</span><span style="color:#e5901a">✈</span>
+        <span>SBGL 021200Z 25004KT 8000 FEW010 SCT034 BKN080 24/21 Q1016</span><span style="color:#e5901a">✈</span>
       </span>
     </div>
   </div>
@@ -1027,6 +1027,60 @@
     document.addEventListener("DOMContentLoaded", setupLangListeners);
   }
 
+})();
+</script>
+
+<!-- Live METAR Ticker Background Sync -->
+<script>
+(function () {
+  "use strict";
+  var API_BASE = "https://aviation-widget-backend-475753506973.europe-southwest1.run.app";
+  var ICAOS = ["LPBJ", "LPPT", "LPEV", "LPCS", "KJFK", "SBGL"];
+
+  function cleanMetar(raw, icao) {
+    if (!raw) return null;
+    var s = String(raw).trim();
+    s = s.replace(/^(METAR|SPECI)\s+/i, "");
+    s = s.replace(/\s+RMK\b.*$/i, "");
+    s = s.replace(/=/g, "").replace(/\s*\$$/, "").trim();
+    if (!s.toUpperCase().startsWith(icao)) s = icao + " " + s;
+    return s;
+  }
+
+  function renderTicker(metars) {
+    var spans = document.querySelectorAll(".metar-ticker-track");
+    if (!spans.length || !metars.length) return;
+    var html = metars.map(function (m) {
+      return "<span>" + m + "</span><span style=\"color:#e5901a\">✈</span>";
+    }).join("\n        ");
+    spans.forEach(function (span) {
+      span.innerHTML = html;
+    });
+  }
+
+  function fetchLiveTicker() {
+    var promises = ICAOS.map(function (icao) {
+      return fetch(API_BASE + "/api/weather/" + icao)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { return cleanMetar(d && d.metar && d.metar.raw, icao); })
+        .catch(function () { return null; });
+    });
+    Promise.all(promises).then(function (results) {
+      var valid = results.filter(Boolean);
+      if (valid.length >= 3) {
+        renderTicker(valid);
+      }
+    }).catch(function () {});
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", fetchLiveTicker);
+  } else {
+    fetchLiveTicker();
+  }
+
+  // Refresh every 5 minutes
+  setInterval(fetchLiveTicker, 5 * 60 * 1000);
 })();
 </script>
 
