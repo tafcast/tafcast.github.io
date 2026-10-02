@@ -9,13 +9,13 @@
    jurisdiction — and have the final text reviewed by a lawyer. This is a starting
    template modelled on standard aviation-app language, not legal advice. */
 (function () {
-  var CONTACT = 'your-contact@example.com';   // ← replace before publishing
-  var JURISDICTION = '[your jurisdiction]';    // ← replace before publishing (governing law)
+  var CONTACT = 'tafcast@outlook.com';
+  var JURISDICTION = 'Portugal / European Union';
 
   window.AV_LEGAL = {
-    appName: 'Aviation Widget',
+    appName: 'TAFCast',
     version: '1.0',
-    effective: '2026-06-22',
+    effective: '2026-09-13',
     contact: CONTACT,
     jurisdiction: JURISDICTION,
 
@@ -25,14 +25,14 @@
       title: 'Safety disclaimer',
       sections: [
         { h: 'For situational awareness only', p: [
-          'Aviation Widget is for situational awareness only. It is NOT for navigation or flight planning. Always verify against official sources before flight.',
+          'TAFCast is for situational awareness only. It is NOT for navigation or flight planning. Always verify against official sources before flight.',
           'This app is not an official meteorological or aeronautical information service. It is not approved, certified, or endorsed by any aviation authority, and it must never be the sole basis for any flight or operational decision.'
         ]},
         { h: 'Always use official sources', p: [
           'Before every flight, obtain and rely on the official AIS / MET briefing for your route — for example your national AIS, an approved self-briefing service, or an authorised flight-service station. Where this app and an official source disagree, the official source governs.'
         ]},
         { h: 'Synthetic Airfield Outlook (SAO) ("ADVISORY")', p: [
-          'For some aerodromes without an official weather station, the app shows a model-generated forecast clearly labelled "SYNTHETIC AIRFIELD OUTLOOK (SAO)". This output is computer-generated, is NOT an official ICAO TAF, may be wrong, and must not be used for flight decisions. Treat it as illustrative only.'
+          'For some aerodromes without an official weather station, the app shows a model-generated forecast clearly labelled "SYNTHETIC AIRFIELD OUTLOOK (SAO)". This output is computer-generated, is NOT an official ICAO forecast, may be wrong, and must not be used for flight decisions. Treat it as illustrative only.'
         ]},
         { h: 'Data may be wrong, delayed, or missing', p: [
           'Weather, forecasts, NOTAMs, and airport/runway data come from third-party services and may be inaccurate, incomplete, out of date, or unavailable. You are solely responsible for confirming all information and for the safe conduct of every flight. The pilot in command remains responsible at all times.'
@@ -45,7 +45,7 @@
       title: 'Terms of Use',
       sections: [
         { h: '1. Acceptance', p: [
-          'By installing or using Aviation Widget ("the App"), you agree to these Terms of Use and to the Safety Disclaimer and Privacy Policy. If you do not agree, do not use the App.'
+          'By installing or using TAFCast ("the App"), you agree to these Terms of Use and to the Safety Disclaimer and Privacy Policy. If you do not agree, do not use the App.'
         ]},
         { h: '2. Licence', p: [
           'You are granted a personal, non-exclusive, non-transferable, revocable licence to use the App for your own non-commercial situational awareness. You may not sell, sublicense, or commercially redistribute the App, and you may not reverse-engineer it except to the extent that restriction is prohibited by law.'
@@ -82,7 +82,7 @@
       title: 'Privacy Policy',
       sections: [
         { h: 'Summary', p: [
-          'Aviation Widget keeps your settings on your device and uses a backend only to fetch aviation data. There are no user accounts, no advertising, and no third-party analytics or tracking SDKs in the app.'
+          'TAFCast keeps your settings on your device and uses a backend only to fetch aviation data. There are no user accounts, no advertising, and no third-party analytics or tracking SDKs in the app.'
         ]},
         { h: 'Stored on your device', p: [
           'Your saved airports, units, theme, alert thresholds, an optional custom backend URL, and the most recent weather data are stored locally on your device (in app storage / browser-style local storage) so the App opens instantly and works offline. This data stays on the device; it is not sent to us except as the airport codes needed to fetch data (below). Cloud backup of this data is disabled.'

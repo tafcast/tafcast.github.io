@@ -516,24 +516,52 @@
       </div>
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:10px;margin:20px 0 24px">
-      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
-        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">1</span>
-        <span style="font-size:.9rem;color:#d5e4f3">Tap <strong>Launch Web App</strong> below in <strong>Safari.</strong></span>
+    <!-- Desktop: QR Code + Steps -->
+    <div id="ios-modal-desktop">
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:6px 0 16px">
+        <div style="background:#ffffff;padding:12px;border-radius:20px;box-shadow:0 12px 30px rgba(0,0,0,.45);margin-bottom:12px">
+          <img src="./qr-app.svg" width="168" height="168" alt="Scan to open TAFCast on iPhone" style="display:block;border-radius:12px">
+        </div>
+        <p style="margin:0;font-size:.9rem;color:#d5e4f3;max-width:38ch;line-height:1.45">Point your iPhone or iPad camera at the QR code to open in <strong>Safari.</strong></p>
       </div>
-      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
-        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">2</span>
-        <span style="font-size:.9rem;color:#d5e4f3">In Safari (bottom toolbar on iPhone, top on iPad), tap <strong>Share</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8m-4-6l-4-4l-4 4m4-4v13"/></svg></span></span>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin:0 0 18px">
+        <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+          <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">1</span>
+          <span style="font-size:.9rem;color:#d5e4f3">In Safari (bottom toolbar on iPhone, top on iPad), tap <strong>Share</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8m-4-6l-4-4l-4 4m4-4v13"/></svg></span></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+          <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">2</span>
+          <span style="font-size:.9rem;color:#d5e4f3">Select <strong>"Add to Home Screen"</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8m-4-4h8"/></svg></span></span>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
-        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">3</span>
-        <span style="font-size:.9rem;color:#d5e4f3">Select <strong>"Add to Home Screen"</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8m-4-4h8"/></svg></span></span>
+
+      <div style="display:flex;justify-content:center;border-top:1px solid rgba(20,58,87,.6);padding-top:14px">
+        <a href="./app/index.html" style="font-size:.85rem;color:#7d9cba;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#7d9cba'">Or test interactive preview in browser →</a>
       </div>
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <a href="./app/index.html" style="display:block;text-align:center;background:#0a84ff;color:#ffffff;font-weight:800;font-size:1rem;padding:15px;border-radius:999px;text-decoration:none;transition:background .2s" style-hover="background:#3fa0ff;color:#ffffff;text-decoration:none">Launch Web App →</a>
-      <p style="margin:0;font-size:.8rem;color:#5d81a3;text-align:center">Runs standalone in full-screen with offline caching.</p>
+    <!-- Mobile: Tap button to launch -->
+    <div id="ios-modal-mobile" style="display:none">
+      <div style="display:flex;flex-direction:column;gap:10px;margin:20px 0 24px">
+        <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+          <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">1</span>
+          <span style="font-size:.9rem;color:#d5e4f3">Tap <strong>Launch Web App</strong> below in <strong>Safari.</strong></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+          <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">2</span>
+          <span style="font-size:.9rem;color:#d5e4f3">In Safari (bottom toolbar on iPhone, top on iPad), tap <strong>Share</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8m-4-6l-4-4l-4 4m4-4v13"/></svg></span></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:#06111c;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px">
+          <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#0a84ff;color:#fff;font-size:12px;font-weight:800;flex:none">3</span>
+          <span style="font-size:.9rem;color:#d5e4f3">Select <strong>"Add to Home Screen"</strong> <span style="display:inline-flex;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.12);vertical-align:middle;margin:0 2px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8m-4-4h8"/></svg></span></span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <a href="./app/index.html" style="display:block;text-align:center;background:#0a84ff;color:#ffffff;font-weight:800;font-size:1rem;padding:15px;border-radius:999px;text-decoration:none;transition:background .2s" style-hover="background:#3fa0ff;color:#ffffff;text-decoration:none">Launch Web App →</a>
+        <p style="margin:0;font-size:.8rem;color:#5d81a3;text-align:center">Runs standalone in full-screen with offline caching.</p>
+      </div>
     </div>
   </div>
 </div>
@@ -878,6 +906,7 @@
 
     "Install on iPhone / iPad": "Instalar no iPhone / iPad",
     "Turn TAFCast into a full-screen app in 3 quick steps": "Transforma o TAFCast numa App em 3 passos rápidos",
+    "Point your iPhone or iPad camera at the QR code to open in": "Aponta a câmara do teu iPhone ou iPad para o código QR para abrir no",
     "Tap": "Toca em",
     "Launch Web App": "Abrir Web App",
     "below in": "abaixo no",
@@ -888,6 +917,7 @@
     "\"Add to Home Screen\"": "\"Adicionar ao Ecrã Principal\"",
     "Launch Web App →": "Abrir Web App →",
     "Runs standalone in full-screen with offline caching.": "Funciona em ecrã inteiro com cache offline.",
+    "Or test interactive preview in browser →": "Ou testa a pré-visualização no navegador →",
     "DECODED": "DESCODIFICADO",
     "RAW": "EM BRUTO",
     "WIND": "VENTO",
@@ -954,7 +984,17 @@
 
   window.openIosModal = function() {
     var m = document.getElementById('ios-modal');
-    if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    if (m) {
+      var isMobile = /iPad|iPhone|iPod|Android/i.test(navigator.userAgent) || 
+                     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) || 
+                     window.innerWidth <= 768;
+      var d = document.getElementById('ios-modal-desktop');
+      var mob = document.getElementById('ios-modal-mobile');
+      if (d) d.style.display = isMobile ? 'none' : 'block';
+      if (mob) mob.style.display = isMobile ? 'block' : 'none';
+      m.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
   };
   window.closeIosModal = function() {
     var m = document.getElementById('ios-modal');
