@@ -3,35 +3,116 @@
   const { useState, useRef } = React;
   const AV = window.AV;
 
+  function decodeRawTaf(raw) {
+    if (!raw) return '';
+    const clean = raw.replace(/=/g, '').trim();
+    const lines = clean.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const segments = [];
+    lines.forEach(line => {
+      const parts = line.split(/\s+(?=(?:BECMG|TEMPO|FM\d{6}|PROB\d\d)\b)/i);
+      parts.forEach(p => { if (p.trim()) segments.push(p.trim()); });
+    });
+    if (!segments.length) return clean;
+
+    return segments.map((seg, i) => {
+      const tokens = seg.split(/\s+/);
+      let label = '', change = '', wind = '';
+      const conds = [];
+      let startIdx = 0;
+      if (/^(BECMG|TEMPO)$/i.test(tokens[0])) {
+        change = tokens[0].toUpperCase();
+        startIdx = 1;
+      } else if (/^PROB\d\d$/i.test(tokens[0])) {
+        change = tokens[0].toUpperCase();
+        startIdx = 1;
+        if (tokens[1] && /^TEMPO$/i.test(tokens[1])) {
+          change += ' TEMPO';
+          startIdx = 2;
+        }
+      } else if (/^FM\d{6}$/i.test(tokens[0])) {
+        const hr = tokens[0].slice(4, 6), min = tokens[0].slice(6, 8);
+        label = 'From ' + hr + ':' + min + 'Z';
+        startIdx = 1;
+      }
+      for (let j = startIdx; j < tokens.length; j++) {
+        const tok = tokens[j];
+        if (i === 0 && j < 4 && /^(TAF|SAO|AMD|COR|[A-Z]{4}|\d{6}Z)$/i.test(tok)) continue;
+        const valMatch = tok.match(/^(\d{2})(\d{2})\/(\d{2})(\d{2})$/);
+        if (valMatch && !label) {
+          label = valMatch[2] + ':00Z \u2192 ' + valMatch[4] + ':00Z' + (change ? ' \u00b7 ' + change : '');
+          continue;
+        }
+        const wMatch = tok.match(/^(\d{3}|VRB)(\d{2,3})(?:G(\d{2,3}))?KT$/i);
+        if (wMatch && !wind) {
+          const dir = wMatch[1] === 'VRB' ? 'VRB' : wMatch[1] + '\u00b0';
+          wind = dir + ' ' + parseInt(wMatch[2], 10) + (wMatch[3] ? 'G' + parseInt(wMatch[3], 10) : '') + ' kt';
+          continue;
+        }
+        if (/^CAVOK$/i.test(tok)) { conds.push('CAVOK \u2014 ceiling & vis OK'); continue; }
+        if (/^\d{4}$/.test(tok)) {
+          const meters = parseInt(tok, 10);
+          if (meters >= 9999) conds.push('10+ km');
+          else conds.push((meters / 1000).toFixed(meters % 1000 === 0 ? 0 : 1) + ' km');
+          continue;
+        }
+        if (/^(NSC|NCD|SKC|CLR)$/i.test(tok)) { conds.push('No significant clouds'); continue; }
+        const cMatch = tok.match(/^(FEW|SCT|BKN|OVC|VV)(\d{3})(CB|TCU)?$/i);
+        if (cMatch) {
+          const type = cMatch[1].toUpperCase();
+          const alt = parseInt(cMatch[2], 10) * 100;
+          const extra = cMatch[3] ? ' ' + cMatch[3].toUpperCase() : '';
+          conds.push(type + ' ' + alt.toLocaleString() + '\'' + extra);
+          continue;
+        }
+        const wxMap = {
+          '-RA': 'Light rain', 'RA': 'Rain', '+RA': 'Heavy rain',
+          '-DZ': 'Light drizzle', 'DZ': 'Drizzle', '+DZ': 'Heavy drizzle',
+          '-SN': 'Light snow', 'SN': 'Snow', '+SN': 'Heavy snow',
+          'TS': 'Thunderstorm', 'TSRA': 'Thunderstorm with rain', '+TSRA': 'Heavy thunderstorm with rain',
+          'SHRA': 'Rain showers', '+SHRA': 'Heavy rain showers', '-SHRA': 'Light rain showers',
+          'BR': 'Mist', 'FG': 'Fog', 'HZ': 'Haze', 'FU': 'Smoke', 'DU': 'Dust'
+        };
+        if (wxMap[tok.toUpperCase()]) { conds.push(wxMap[tok.toUpperCase()]); continue; }
+      }
+      if (!label) label = 'Period ' + (i + 1) + (change ? ' \u00b7 ' + change : '');
+      const line2 = (wind + (conds.length ? '  ' + conds.join(' \u00b7 ') : '')).trim();
+      return label + (line2 ? '\n  ' + line2 : '');
+    }).join('\n');
+  }
+
   // A single home-screen widget for one airport.
   function WidgetCard({ ap, mode = 'summary', size = 'small', dark = true, mono }) {
     const cat = AV.cat(ap.category);
-    const m = ap.metar || ap.ipmaEma || (ap.nearestStation && ap.nearestStation.metar) || { wind: { dir: 0, spd: 0 }, temp: '—', qnh: '—', clouds: [] };
+    const catColor = dark ? cat.color : (ap.category === 'VFR' ? '#1b8738' : (ap.category === 'MVFR' ? '#0066cc' : (ap.category === 'IFR' ? '#d70015' : (ap.category === 'LIFR' ? '#a030a0' : cat.color))));
+    const isOfficial = window.AV?.isOfficialStation ? window.AV.isOfficialStation(ap.icao) : false;
+    const m = ap.metar || (!isOfficial && ap.ipmaEma) || (ap.nearestStation && ap.nearestStation.metar) || { wind: { dir: 0, spd: 0 }, temp: '—', qnh: '—', clouds: [] };
     const bg = dark ? '#15181d' : '#ffffff';
     const text = dark ? '#fff' : '#10131a';
-    const dim = dark ? 'rgba(235,235,245,0.6)' : 'rgba(60,60,67,0.6)';
-    const faint = dark ? 'rgba(235,235,245,0.32)' : 'rgba(60,60,67,0.3)';
+    const dim = dark ? 'rgba(235,235,245,0.6)' : '#475569';
+    const faint = dark ? 'rgba(235,235,245,0.32)' : '#64748b';
+    const bodyColor = dark ? 'rgba(235,235,245,0.72)' : '#334155';
+    const cardBorder = dark ? 'none' : '1px solid rgba(0,0,0,0.08)';
     const wind = `${String(m.wind.dir).padStart(3, '0')}/${m.wind.spd}${m.wind.gust ? `G${m.wind.gust}` : ''}`;
     const radius = 22;
 
     const Head = () => (
       <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-        <span style={{ width: 9, height: 9, borderRadius: 9, background: cat.color }} />
+        <span style={{ width: 9, height: 9, borderRadius: 9, background: catColor }} />
         <span style={{ font: `800 15px ${mono}`, color: text, letterSpacing: 0.5 }}>{ap.icao}</span>
-        <span style={{ font: `700 11px ${mono}`, color: cat.color, marginLeft: 'auto', letterSpacing: 0.5 }}>{cat.label}</span>
+        <span style={{ font: `700 11px ${mono}`, color: catColor, marginLeft: 'auto', letterSpacing: 0.5 }}>{cat.label}</span>
       </div>
     );
 
     if (size === 'small') {
       return (
         <div style={{ width: 158, height: 158, borderRadius: radius, background: bg, padding: 15, boxSizing: 'border-box',
-          display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.25)' }}>
+          display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.25)', border: cardBorder }}>
           <Head />
           {mode === 'taf' ? (
             <div style={{ marginTop: 12, flex: 1 }}>
               <div style={{ font: `600 10px ${mono}`, color: faint, letterSpacing: 1 }}>TAF NEXT</div>
               <div style={{ font: `600 14px ${mono}`, color: text, marginTop: 6, lineHeight: 1.3 }}>{(ap.taf && ap.taf.periods && ap.taf.periods[0] && ap.taf.periods[0].wind) || (ap.nearestStation && ap.nearestStation.taf && ap.nearestStation.taf.periods && ap.nearestStation.taf.periods[0] && ap.nearestStation.taf.periods[0].wind) || '—'}</div>
-              <div style={{ font: `400 12px -apple-system, system-ui`, color: dim, marginTop: 6, lineHeight: 1.3, textWrap: 'pretty' }}>{(ap.taf && ap.taf.periods && ap.taf.periods[0] && ap.taf.periods[0].text) || (ap.nearestStation && ap.nearestStation.taf && ap.nearestStation.taf.periods && ap.nearestStation.taf.periods[0] && ap.nearestStation.taf.periods[0].text) || 'No forecast'}</div>
+              <div style={{ font: `400 12px -apple-system, system-ui`, color: bodyColor, marginTop: 6, lineHeight: 1.3, textWrap: 'pretty' }}>{(ap.taf && ap.taf.periods && ap.taf.periods[0] && ap.taf.periods[0].text) || (ap.nearestStation && ap.nearestStation.taf && ap.nearestStation.taf.periods && ap.nearestStation.taf.periods[0] && ap.nearestStation.taf.periods[0].text) || 'No forecast'}</div>
             </div>
           ) : (
             <div style={{ marginTop: 'auto' }}>
@@ -46,32 +127,49 @@
       );
     }
 
-    // medium — ALWAYS the TAF (raw or decoded) + a WIND / CEILING / QNH side panel from the
+    // medium — ALWAYS the TAF/SAO (raw or decoded) + a WIND / CEILING / QNH side panel from the
     // latest METAR, mirroring the native home-screen widget.
     const ceil = (() => {
       const cs = (m.clouds || []).filter(c => (c.cover === 'BKN' || c.cover === 'OVC') && c.base != null);
       return cs.length ? Math.min(...cs.map(c => c.base)) + "'" : 'NSC';
     })();
-    const tafBody = (ap.taf && ap.taf.raw)
-      ? (mode === 'decoded'
-          ? (ap.taf.periods || []).map(p => `${p.label}\n  ${p.wind}${p.text ? '  ' + p.text : ''}`).join('\n')
-          : ap.taf.raw)
-      : (ap.syntheticTaf && ap.syntheticTaf.raw) ? (ap.syntheticTaf.raw || '').replace(/^TAF\b/i, 'SAO')   // advisory model SAO when no official TAF
-      : (ap.nearestStation && ap.nearestStation.taf && ap.nearestStation.taf.raw) ? ap.nearestStation.taf.raw
-      : 'No forecast available.';
+
+    const hasTaf = ap.taf && ap.taf.raw;
+    const hasSynth = !isOfficial && ap.syntheticTaf && ap.syntheticTaf.raw;
+    const hasNear = ap.nearestStation && ap.nearestStation.taf && ap.nearestStation.taf.raw;
+
+    const rawTaf = hasTaf ? ap.taf.raw
+      : hasSynth ? (ap.syntheticTaf.raw || '').replace(/^TAF\b/i, 'SAO')
+      : hasNear ? ap.nearestStation.taf.raw
+      : null;
+
+    let tafBody;
+    if (!rawTaf) {
+      tafBody = 'No forecast available.';
+    } else if (mode === 'raw') {
+      tafBody = rawTaf;
+    } else {
+      // decoded
+      if (hasTaf && ap.taf.periods && ap.taf.periods.length) {
+        tafBody = ap.taf.periods.map(p => `${p.label}\n  ${p.wind}${p.text ? '  ' + p.text : ''}`).join('\n');
+      } else {
+        tafBody = decodeRawTaf(rawTaf);
+      }
+    }
+
     return (
-      <div style={{ width: 338, height: 158, borderRadius: radius, background: bg, padding: 15, boxSizing: 'border-box',
-        display: 'flex', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.25)' }}>
+      <div style={{ width: '100%', maxWidth: 340, minWidth: 0, height: 158, borderRadius: radius, background: bg, padding: '13px 14px', boxSizing: 'border-box',
+        display: 'flex', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.25)', border: cardBorder }}>
         <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
           <Head />
           <div style={{ font: `500 11px -apple-system, system-ui`, color: dim, marginTop: 2,
             whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ap.name}</div>
-          <div style={{ marginTop: 7, flex: 1, font: `500 11.5px ${mono}`, color: dim, lineHeight: 1.35,
+          <div style={{ marginTop: 7, flex: 1, font: `500 11px ${mono}`, color: bodyColor, lineHeight: 1.35,
             whiteSpace: 'pre-wrap', overflow: 'hidden',
             display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 6 }}>{tafBody}</div>
         </div>
-        <div style={{ width: 1, background: dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.08)', margin: '2px 12px' }} />
-        <div style={{ width: 82, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 10 }}>
+        <div style={{ width: 1, background: dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.08)', margin: '2px 8px', flexShrink: 0 }} />
+        <div style={{ width: 74, flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 10 }}>
           {[['WIND', wind], ['CEILING', ceil], ['QNH', `${m.qnh}`]].map(([l, v]) => (
             <div key={l}>
               <div style={{ font: `600 9px ${mono}`, color: faint, letterSpacing: 1 }}>{l}</div>
@@ -126,7 +224,7 @@
         <div style={{ position: 'absolute', display: 'flex', gap: 4, ...dotPos }}>
           {order.map((_, i) => (
             <span key={i} style={{ width: ds, height: ds, borderRadius: 5,
-              background: i === idx ? '#fff' : 'rgba(255,255,255,0.4)' }} />
+              background: i === idx ? (dark ? '#fff' : '#10131a') : (dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.22)') }} />
           ))}
         </div>
       </div>

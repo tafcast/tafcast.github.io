@@ -12,6 +12,61 @@
   };
 
   const airports = {
+    LPPT: {
+      icao: 'LPPT', name: 'Lisboa', city: 'Lisbon', country: 'Portugal',
+      lat: '38°46′N', lon: '09°08′W', elev: 374,
+      runways: ['02/20'],
+      category: 'VFR',
+      updatedMin: 2,
+      windAlert: false,
+      metarSource: 'OFFICIAL',
+      ipmaEma: null,
+      syntheticTaf: null,
+      metar: {
+        raw: 'LPPT 091100Z 36009KT 9999 FEW030 22/13 Q1022',
+        time: '11:00Z',
+        wind: { dir: 360, spd: 9, gust: null },
+        visM: 9999, vis: '10+ km',
+        clouds: [{ cover: 'FEW', base: 3000 }],
+        temp: 22, dew: 13, qnh: 1022,
+        summary: 'Clear, light N breeze',
+      },
+      taf: {
+        raw: 'LPPT 091100Z 0912/1018 36012KT CAVOK BECMG 0920/0922 01006KT',
+        issued: '11:00Z', valid: '09 12:00Z → 10 18:00Z',
+        periods: [
+          { label: 'Now → 20:00Z', wind: '360° 12 kt', text: 'CAVOK — ceiling & visibility OK', cat: 'VFR' },
+          { label: '20:00 → 22:00Z', wind: '010° 6 kt', text: 'Light north-northeasterly', cat: 'VFR' },
+        ],
+      },
+      notams: [
+        {
+          id: 'A3402/26',
+          sev: 'caution',
+          summary: 'TWY A1 CENTRE LINE LIGHTS U/S DUE TO WIP',
+          raw: 'A3402/26 NOTAMR A3384/26\nQ) LPPC/QLXAS/IV/M  /A /000/999/3846N00908W005\nA) LPPT B) 2606081011 C) 2612312359EST\nE) TWY A1 CENTRE LINE LIGHTS U/S DUE TO WIP.',
+          from: '08 Jun 10:11Z',
+          to: '31 Dec 23:59Z',
+        },
+        {
+          id: 'A3942/26',
+          sev: 'info',
+          summary: 'EXTENSIONS OF APRON 10 AND NEW APRON 23. TWY M1 RENAMED R1. TWY K CLOSED.',
+          raw: 'A3942/26 NOTAMN\nQ) LPPC/QFAHW/IV/BO /A /000/999/3846N00908W005\nA) LPPT B) 2606290954 C) 2612312359EST\nE) REF AIP SUP 083/2024 LPPT AD - MAJOR WORKS - EXTENSIONS OF APRON 10 AND NEW APRON 23.\nTWY M1 RENAMED R1.\nTWY M2, BTN T1 AND Q1 RENAMED R2.\nTWY M2, BTN Q1 AND M3 RENAMED R3.\nTHE CURRENT TEMPORARY PARKING AREA 351 CLOSED.\nTWY K CLOSED.',
+          from: '29 Jun 09:54Z',
+          to: '31 Dec 23:59Z',
+        },
+        {
+          id: 'A4314/26',
+          sev: 'info',
+          summary: 'LISBOA IAC RNP Z RWY20 (AR) PLAN VIEW CHANGE: WAYPOINT PT502 RNP 0.3',
+          raw: 'A4314/26 NOTAMN\nQ) LPPC/QPICH/I /NBO/A /000/999/3846N00908W005\nA) LPPT B) 2608060000 C) PERM\nE) LISBOA IAC RNP Z RWY20 (AR) PLAN VIEW CHANGE AS FOLLOW:\nPATH TERMINATOR: TF\nWAYPOINT IDENTIFIER: PT502\nCHANGE RNP VALUE TO: RNP 0.3.',
+          from: '06 Aug 00:00Z',
+          to: 'PERM',
+        },
+      ],
+    },
+
     LPBJ: {
       icao: 'LPBJ', name: 'Beja', city: 'Beja', country: 'Portugal',
       lat: '38°04′N', lon: '07°56′W', elev: 636,
@@ -19,6 +74,9 @@
       category: 'VFR',
       updatedMin: 3,
       windAlert: false,
+      metarSource: 'OFFICIAL',
+      ipmaEma: null,
+      syntheticTaf: null,
       metar: {
         raw: 'LPBJ 041530Z 32008KT 9999 FEW040 25/11 Q1019',
         time: '15:30Z',
@@ -36,16 +94,36 @@
           { label: '18:00 → 20:00Z', wind: '310° 6 kt', text: 'Becoming lighter, backing NW', cat: 'VFR' },
         ],
       },
-      notams: [],   // sample airports carry no demo NOTAMs — live NOTAMs come from the backend
+      notams: [
+        {
+          id: 'M1310/26',
+          sev: 'caution',
+          summary: 'RWY 01R/19L PHYSICAL CHARACTERISTICS: RWY SLIPPERY WHEN WET',
+          raw: 'M1310/26 NOTAMN\nQ) LPPC/QMRLC/IV/NBO/A /000/999/3804N00756W005\nA) LPBJ B) 2609010800 C) 2611302359\nE) RWY 01R/19L PHYSICAL CHARACTERISTICS, ADD, RWY SLIPPERY WHEN WET.\nREF MIL AIP PAGE AD-2.LPBJ-8.',
+          from: '01 Sep 08:00Z',
+          to: '30 Nov 23:59Z',
+        },
+        {
+          id: 'M1205/26',
+          sev: 'info',
+          summary: 'AERODROME OPERATIONAL HOURS MON-FRI 0800-1700 UTC',
+          raw: 'M1205/26 NOTAMN\nQ) LPPC/QFAAH/IV/NBO/A /000/999/3804N00756W005\nA) LPBJ B) 2608150800 C) 2612311700\nE) AERODROME OPERATIONAL HOURS MON-FRI 0800-1700 UTC.',
+          from: '15 Aug 08:00Z',
+          to: '31 Dec 17:00Z',
+        },
+      ],
     },
 
     LPCS: {
       icao: 'LPCS', name: 'Cascais', city: 'Cascais · Tires', country: 'Portugal',
       lat: '38°43′N', lon: '09°21′W', elev: 326,
       runways: ['17/35'],
-      category: 'MVFR',
+      category: 'VFR',
       updatedMin: 6,
       windAlert: true,
+      metarSource: 'OFFICIAL',
+      ipmaEma: null,
+      syntheticTaf: null,
       metar: {
         raw: 'LPCS 041530Z 29014G24KT 9999 SCT012 BKN025 19/15 Q1016',
         time: '15:30Z',
@@ -63,7 +141,24 @@
           { label: '14:00 → 18:00Z · TEMPO', wind: '300° 18 kt G28', text: 'Gusty westerly, temporary', cat: 'MVFR' },
         ],
       },
-      notams: [],
+      notams: [
+        {
+          id: 'A4795/26',
+          sev: 'caution',
+          summary: 'RNP RWY 35: LPV MINIMA VALUES DA(H) AND OCH CHANGED TO 820(533) AND 533',
+          raw: 'A4795/26 NOTAMN\nQ) LPPC/QPIAU/I /NBO/A /000/999/3843N00921W005\nA) LPCS B) 2608151200 C) PERM\nE) RNP RWY 35: LPV MINIMA VALUES DA(H) AND OCH CHANGED TO, RESPECTIVELY, 820(533) AND 533.',
+          from: '15 Aug 12:00Z',
+          to: 'PERM',
+        },
+        {
+          id: 'A4210/26',
+          sev: 'info',
+          summary: 'CASCAIS AFIS / INFORMATION SERVICE HOURS 0600-2000 UTC DAILY',
+          raw: 'A4210/26 NOTAMN\nQ) LPPC/QFAAH/IV/BO /A /000/999/3843N00921W005\nA) LPCS B) 2607010600 C) 2612312000\nE) CASCAIS AFIS HOURS OF SERVICE 0600-2000 UTC DAILY.',
+          from: '01 Jul 06:00Z',
+          to: '31 Dec 20:00Z',
+        },
+      ],
     },
 
     LPEV: {
@@ -89,18 +184,27 @@
           { label: 'Now → 12:00Z (+1)', wind: '360° 6 kt', text: 'CAVOK — ceiling & visibility OK', cat: 'VFR' },
         ],
       },
-      notams: [],
+      notams: [
+        {
+          id: 'A5011/26',
+          sev: 'caution',
+          summary: 'LOCATOR EVR FREQ 425 KHZ U/S',
+          raw: 'A5011/26 NOTAMN\nQ) LPPC/QNLAS/IV/M  /A /000/999/3832N00753W005\nA) LPEV B) 2609100800 C) 2612312359\nE) LOCATOR EVR FREQ 425 KHZ U/S.',
+          from: '10 Sep 08:00Z',
+          to: '31 Dec 23:59Z',
+        },
+      ],
     },
   };
 
   // Airports available to add (search results)
   const directory = [
-    { icao: 'LPPT', name: 'Lisboa', city: 'Lisbon', category: 'VFR' },
-    { icao: 'LPPR', name: 'Porto', city: 'Porto · Sá Carneiro', category: 'MVFR' },
-    { icao: 'LPFR', name: 'Faro', city: 'Faro', category: 'VFR' },
-    { icao: 'LPPM', name: 'Portimão', city: 'Portimão', category: 'VFR' },
-    { icao: 'LPMR', name: 'Monte Real', city: 'Monte Real AB', category: 'IFR' },
-    { icao: 'LPVR', name: 'Vila Real', city: 'Vila Real', category: 'MVFR' },
+    { icao: 'LPPT', name: 'Lisboa', city: 'Lisbon' },
+    { icao: 'LPPR', name: 'Porto', city: 'Porto · Sá Carneiro' },
+    { icao: 'LPFR', name: 'Faro', city: 'Faro' },
+    { icao: 'LPPM', name: 'Portimão', city: 'Portimão' },
+    { icao: 'LPMR', name: 'Monte Real', city: 'Monte Real AB' },
+    { icao: 'LPVR', name: 'Vila Real', city: 'Vila Real' },
   ];
 
   function cat(c) { return CAT[c] || CAT.VFR; }
@@ -157,9 +261,13 @@
     let changed = false;
     (list || []).forEach(a => {
       if (a && a.icao) {
+        const prev = metaCache[a.icao] || {};
         metaCache[a.icao] = {
-          icao: a.icao, name: a.name || a.icao, city: a.city || '',
-          category: a.category || 'VFR', country: a.country || '',
+          icao: a.icao,
+          name: a.name || prev.name || a.icao,
+          city: a.city || prev.city || '',
+          category: a.category || prev.category || null,
+          country: a.country || prev.country || '',
         };
         changed = true;
       }
@@ -211,20 +319,32 @@
     return s;
   }
 
-  function ago(min) {
-    if (min < 1) return 'just now';
-    if (min < 60) return `${min}m ago`;
-    const h = Math.floor(min / 60);
-    return `${h}h ago`;
+  // Certified Portuguese aeronautical meteorological stations (IPMA / FAP).
+  // These stations possess certified aeronautical meteorological infrastructure (METAR/SPECI and/or TAF).
+  // They must NEVER be treated as unmonitored airfields, and must NEVER receive IPMA EMA or Synthetic Airfield Outlook (SAO).
+  const PT_OFFICIAL_METEO_STATIONS = new Set([
+    'LPAR', 'LPAZ', 'LPBJ', 'LPCR', 'LPCS', 'LPFL', 'LPFR', 'LPGR',
+    'LPHR', 'LPLA', 'LPMA', 'LPMR', 'LPMT', 'LPOV', 'LPPD', 'LPPI',
+    'LPPR', 'LPPS', 'LPPT', 'LPSJ', 'LPST', 'LPTN',
+  ]);
+
+  function isOfficialStation(icao) {
+    if (!icao) return false;
+    const up = icao.toUpperCase();
+    if (PT_OFFICIAL_METEO_STATIONS.has(up)) return true;
+    // Any international airport outside Portugal is an official reporting aerodrome if tracked
+    if (!up.startsWith('LP')) return true;
+    return false;
   }
 
   window.AV = {
     CAT, cat, meta, rememberAirports, apiBase, country, airports, directory,
     compass, windText, ago,
+    PT_OFFICIAL_METEO_STATIONS, isOfficialStation,
     // units
     units, setUnit, convTempVal, tempUnit, fmtTemp, convWindVal, windUnit, convPressVal, pressUnit, fmtPress,
     // default saved order for the app
-    saved: ['LPBJ', 'LPCS', 'LPEV'],
+    saved: ['LPPT'],
   };
 
   // Push saved airports + backend URL + widget settings to the native

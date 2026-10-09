@@ -135,7 +135,16 @@
   function NotamCard({ ap, t }) {
     const notams = ap.notams || [];
     const [expanded, setExpanded] = useState(false);
-    if (!notams.length) return null;
+    if (!notams.length) {
+      return (
+        <Card t={t}>
+          <SectionTitle t={t} badge="!" title="NOTAMs" meta="0 active" />
+          <div style={{ font: `500 14px ${t.body}`, color: t.textDim, lineHeight: 1.5 }}>
+            No active NOTAMs reported for this aerodrome.
+          </div>
+        </Card>
+      );
+    }
 
     // Prioritize caution/warning NOTAMs first
     const sorted = [...notams].sort((a, b) => {
@@ -223,13 +232,31 @@
   function WindForecast({ hours, t }) {
     if (!hours || !hours.length) return null;
     const hh = (ts) => String(new Date(ts * 1000).getUTCHours()).padStart(2, '0') + 'Z';
-    // Keep horizontal scrolling local — don't let it trigger the airport carousel.
-    const stop = (e) => e.stopPropagation();
+    const touchRef = React.useRef({ x: 0, y: 0, locked: null });
+    const onTouchStart = (e) => {
+      const p = e.touches ? e.touches[0] : e;
+      touchRef.current = { x: p.clientX, y: p.clientY, locked: null };
+    };
+    const onTouchMove = (e) => {
+      const tr = touchRef.current;
+      if (!tr) return;
+      const p = e.touches ? e.touches[0] : e;
+      const dx = Math.abs(p.clientX - tr.x);
+      const dy = Math.abs(p.clientY - tr.y);
+      if (tr.locked === null && (dx > 6 || dy > 6)) {
+        tr.locked = dx > dy ? 'h' : 'v';
+      }
+      if (tr.locked === 'h') {
+        // Horizontal scroll inside wind forecast: stop propagation so carousel doesn't switch airports
+        e.stopPropagation();
+      }
+      // If locked === 'v', do NOT stop propagation! Native vertical page scrolling works smoothly!
+    };
     return (
       <Card t={t}>
         <SectionTitle t={t} badge="W" title="Wind outlook" meta={`24h · ${AV.windUnit()}`} />
-        <div onMouseDown={stop} onMouseMove={stop} onTouchStart={stop} onTouchMove={stop}
-          style={{ display: 'flex', overflowX: 'auto', paddingBottom: 6, touchAction: 'pan-x', WebkitOverflowScrolling: 'touch' }}>
+        <div onTouchStart={onTouchStart} onTouchMove={onTouchMove}
+          style={{ display: 'flex', overflowX: 'auto', paddingBottom: 6, touchAction: 'pan-x pan-y', WebkitOverflowScrolling: 'touch' }}>
           {hours.map((h, i) => (
             <div key={i} style={{ flex: '0 0 auto', width: 52, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
               padding: '2px 0', borderRight: i < hours.length - 1 ? `1px solid ${t.hair}` : 'none' }}>
@@ -343,6 +370,9 @@
   }
 
   function getEmaData(ap) {
+    if (!ap || !ap.icao) return null;
+    const isOfficial = window.AV?.isOfficialStation ? window.AV.isOfficialStation(ap.icao) : false;
+    if (isOfficial) return null; // Certified stations NEVER show IPMA EMA
     if (ap.ipmaEma) return ap.ipmaEma;
     const o = ap.syntheticTaf && ap.syntheticTaf.obs;
     if (o && o.temp_c != null) {
@@ -374,6 +404,9 @@
 
   // IPMA EMA observation card (Portuguese aerodromes with automatic surface station).
   function IpmaEmaCard({ ap, t, raw }) {
+    if (!ap || !ap.icao) return null;
+    const isOfficial = window.AV?.isOfficialStation ? window.AV.isOfficialStation(ap.icao) : false;
+    if (isOfficial) return null;
     const ema = getEmaData(ap);
     if (!ema) return null;
     const [showNote, setShowNote] = useState(false);
@@ -492,16 +525,19 @@
 
   // Advisory model-generated Synthetic Airfield Outlook for aerodromes with no official station.
   function SyntheticTafCard({ ap, t }) {
+    if (!ap || !ap.icao) return null;
+    const isOfficial = window.AV?.isOfficialStation ? window.AV.isOfficialStation(ap.icao) : false;
+    if (isOfficial) return null;
     const s = ap.syntheticTaf;
     const [showNote, setShowNote] = useState(false);
     if (!s) return null;
-    const rawSao = (s.raw || s.taf || '').replace(/^TAF\b/i, 'SAO').trim();
+    const rawSao = (s.raw || s.taf || '').replace(/\bTAF\b/gi, 'SAO').trim();
     if (!rawSao) return null;
     const o = s.obs || {};
     const amber = '#e5901a';
     return (
       <Card t={t} style={{ border: `1px solid ${t.dark ? 'rgba(245,166,35,0.35)' : 'rgba(245,166,35,0.45)'}` }}>
-        <SectionTitle t={t} badge="≈" title="Airfield Outlook (SAO)" meta="SYNTHETIC · ADVISORY" />
+        <SectionTitle t={t} badge="≈" title="Synthetic Airfield Outlook (SAO)" meta="SYNTHETIC · ADVISORY" />
         <div style={{ font: `500 12.5px ${t.body}`, color: t.textDim, marginBottom: 10, lineHeight: 1.4 }}>
           Model forecast for {ap.icao}{o.station_name ? ` · neighbour obs: ${o.station_name}` : (s.station ? ` · neighbour obs: ${s.station}` : '')}.
         </div>
@@ -586,10 +622,11 @@
     const editing = layout.editing;
     const order = layout.order;
 
-    const hasOfficialMetar = !!(ap.metar && ap.metarSource === 'OFFICIAL');
-    const hasIpma = !!emaData;
+    const isOfficial = window.AV?.isOfficialStation ? window.AV.isOfficialStation(ap.icao) : false;
+    const hasOfficialMetar = !!(ap.metar && (ap.metarSource === 'OFFICIAL' || isOfficial));
+    const hasIpma = !isOfficial && !!emaData;
     const hasTaf = !!ap.taf;
-    const hasSynth = !!(ap.syntheticTaf && (ap.syntheticTaf.raw || ap.syntheticTaf.taf));
+    const hasSynth = !isOfficial && !!(ap.syntheticTaf && (ap.syntheticTaf.raw || ap.syntheticTaf.taf));
     const hasNearest = !!(ap.nearestStation && (ap.nearestStation.metar || ap.nearestStation.taf));
 
     // Which islands actually have something to show for this airport.
@@ -601,7 +638,7 @@
       nearest: hasNearest,
       wind: !!(windHours && windHours.length),
       runways: !!(hasWx && ap.runways && ap.runways.length),
-      notams: !!(ap.notams && ap.notams.length),
+      notams: true,
     };
     const visibleIds = order.filter(id => visible[id]);
 
@@ -612,7 +649,7 @@
             <SectionTitle t={t} badge="M" title="METAR" meta={hasOfficialMetar ? `OBS ${ap.metar.time}` : 'OFFICIAL'} />
             {!hasOfficialMetar ? (
               <div style={{ font: `500 14px ${t.body}`, color: t.textDim, lineHeight: 1.5 }}>
-                No official METAR station at this aerodrome.
+                {isOfficial ? 'No current METAR observation reported.' : 'No official METAR station at this aerodrome.'}
               </div>
             ) : raw ? (
               <div style={{ font: `500 13.5px ${t.mono}`, color: t.text, lineHeight: 1.6, whiteSpace: 'pre-wrap',
@@ -669,34 +706,34 @@
     return (
       <div style={{ padding: '0 14px 28px', display: 'flex', flexDirection: 'column', gap: 14 }}>
         {/* Hero */}
-        <div style={{ borderRadius: t.radCard, padding: '20px 20px 22px', background: tint,
+        <div data-island="hero" style={{ borderRadius: t.radCard, padding: '20px 20px 22px', background: tint,
           position: 'relative', overflow: 'hidden' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-            <div>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12 }}>
+            <div style={{ minWidth: 0, flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                 <window.CatDot category={ap.category} size={11} />
                 <span style={{ font: `700 13px ${t.body}`, color: cat.color, letterSpacing: 0.3 }}>{cat.label} · {cat.name}</span>
               </div>
-              <div style={{ font: `700 38px ${t.display}`, color: t.text, letterSpacing: -0.8, lineHeight: 1.05, marginTop: 6 }}>{ap.name}</div>
+              <div style={{ font: `700 38px ${t.display}`, color: t.text, letterSpacing: -0.8, lineHeight: 1.05, marginTop: 6, wordBreak: 'break-word', overflowWrap: 'break-word' }}>{ap.name}</div>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 4 }}>
                 <span style={{ font: `700 13px ${t.mono}`, color: t.textDim, letterSpacing: 1 }}>{ap.icao}</span>
                 <span style={{ font: `500 13px ${t.body}`, color: t.textDim }}>· {ap.city}</span>
               </div>
-              {emaData && !hasOfficialMetar && (
+              {emaData && !hasOfficialMetar && !isOfficial && (
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 7, padding: '3px 9px', borderRadius: 6,
                   background: t.dark ? 'rgba(52,199,89,0.20)' : 'rgba(52,199,89,0.15)', font: `700 11.5px ${t.body}`, color: t.dark ? '#85e89d' : '#22863a' }}>
                   ⚡ IPMA EMA · {emaData.stationName || 'Automatic station'}{emaData.distKm != null ? ` (${emaData.distKm} km)` : ''}
                 </div>
               )}
             </div>
-            <div style={{ textAlign: 'right' }}>
+            <div style={{ textAlign: 'right', flexShrink: 0 }}>
               <div style={{ font: `300 52px ${t.body}`, color: t.text, lineHeight: 0.9, letterSpacing: -2 }}>{typeof m.temp === 'number' ? AV.convTempVal(m.temp) : m.temp}°</div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 16 }}>
             <div style={{ font: `500 15px ${t.body}`, color: t.text, maxWidth: 200, textWrap: 'pretty' }}>{m.summary}</div>
             {hasWx
-              ? <window.WindDial dir={m.wind.dir} spd={m.wind.spd} gust={m.wind.gust} size={84} t={t} />
+              ? <window.WindDial dir={m.wind.dir} spd={m.wind.spd} gust={m.wind.gust} size={80} t={t} />
               : <span style={{ font: `300 40px ${t.body}`, color: t.textFaint }}>—</span>}
           </div>
           {ap.windAlert && (
@@ -756,17 +793,19 @@
           if (!node) return null;
           const vi = visibleIds.indexOf(id);
           return (
-            <IslandWrap key={id} t={t} editing={editing} label={ISLAND_LABEL[id] || id}
-              canUp={vi > 0} canDown={vi < visibleIds.length - 1}
-              onUp={() => setIslandOrder(moveIsland(order, visibleIds, id, -1))}
-              onDown={() => setIslandOrder(moveIsland(order, visibleIds, id, 1))}>
-              {node}
-            </IslandWrap>
+            <div key={id} data-island={id}>
+              <IslandWrap t={t} editing={editing} label={ISLAND_LABEL[id] || id}
+                canUp={vi > 0} canDown={vi < visibleIds.length - 1}
+                onUp={() => setIslandOrder(moveIsland(order, visibleIds, id, -1))}
+                onDown={() => setIslandOrder(moveIsland(order, visibleIds, id, 1))}>
+                {node}
+              </IslandWrap>
+            </div>
           );
         })}
       </div>
     );
   }
 
-  window.CardBriefing = CardBriefing;
+  window.CardBriefing = (typeof React !== 'undefined' && React.memo) ? React.memo(CardBriefing) : CardBriefing;
 })();

@@ -75,12 +75,27 @@
   }
 
   function Row({ t, children, last, onClick, style }) {
-    return <div onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 15px', minHeight: 30,
-      borderBottom: last ? 'none' : `1px solid ${t.hair}`, cursor: onClick ? 'pointer' : 'default', ...style }}>{children}</div>;
+    const [pressed, setPressed] = useState(false);
+    return (
+      <div 
+        onClick={onClick}
+        onPointerDown={onClick ? () => setPressed(true) : undefined}
+        onPointerUp={onClick ? () => setPressed(false) : undefined}
+        onPointerCancel={onClick ? () => setPressed(false) : undefined}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 12, padding: '13px 15px', minHeight: 30,
+          borderBottom: last ? 'none' : `1px solid ${t.hair}`,
+          cursor: onClick ? 'pointer' : 'default',
+          background: pressed ? (t.dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)') : 'transparent',
+          transition: 'background 0.1s ease',
+          WebkitTapHighlightColor: 'transparent',
+          ...style
+        }}>{children}</div>
+    );
   }
 
   /* ---- Manage airports ---- */
-  function ManageAirports({ t, saved, onAdd, onRemove, onReorder, onSelect, onClose }) {
+  function ManageAirports({ t, saved, apiData, onAdd, onRemove, onReorder, onSelect, onClose }) {
     const [q, setQ] = useState('');
     const [collapsed, setCollapsed] = useState({}); // country -> hidden?
     const [results, setResults] = useState([]);
@@ -124,18 +139,22 @@
           <GroupLabel t={t}>Saved · {saved.length}</GroupLabel>
           <Group t={t}>
             {saved.map((code, i) => {
-              const a = AV.meta(code); const c = AV.cat(a.category);
+              const a = AV.meta(code);
+              const liveCat = (apiData && apiData[code] && !apiData[code].isLoading && !apiData[code].error)
+                ? apiData[code].category
+                : null;
+              const c = liveCat ? AV.cat(liveCat) : null;
               return (
                 <Row key={code} t={t} last={i === saved.length - 1}>
                   <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <button onClick={() => onReorder(i, -1)} disabled={i === 0} style={{ all: 'unset', cursor: i === 0 ? 'default' : 'pointer', opacity: i === 0 ? 0.25 : 0.6, lineHeight: 0 }}>{window.Icon.chevDown({ size: 14, color: t.textDim, stroke: 2.5 })}</button>
                   </span>
-                  <span style={{ width: 9, height: 9, borderRadius: 9, background: c.color }} />
+                  {c && <span style={{ width: 9, height: 9, borderRadius: 9, background: c.color }} />}
                   <span onClick={() => onSelect(i)} style={{ flex: 1, cursor: 'pointer' }}>
                     <span style={{ font: `700 16px ${t.mono}`, color: t.text, letterSpacing: 0.5 }}>{a.icao}</span>
                     <span style={{ font: `500 15px ${t.body}`, color: t.textDim, marginLeft: 9 }}>{a.name}</span>
                   </span>
-                  <span style={{ font: `700 11px ${t.mono}`, color: c.color, letterSpacing: 0.5 }}>{c.label}</span>
+                  {c && <span style={{ font: `700 11px ${t.mono}`, color: c.color, letterSpacing: 0.5 }}>{c.label}</span>}
                   <button onClick={() => onRemove(code)} style={{ all: 'unset', cursor: 'pointer', lineHeight: 0, padding: 4 }}>
                     {window.Icon.trash({ size: 17, color: '#ff453a', stroke: 2 })}
                   </button>
@@ -170,19 +189,15 @@
                   </div>
                   {!hidden && (
                     <Group t={t}>
-                      {byCountry[cn].map((d, i) => {
-                        const c = AV.cat(d.category);
-                        return (
-                          <Row key={d.icao} t={t} last={i === byCountry[cn].length - 1} onClick={() => { AV.rememberAirports([d]); onAdd(d.icao); }}>
-                            <span style={{ width: 9, height: 9, borderRadius: 9, background: c.color }} />
-                            <span style={{ flex: 1 }}>
-                              <span style={{ font: `700 16px ${t.mono}`, color: t.text, letterSpacing: 0.5 }}>{d.icao}</span>
-                              <span style={{ font: `500 15px ${t.body}`, color: t.textDim, marginLeft: 9 }}>{d.name}</span>
-                            </span>
-                            {window.Icon.plus({ size: 20, color: t.accent, stroke: 2.4 })}
-                          </Row>
-                        );
-                      })}
+                      {byCountry[cn].map((d, i) => (
+                        <Row key={d.icao} t={t} last={i === byCountry[cn].length - 1} onClick={() => { AV.rememberAirports([d]); onAdd(d.icao); }}>
+                          <span style={{ flex: 1 }}>
+                            <span style={{ font: `700 16px ${t.mono}`, color: t.text, letterSpacing: 0.5 }}>{d.icao}</span>
+                            <span style={{ font: `500 15px ${t.body}`, color: t.textDim, marginLeft: 9 }}>{d.name}</span>
+                          </span>
+                          {window.Icon.plus({ size: 20, color: t.accent, stroke: 2.4 })}
+                        </Row>
+                      ))}
                     </Group>
                   )}
                 </React.Fragment>
@@ -204,23 +219,40 @@
       catch(e) { return 'raw'; }
     });
     const [wdark, setWdark] = useState(() => { try { return localStorage.getItem('av_widget_dark') !== 'false'; } catch(e) { return true; } });
+    const [previewIdx, setPreviewIdx] = useState(0);
 
     // Persist each setting and push it to the native widget.
     useEffect(() => { try { localStorage.setItem('av_widget_mode', mode); } catch(e) {} if (window.AV_syncWidget) window.AV_syncWidget(); }, [mode]);
     useEffect(() => { try { localStorage.setItem('av_widget_dark', String(wdark)); } catch(e) {} if (window.AV_syncWidget) window.AV_syncWidget(); }, [wdark]);
 
-    // The widget cycles through all saved airports; preview the first one.
-    const icao = order[0];
+    // The widget cycles through all saved airports; allow previewing any saved airport.
+    const safeIdx = Math.min(previewIdx, Math.max(0, order.length - 1));
+    const icao = order[safeIdx] || order[0];
     const ap = apiData[icao] || AV.airports[icao];
-    const canPreview = ap && ((ap.taf && ap.taf.raw) || (ap.syntheticTaf && ap.syntheticTaf.raw));
+    const canPreview = ap && ((ap.taf && ap.taf.raw) || (ap.syntheticTaf && ap.syntheticTaf.raw) || (ap.nearestStation && ap.nearestStation.taf));
 
     return (
       <div style={{ height: '100%', overflowY: 'auto', background: t.page }}>
         <Header t={t} title="Widget" onClose={onClose} />
         <div style={{ padding: '4px 16px 40px' }}>
           {/* preview */}
-          <div style={{ borderRadius: 22, marginTop: 16, padding: '30px 16px', display: 'grid', placeItems: 'center',
-            background: 'linear-gradient(165deg,#243456,#5b4f6b 70%,#a8806a)', minHeight: 200 }}>
+          <div style={{ borderRadius: 22, marginTop: 16, padding: '20px 12px 22px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            background: 'linear-gradient(165deg,#243456,#5b4f6b 70%,#a8806a)', minHeight: 200, boxSizing: 'border-box', overflow: 'hidden' }}>
+            {order.length > 1 && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: 340, marginBottom: 12, padding: '0 4px', boxSizing: 'border-box' }}>
+                <button onClick={() => setPreviewIdx((safeIdx - 1 + order.length) % order.length)}
+                  style={{ all: 'unset', cursor: 'pointer', width: 28, height: 28, borderRadius: 8, background: 'rgba(255,255,255,0.18)', display: 'grid', placeItems: 'center', color: '#fff' }}>
+                  {window.Icon.chevL({ size: 16, color: '#fff', stroke: 2.5 })}
+                </button>
+                <div style={{ font: `600 12px ${t.mono}`, color: 'rgba(255,255,255,0.9)', letterSpacing: 0.5 }}>
+                  {icao} · {safeIdx + 1} of {order.length}
+                </div>
+                <button onClick={() => setPreviewIdx((safeIdx + 1) % order.length)}
+                  style={{ all: 'unset', cursor: 'pointer', width: 28, height: 28, borderRadius: 8, background: 'rgba(255,255,255,0.18)', display: 'grid', placeItems: 'center', color: '#fff' }}>
+                  {window.Icon.chevR({ size: 16, color: '#fff', stroke: 2.5 })}
+                </button>
+              </div>
+            )}
             {canPreview
               ? <window.WidgetCard ap={ap} mode={mode} size="medium" dark={wdark} mono={t.mono} />
               : <div style={{ color: '#fff', font: `500 14px ${t.body}`, opacity: 0.9 }}>Loading {icao}…</div>}
@@ -313,19 +345,30 @@
     const [u, setU] = useState(() => ({ ...AV.units }));
     const pick = (k, v) => { AV.setUnit(k, v); setU(p => ({ ...p, [k]: v })); if (onUnitsChange) onUnitsChange(); };
     const [urlDraft, setUrlDraft] = useState(apiOverride || '');
+    const [closing, setClosing] = useState(false);
+
+    const handleClose = () => {
+      if (closing) return;
+      setClosing(true);
+      setTimeout(() => onClose(), 180);
+    };
+
     return (
-      <div style={{ position: 'absolute', inset: 0, zIndex: 80, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-        <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} />
+      <div style={{ position: 'absolute', inset: 0, zIndex: 80, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', pointerEvents: closing ? 'none' : 'auto' }}>
+        <div onClick={handleClose} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)',
+          animation: closing ? 'fadeOut .18s ease forwards' : 'fadeIn .18s ease forwards' }} />
         <div style={{ position: 'relative', background: t.page, borderTopLeftRadius: 28, borderTopRightRadius: 28,
           padding: '0 16px 28px', maxHeight: '85vh', overflowY: 'auto',
-          boxShadow: '0 -10px 40px rgba(0,0,0,0.3)', animation: 'sheetUp .28s cubic-bezier(.2,.8,.2,1)' }}>
+          boxShadow: t.dark ? '0 -4px 24px rgba(0,0,0,0.5)' : '0 -4px 24px rgba(0,0,0,0.12)',
+          willChange: 'transform',
+          animation: closing ? 'sheetDown .18s cubic-bezier(.3,0,.8,.15) forwards' : 'sheetUp .22s cubic-bezier(.16,1,.3,1) forwards' }}>
           {/* sticky header so the close button is always reachable */}
           <div style={{ position: 'sticky', top: 0, zIndex: 3, background: t.page, margin: '0 -16px', padding: '10px 16px 8px' }}>
             <div style={{ width: 38, height: 5, borderRadius: 5, background: t.line, margin: '0 auto 6px' }} />
             <div style={{ display: 'flex', alignItems: 'center', padding: '4px 2px' }}>
               <span style={{ font: `700 22px ${t.display}`, color: t.text, letterSpacing: t.variant === 'deck' ? 1 : -0.3,
                 textTransform: t.variant === 'deck' ? 'uppercase' : 'none' }}>Settings</span>
-              <button onClick={onClose} style={{ all: 'unset', cursor: 'pointer', marginLeft: 'auto', width: 32, height: 32, borderRadius: 32,
+              <button onClick={handleClose} style={{ all: 'unset', cursor: 'pointer', marginLeft: 'auto', width: 32, height: 32, borderRadius: 32,
                 background: t.inset, display: 'grid', placeItems: 'center' }}>{window.Icon.x({ size: 17, color: t.text, stroke: 2.6 })}</button>
             </div>
           </div>
@@ -392,7 +435,7 @@
                 )}
               </div>
               <input value={urlDraft} onChange={e => setUrlDraft(e.target.value)}
-                placeholder="Default (Cloud Run)"
+                placeholder=""
                 style={{ border: `1px solid ${t.line}`, background: t.inset, borderRadius: 8, padding: '8px 10px',
                   font: `500 13px ${t.mono}`, color: t.text, outline: 'none' }} />
             </Row>
@@ -414,7 +457,7 @@
             </Row>
           </Group>
 
-          <button onClick={onClose} style={{ all: 'unset', cursor: 'pointer', display: 'block', textAlign: 'center',
+          <button onClick={handleClose} style={{ all: 'unset', cursor: 'pointer', display: 'block', textAlign: 'center',
             marginTop: 22, padding: '14px', borderRadius: 14, background: t.accent, color: '#fff', font: `700 16px ${t.body}` }}>Done</button>
         </div>
       </div>
@@ -422,7 +465,7 @@
   }
 
   /* ---- First-run onboarding + disclaimer (also reachable via Settings ▸ About) ---- */
-  function Onboarding({ t, onDone, onShowLegal }) {
+  function Onboarding({ t, onDone, onShowLegal, onClose, isAbout }) {
     const bullet = (icon, title, body) => (
       <div style={{ display: 'flex', gap: 12, marginBottom: 18 }}>
         <span style={{ width: 34, height: 34, flexShrink: 0, borderRadius: 10, background: t.inset, display: 'grid', placeItems: 'center' }}>
@@ -436,7 +479,8 @@
     );
     return (
       <div style={{ position: 'absolute', inset: 0, zIndex: 90, background: t.page, display: 'flex', flexDirection: 'column' }}>
-        <div style={{ flex: 1, overflowY: 'auto', padding: window.AV_NATIVE ? '20px 22px 20px' : 'calc(env(safe-area-inset-top, 0px) + 20px) 22px 20px' }}>
+        {isAbout && <Header t={t} title="About & disclaimer" onClose={onClose || onDone} />}
+        <div style={{ flex: 1, overflowY: 'auto', padding: isAbout ? '16px 22px 20px' : (window.AV_NATIVE ? '20px 22px 20px' : 'calc(env(safe-area-inset-top, 0px) + 20px) 22px 20px') }}>
           <div style={{ font: `800 30px ${t.display}`, color: t.text, letterSpacing: -0.5 }}>TAFCast</div>
           <div style={{ font: `500 15px ${t.body}`, color: t.textDim, margin: '6px 0 26px', lineHeight: 1.45, textWrap: 'pretty' }}>
             A quick pre-flight picture for your airports — METAR, TAF, wind, runways and NOTAMs in one place.
@@ -445,13 +489,13 @@
           {bullet('layers', 'Fields with no station', 'For Portuguese aerodromes with no official weather station, the app shows the nearest IPMA automatic-station observation and a model-generated, clearly-labelled SYNTHETIC AIRFIELD OUTLOOK (SAO) — illustrative only, never for flight decisions.')}
           {bullet('x', 'For situational awareness only', 'Not for navigation or flight planning. Always verify against official sources before flight. This app is not an official MET/AIS service, is not certified by any aviation authority, and must never be the sole basis for any flight decision — the pilot in command is always responsible.')}
           <div style={{ marginTop: 6, padding: '12px 14px', borderRadius: 12, background: t.inset, font: `500 12.5px ${t.body}`, color: t.textDim, lineHeight: 1.5 }}>
-            By tapping “I agree”, you accept the <button onClick={onShowLegal} style={{ all: 'unset', cursor: 'pointer', color: t.accent, fontWeight: 700 }}>Terms of Use &amp; Privacy Policy</button>. Data is provided “as is”, with no warranty; the app is supplied without liability for any flight or operational decision.
+            By tapping “{isAbout ? 'Done' : 'I agree'}”, you accept the <button onClick={onShowLegal} style={{ all: 'unset', cursor: 'pointer', color: t.accent, fontWeight: 700 }}>Terms of Use &amp; Privacy Policy</button>. Data is provided “as is”, with no warranty; the app is supplied without liability for any flight or operational decision.
           </div>
         </div>
         <div style={{ padding: '12px 22px 28px', borderTop: `1px solid ${t.hair}` }}>
-          <button onClick={onDone} style={{ all: 'unset', cursor: 'pointer', display: 'block', textAlign: 'center', width: '100%',
+          <button onClick={onClose || onDone} style={{ all: 'unset', cursor: 'pointer', display: 'block', textAlign: 'center', width: '100%',
             boxSizing: 'border-box', padding: '15px', borderRadius: 14, background: t.accent, color: '#fff', font: `700 16px ${t.body}` }}>
-            I agree
+            {isAbout ? 'Done' : 'I agree'}
           </button>
           <button onClick={onShowLegal} style={{ all: 'unset', cursor: 'pointer', display: 'block', textAlign: 'center', width: '100%',
             marginTop: 10, font: `600 13px ${t.body}`, color: t.textDim }}>
