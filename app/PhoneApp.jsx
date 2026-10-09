@@ -23,11 +23,7 @@
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         opacity: phase === 'out' ? 0 : 1, transition: 'opacity .35s ease', pointerEvents: 'none' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
-          <div style={{ width: 96, height: 96, borderRadius: 26, display: 'grid', placeItems: 'center',
-            background: 'linear-gradient(160deg, #17354f, #0b1f2f)', border: '1px solid rgba(255,255,255,0.10)',
-            boxShadow: '0 16px 44px rgba(0,0,0,0.5)' }}>
-            <svg width="52" height="52" viewBox="0 0 24 24"><path fill="#fff" d={plane} /></svg>
-          </div>
+          <img src="./icon-192.png" width="96" height="96" alt="TAFCast" style={{ borderRadius: 26, boxShadow: '0 16px 44px rgba(0,0,0,0.5)', display: 'block' }} />
           <div style={{ font: `800 23px ${t.display}`, color: '#fff', letterSpacing: -0.3 }}>TAFCast</div>
         </div>
         <div style={{ position: 'absolute', left: 0, right: 0, textAlign: 'center',
