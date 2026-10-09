@@ -337,6 +337,13 @@
     return false;
   }
 
+  function ago(min) {
+    if (min < 1) return 'just now';
+    if (min < 60) return `${min}m ago`;
+    const h = Math.floor(min / 60);
+    return `${h}h ago`;
+  }
+
   window.AV = {
     CAT, cat, meta, rememberAirports, apiBase, country, airports, directory,
     compass, windText, ago,
