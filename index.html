@@ -80,6 +80,7 @@
 <style>
   html { background:#06111c; scroll-behavior:smooth; }
   body { margin:0; background:#06111c; color:#e8eef5; font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  [id] { scroll-margin-top: 72px; }
   a { color:#79b6ff; text-decoration:none; }
   a:hover { color:#b3d4ff; }
   ::selection { background:#0a84ff; color:#fff; }
@@ -88,6 +89,87 @@
   @keyframes tc-rise { from { opacity:0; transform:translateY(46px); } to { opacity:1; transform:none; } }
   @keyframes tc-bob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
   @keyframes tc-blink { 0%,100% { opacity:1; } 50% { opacity:.45; } }
+  @keyframes tc-nav-slide { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
+
+  /* Navigation */
+  .site-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 0 clamp(16px, 4vw, 48px);
+    background: rgba(6, 17, 28, .82);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(20, 58, 87, .6);
+    box-sizing: border-box;
+  }
+  .nav-desktop {
+    display: flex; align-items: center; gap: clamp(10px, 2.4vw, 26px);
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  }
+  .header-right-mobile {
+    display: none; align-items: center; gap: 10px;
+  }
+  .nav-mobile-toggle {
+    display: none; width: 38px; height: 38px; border-radius: 10px;
+    border: 1px solid rgba(121, 182, 255, .3);
+    background: rgba(20, 58, 87, .4); color: #ffffff;
+    cursor: pointer; padding: 0; place-items: center;
+    transition: background .2s, border-color .2s;
+  }
+  .nav-mobile-toggle:hover {
+    background: rgba(10, 132, 255, .3);
+    border-color: #79b6ff;
+  }
+  .nav-mobile-drawer {
+    display: none; position: fixed; top: 58px; left: 0; right: 0; bottom: 0;
+    background: rgba(6, 17, 28, .98);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    z-index: 99; padding: 22px 20px 48px;
+    overflow-y: auto; box-sizing: border-box;
+    flex-direction: column; gap: 10px;
+    border-bottom: 1px solid rgba(20, 58, 87, .8);
+  }
+  .nav-mobile-drawer.is-open {
+    display: flex;
+    animation: tc-nav-slide .2s cubic-bezier(.2, .6, .2, 1) both;
+  }
+  .mobile-nav-link {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 16px; border-radius: 12px;
+    background: rgba(20, 58, 87, .25); border: 1px solid rgba(121, 182, 255, .15);
+    color: #d8e6f5; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700;
+    text-decoration: none; transition: background .18s, color .18s;
+  }
+  .mobile-nav-link:active, .mobile-nav-link:hover {
+    background: rgba(10, 132, 255, .25); color: #ffffff; border-color: rgba(121, 182, 255, .4);
+  }
+  .mobile-nav-cta {
+    display: flex; flex-direction: column; gap: 12px;
+    margin-top: 8px; padding-top: 14px;
+    border-top: 1px solid rgba(20, 58, 87, .6);
+  }
+  .hero-content {
+    position: relative; display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr));
+    gap: clamp(24px, 4vw, 56px); align-items: center;
+    padding: clamp(110px, 16vh, 160px) clamp(20px, 5vw, 72px) clamp(90px, 12vh, 140px);
+    max-width: 1440px; margin: 0 auto; width: 100%; box-sizing: border-box;
+  }
+
+  @media (max-width: 960px) {
+    .nav-desktop { display: none !important; }
+    .header-right-mobile { display: flex !important; }
+    .nav-mobile-toggle { display: grid !important; }
+    .hero-content {
+      padding-top: max(96px, clamp(105px, 15vh, 140px)) !important;
+      padding-bottom: clamp(60px, 8vh, 90px) !important;
+    }
+  }
+  @media (min-width: 961px) {
+    .header-right-mobile { display: none !important; }
+    .nav-mobile-drawer { display: none !important; }
+  }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior:auto; }
     *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
@@ -95,12 +177,14 @@
 </style>
 
 <!-- ============ NAV ============ -->
-<header style="position:fixed;top:0;left:0;right:0;z-index:90;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px clamp(16px,4vw,48px);background:rgba(6,17,28,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(20,58,87,.6)">
+<header class="site-header">
   <a href="#top" aria-label="TAFCast home" style="display:flex;align-items:center;gap:10px;color:#fff;font-weight:900;letter-spacing:-0.02em;font-size:1.05rem">
     <img src="./icon.png" width="30" height="30" alt="TAFCast logo" style="border-radius:8px;display:block;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.3)">
     TAFCast
   </a>
-  <nav aria-label="Sections" style="display:flex;align-items:center;gap:clamp(10px,2.4vw,26px);font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;flex-wrap:wrap;justify-content:flex-end">
+
+  <!-- Desktop Nav (screens >= 960px) -->
+  <nav class="nav-desktop" aria-label="Sections">
     <a href="#app" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">App</a>
     <a href="#free" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Free</a>
     <a href="#widget" style="color:#9fbdd9" style-hover="color:#ffffff;text-decoration:none">Widget</a>
@@ -113,12 +197,44 @@
     <a href="https://play.google.com/store/apps/details?id=com.tafcast.app" target="_blank" rel="noopener" style="display:inline-block;background:#0a84ff;color:#ffffff;font-weight:700;padding:9px 16px;border-radius:999px;letter-spacing:.1em;font-family:inherit;font-size:11px;text-transform:uppercase;text-decoration:none;transition:all .2s" style-hover="background:#3fa0ff;color:#ffffff;text-decoration:none;transform:translateY(-1px)">Google Play</a>
     <button type="button" onclick="openIosModal()" style="display:inline-block;background:transparent;border:1px solid rgba(121,182,255,.35);color:#9fbdd9;font-weight:700;padding:8px 14px;border-radius:999px;letter-spacing:.1em;border:1px solid rgba(121,182,255,.35);cursor:pointer;font-family:inherit;font-size:11px;text-transform:uppercase;transition:all .2s" style-hover="color:#ffffff;border-color:#ffffff;text-decoration:none;transform:translateY(-1px)">iOS Web App</button>
   </nav>
+
+  <!-- Mobile Controls (screens < 960px) -->
+  <div class="header-right-mobile">
+    <span role="group" aria-label="Language / Idioma" style="display:inline-flex;align-items:center;gap:2px;border:1px solid rgba(121,182,255,.35);border-radius:999px;padding:2px">
+      <button id="lang-en-m" type="button" onclick="setLang('en')" aria-pressed="true" style="border:none;cursor:pointer;background:#0a84ff;color:#ffffff;font-family:inherit;font-weight:700;font-size:11px;letter-spacing:.08em;padding:5px 9px;border-radius:999px">EN</button>
+      <button id="lang-pt-m" type="button" onclick="setLang('pt')" aria-pressed="false" style="border:none;cursor:pointer;background:transparent;color:#9fbdd9;font-family:inherit;font-weight:700;font-size:11px;letter-spacing:.08em;padding:5px 9px;border-radius:999px">PT</button>
+    </span>
+    <button type="button" id="nav-toggle" class="nav-mobile-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="toggleNavMobile()">
+      <svg id="nav-icon-menu" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg id="nav-icon-close" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="display:none"><path d="M6 6l12 12M6 18L18 6"/></svg>
+    </button>
+  </div>
 </header>
+
+<!-- ============ MOBILE NAV DRAWER ============ -->
+<div id="nav-mobile" class="nav-mobile-drawer" role="dialog" aria-label="Site Navigation" aria-modal="true">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <a href="#app" class="mobile-nav-link" onclick="closeNavMobile()"><span>App</span><span style="opacity:.6">→</span></a>
+    <a href="#free" class="mobile-nav-link" onclick="closeNavMobile()"><span>Free</span><span style="opacity:.6">→</span></a>
+    <a href="#widget" class="mobile-nav-link" onclick="closeNavMobile()"><span>Widget</span><span style="opacity:.6">→</span></a>
+    <a href="#advisory" class="mobile-nav-link" onclick="closeNavMobile()" style="color:#e5901a"><span>Outlook (SAO)</span><span style="opacity:.6">→</span></a>
+    <a href="#faq" class="mobile-nav-link" onclick="closeNavMobile()"><span>FAQ</span><span style="opacity:.6">→</span></a>
+  </div>
+  <div class="mobile-nav-cta">
+    <a href="https://play.google.com/store/apps/details?id=com.tafcast.app" target="_blank" rel="noopener" onclick="closeNavMobile()" style="display:flex;align-items:center;justify-content:center;gap:10px;background:#0a84ff;color:#ffffff;font-weight:800;font-size:.95rem;padding:14px 20px;border-radius:999px;letter-spacing:.02em;text-decoration:none;box-shadow:0 8px 22px rgba(10,132,255,.35)">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true" style="flex:none"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.996 1.996 0 0 1-.61-.914V2.728c.162-.36.38-.68.609-.914zm11.233 11.233l2.254 2.255-11.4 6.58 9.146-8.835zm0-2.094L5.696 2.115l11.4 6.58-2.254 2.254zm1.464 1.047l3.83-2.212c.797-.46.797-1.206 0-1.666l-3.83-2.212-2.316 2.316 2.316 2.316z"/></svg>
+      <span>Google Play</span>
+    </a>
+    <button type="button" onclick="closeNavMobile(); openIosModal();" style="display:flex;align-items:center;justify-content:center;background:transparent;color:#ffffff;font-weight:700;font-size:.95rem;padding:13px 20px;border-radius:999px;border:1px solid rgba(121,182,255,.35);cursor:pointer;font-family:inherit">
+      <span>iOS Web App</span>
+    </button>
+  </div>
+</div>
 
 <!-- ============ 1 · HERO ============ -->
 <section id="top" data-screen-label="Hero" style="position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(165deg,#243456,#5b4f6b 70%,#a8806a);overflow:hidden">
   <div aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(1200px 600px at 80% -10%, rgba(10,132,255,.28), transparent 60%), radial-gradient(900px 500px at 10% 110%, rgba(229,144,26,.22), transparent 60%)"></div>
-  <div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(110px,16vh,160px) clamp(20px,5vw,72px) clamp(90px,12vh,140px);max-width:1440px;margin:0 auto;width:100%;box-sizing:border-box">
+  <div class="hero-content">
     <div>
       <p style="margin:0 0 22px;display:inline-flex;align-items:center;gap:10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#ffffff;background:rgba(6,17,28,.42);border:1px solid rgba(255,255,255,.22);padding:9px 16px;border-radius:999px;animation:tc-rise .9s cubic-bezier(.2,.6,.2,1) both">
         <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="#ffffff" d="M21,16v-2l-8,-5V3.5C13,2.67 12.33,2 11.5,2S10,2.67 10,3.5V9l-8,5v2l8,-2.5V19l-2,1.5V22l3.5,-1 3.5,1v-1.5L13,19v-5.5l8,2.5z"></path></svg>
@@ -957,9 +1073,22 @@
   collect(document.body);
 
   function paintButtons(lang) {
-    var en = document.getElementById("lang-en"), pt = document.getElementById("lang-pt");
-    if (en) { en.style.background = lang === "en" ? "#0a84ff" : "transparent"; en.style.color = lang === "en" ? "#ffffff" : "#9fbdd9"; en.setAttribute("aria-pressed", lang === "en" ? "true" : "false"); }
-    if (pt) { pt.style.background = lang === "pt" ? "#0a84ff" : "transparent"; pt.style.color = lang === "pt" ? "#ffffff" : "#9fbdd9"; pt.setAttribute("aria-pressed", lang === "pt" ? "true" : "false"); }
+    ['lang-en', 'lang-en-m'].forEach(function (id) {
+      var en = document.getElementById(id);
+      if (en) {
+        en.style.background = lang === "en" ? "#0a84ff" : "transparent";
+        en.style.color = lang === "en" ? "#ffffff" : "#9fbdd9";
+        en.setAttribute("aria-pressed", lang === "en" ? "true" : "false");
+      }
+    });
+    ['lang-pt', 'lang-pt-m'].forEach(function (id) {
+      var pt = document.getElementById(id);
+      if (pt) {
+        pt.style.background = lang === "pt" ? "#0a84ff" : "transparent";
+        pt.style.color = lang === "pt" ? "#ffffff" : "#9fbdd9";
+        pt.setAttribute("aria-pressed", lang === "pt" ? "true" : "false");
+      }
+    });
   }
 
   window.setLang = function (lang) {
@@ -971,6 +1100,56 @@
     paintButtons(lang);
     try { localStorage.setItem("tafcast_lang", lang); } catch (e) {}
   };
+
+  /* ---------- Mobile Nav Toggle ---------- */
+  window.toggleNavMobile = function () {
+    var drawer = document.getElementById("nav-mobile");
+    var btn = document.getElementById("nav-toggle");
+    var iconMenu = document.getElementById("nav-icon-menu");
+    var iconClose = document.getElementById("nav-icon-close");
+    if (!drawer) return;
+    var isOpen = drawer.classList.contains("is-open");
+    if (isOpen) {
+      drawer.classList.remove("is-open");
+      document.body.style.overflow = "";
+      if (btn) btn.setAttribute("aria-expanded", "false");
+      if (iconMenu) iconMenu.style.display = "";
+      if (iconClose) iconClose.style.display = "none";
+    } else {
+      drawer.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+      if (btn) btn.setAttribute("aria-expanded", "true");
+      if (iconMenu) iconMenu.style.display = "none";
+      if (iconClose) iconClose.style.display = "";
+    }
+  };
+
+  window.closeNavMobile = function () {
+    var drawer = document.getElementById("nav-mobile");
+    var btn = document.getElementById("nav-toggle");
+    var iconMenu = document.getElementById("nav-icon-menu");
+    var iconClose = document.getElementById("nav-icon-close");
+    if (drawer && drawer.classList.contains("is-open")) {
+      drawer.classList.remove("is-open");
+      document.body.style.overflow = "";
+      if (btn) btn.setAttribute("aria-expanded", "false");
+      if (iconMenu) iconMenu.style.display = "";
+      if (iconClose) iconClose.style.display = "none";
+    }
+  };
+
+  window.addEventListener("resize", function () {
+    if (window.innerWidth >= 961) {
+      window.closeNavMobile();
+    }
+  });
+
+  var mobileDrawerEl = document.getElementById("nav-mobile");
+  if (mobileDrawerEl) {
+    mobileDrawerEl.addEventListener("click", function (e) {
+      if (e.target === mobileDrawerEl) window.closeNavMobile();
+    });
+  }
 
   window.openIosModal = function() {
     var m = document.getElementById('ios-modal');
@@ -991,7 +1170,10 @@
     if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
   };
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') window.closeIosModal();
+    if (e.key === 'Escape') {
+      window.closeIosModal();
+      window.closeNavMobile();
+    }
   });
   var modalBg = document.getElementById('ios-modal');
   if (modalBg) {
@@ -1006,16 +1188,20 @@
   window.setLang(initial);
 
   function setupLangListeners() {
-    var enBtn = document.getElementById("lang-en");
-    var ptBtn = document.getElementById("lang-pt");
-    if (enBtn) {
-      enBtn.addEventListener("click", function (e) { e.preventDefault(); window.setLang("en"); });
-      enBtn.addEventListener("touchend", function (e) { e.preventDefault(); window.setLang("en"); });
-    }
-    if (ptBtn) {
-      ptBtn.addEventListener("click", function (e) { e.preventDefault(); window.setLang("pt"); });
-      ptBtn.addEventListener("touchend", function (e) { e.preventDefault(); window.setLang("pt"); });
-    }
+    ['lang-en', 'lang-en-m'].forEach(function (id) {
+      var btn = document.getElementById(id);
+      if (btn) {
+        btn.addEventListener("click", function (e) { e.preventDefault(); window.setLang("en"); });
+        btn.addEventListener("touchend", function (e) { e.preventDefault(); window.setLang("en"); });
+      }
+    });
+    ['lang-pt', 'lang-pt-m'].forEach(function (id) {
+      var btn = document.getElementById(id);
+      if (btn) {
+        btn.addEventListener("click", function (e) { e.preventDefault(); window.setLang("pt"); });
+        btn.addEventListener("touchend", function (e) { e.preventDefault(); window.setLang("pt"); });
+      }
+    });
   }
   setupLangListeners();
   if (document.readyState === "loading") {
