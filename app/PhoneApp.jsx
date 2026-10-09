@@ -199,6 +199,34 @@
                 }
                 return { ...prev, [icao]: data };
               });
+
+              // If no NOTAMs from backend and running in native Android app, query FAA directly via bridge
+              if ((!data.notams || !data.notams.length) && window.AndroidWidget && typeof window.AndroidWidget.fetchNotams === 'function') {
+                setTimeout(() => {
+                  try {
+                    const rawJson = window.AndroidWidget.fetchNotams(icao);
+                    if (rawJson) {
+                      const parsed = typeof rawJson === 'string' ? JSON.parse(rawJson) : rawJson;
+                      const list = Array.isArray(parsed?.notamList) ? parsed.notamList : [];
+                      if (list.length > 0 && window.AV?.mapFnsNotam) {
+                        const mapped = list.map(window.AV.mapFnsNotam);
+                        setApiData(curr => {
+                          const ap = curr[icao] || data;
+                          return { ...curr, [icao]: { ...ap, notams: mapped } };
+                        });
+                        // Sync to backend to keep server cache warm
+                        fetch(`${AV.apiBase()}/api/notams/${icao}`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify(mapped),
+                        }).catch(() => {});
+                      }
+                    }
+                  } catch (e) {
+                    console.warn('Native NOTAM fetch failed:', e);
+                  }
+                }, 30);
+              }
             } else {
               // Backend returned an explicit error object (e.g. 404/500).
               // Only surface it if we have nothing good cached for this airport.

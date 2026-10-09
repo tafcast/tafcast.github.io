@@ -350,9 +350,59 @@
     PT_OFFICIAL_METEO_STATIONS, isOfficialStation,
     // units
     units, setUnit, convTempVal, tempUnit, fmtTemp, convWindVal, windUnit, convPressVal, pressUnit, fmtPress,
+    // FAA NOTAM mapper
+    mapFnsNotam,
     // default saved order for the app
     saved: ['LPPT'],
   };
+
+  const FAA_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function parseFaaDate(str) {
+    if (!str) return '—';
+    if (/PERM/i.test(str)) return 'PERM';
+    const clean = str.replace(/EST/i, '').trim();
+    const m = clean.match(/^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2})(\d{2})$/);
+    if (m) {
+      const month = parseInt(m[1], 10) - 1;
+      const day = parseInt(m[2], 10);
+      const hour = m[4];
+      const min = m[5];
+      if (month >= 0 && month < 12 && day >= 1 && day <= 31) {
+        return `${String(day).padStart(2, '0')} ${FAA_MONTHS[month]} ${hour}:${min}Z`;
+      }
+    }
+    return str;
+  }
+
+  function notamSeverity(text) {
+    const s = (text || '').toUpperCase();
+    if (/\b(CLSD|CLOSED|U\/S|UNSERVICEABLE|PROHIBITED|DANGER|RESTRICTED|OBST|CRANE|OUT OF SERVICE)\b/.test(s)) {
+      return 'caution';
+    }
+    return 'info';
+  }
+
+  function mapFnsNotam(n) {
+    const id = n.notamNumber || (n.facilityDesignator ? `${n.facilityDesignator} ${n.transactionID || ''}` : 'NOTAM');
+    const raw = (n.icaoMessage || n.traditionalMessage || '').trim();
+    let summary = (n.traditionalMessageFrom4thWord || n.plainLanguageMessage || '').trim();
+    if (!summary && raw) {
+      const lines = raw.split(/[\r\n]+/);
+      const eLine = lines.find(l => /^E\)\s*/.test(l.trim()));
+      summary = eLine ? eLine.replace(/^E\)\s*/, '').trim() : lines.slice(0, 2).join(' ');
+    }
+    summary = summary.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+    if (summary.length > 170) summary = summary.slice(0, 167) + '…';
+
+    return {
+      id,
+      sev: notamSeverity(raw + ' ' + summary),
+      summary: summary || '(No summary text)',
+      raw: raw || id,
+      from: parseFaaDate(n.startDate || n.issueDate),
+      to: parseFaaDate(n.endDate),
+    };
+  }
 
   // Push saved airports + backend URL + widget settings to the native
   // home-screen widget (no-op in a plain browser). Reads the current values
