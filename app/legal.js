@@ -1,117 +1,207 @@
-/* Canonical legal text for the app (Disclaimer, Terms of Use / EULA, Privacy Policy).
-   Exposed as window.AV_LEGAL and rendered by the in-app Legal screen + onboarding.
-
-   ⚠ KEEP IN SYNC with backend/legal/content.json, which serves the same text as the
-   public web pages (/legal/*) that the app store listing links to. The two live in
-   different deploy roots (app bundle vs. Render backend) so they can't share one file.
-
-   ⚠ BEFORE LISTING PUBLICLY: replace the placeholders below — contact email and
-   jurisdiction — and have the final text reviewed by a lawyer. This is a starting
-   template modelled on standard aviation-app language, not legal advice. */
-(function () {
-  var CONTACT = 'tafcast@outlook.com';
-  var JURISDICTION = 'Portugal / European Union';
-
-  window.AV_LEGAL = {
-    appName: 'TAFCast',
-    version: '1.0',
-    effective: '2026-09-13',
-    contact: CONTACT,
-    jurisdiction: JURISDICTION,
-
-    // Short, plain-language safety disclaimer. Shown on first run and always
-    // reachable from Settings. The first sentence is the key one.
-    disclaimer: {
-      title: 'Safety disclaimer',
-      sections: [
-        { h: 'For situational awareness only', p: [
-          'TAFCast is for situational awareness only. It is NOT for navigation or flight planning. Always verify against official sources before flight.',
-          'This app is not an official meteorological or aeronautical information service. It is not approved, certified, or endorsed by any aviation authority, and it must never be the sole basis for any flight or operational decision.'
-        ]},
-        { h: 'Always use official sources', p: [
-          'Before every flight, obtain and rely on the official AIS / MET briefing for your route — for example your national AIS, an approved self-briefing service, or an authorised flight-service station. Where this app and an official source disagree, the official source governs.'
-        ]},
-        { h: 'Synthetic Airfield Outlook (SAO) ("ADVISORY")', p: [
-          'For some aerodromes without an official weather station, the app shows a model-generated forecast clearly labelled "SYNTHETIC AIRFIELD OUTLOOK (SAO)". This output is computer-generated, is NOT an official ICAO forecast, may be wrong, and must not be used for flight decisions. Treat it as illustrative only.'
-        ]},
-        { h: 'Data may be wrong, delayed, or missing', p: [
-          'Weather, forecasts, NOTAMs, and airport/runway data come from third-party services and may be inaccurate, incomplete, out of date, or unavailable. You are solely responsible for confirming all information and for the safe conduct of every flight. The pilot in command remains responsible at all times.'
-        ]}
-      ]
-    },
-
-    // End-user licence agreement / terms of use.
-    terms: {
-      title: 'Terms of Use',
-      sections: [
-        { h: '1. Acceptance', p: [
-          'By installing or using TAFCast ("the App"), you agree to these Terms of Use and to the Safety Disclaimer and Privacy Policy. If you do not agree, do not use the App.'
-        ]},
-        { h: '2. Licence', p: [
-          'You are granted a personal, non-exclusive, non-transferable, revocable licence to use the App for your own non-commercial situational awareness. You may not sell, sublicense, or commercially redistribute the App, and you may not reverse-engineer it except to the extent that restriction is prohibited by law.'
-        ]},
-        { h: '3. Not for navigation or flight planning', p: [
-          'The App is provided for situational awareness only. It is not for navigation or flight planning, is not an official MET/AIS source, and is not certified by any aviation authority. You must always verify against official sources before flight. The pilot in command is solely responsible for every flight and operational decision.'
-        ]},
-        { h: '4. No warranty', p: [
-          'THE APP AND ALL DATA ARE PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY, AVAILABILITY, AND NON-INFRINGEMENT. We do not warrant that the App or its data will be accurate, complete, timely, uninterrupted, or error-free.'
-        ]},
-        { h: '5. Limitation of liability', p: [
-          'To the maximum extent permitted by law, the developer shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages, or for any loss of, or damage to, life, property, profits, or data, arising out of or relating to your use of, or inability to use, the App or its data — including any reliance on weather, forecast, NOTAM, or airport information, and including any Synthetic Airfield Outlook (SAO) product. Your sole and exclusive remedy is to stop using the App.'
-        ]},
-        { h: '6. Acceptable use', p: [
-          'You agree not to misuse the App or the backing service, including by attempting to overload, disrupt, scrape in bulk, or gain unauthorised access to it, or by using it in any unlawful way or in breach of any third-party data provider’s terms.'
-        ]},
-        { h: '7. Third-party data', p: [
-          'The App relies on third-party data sources (see the Privacy Policy). Those sources have their own terms and may change or withdraw their data at any time. We are not responsible for third-party data or services.'
-        ]},
-        { h: '8. Changes and termination', p: [
-          'We may update the App and these Terms from time to time. Material changes will update the "effective" date shown in-app; continued use after a change means you accept the updated Terms. We may suspend or discontinue the App or its backend at any time.'
-        ]},
-        { h: '9. Governing law', p: [
-          'These Terms are governed by the laws of ' + JURISDICTION + ', without regard to its conflict-of-laws rules, and you agree to the exclusive jurisdiction of its courts, except where mandatory local consumer law provides otherwise.'
-        ]},
-        { h: '10. Contact', p: [
-          'Questions about these Terms: ' + CONTACT + '.'
-        ]}
-      ]
-    },
-
-    // Privacy policy.
-    privacy: {
-      title: 'Privacy Policy',
-      sections: [
-        { h: 'Summary', p: [
-          'TAFCast keeps your settings on your device and uses a backend only to fetch aviation data. There are no user accounts, no advertising, and no third-party analytics or tracking SDKs in the app.'
-        ]},
-        { h: 'Stored on your device', p: [
-          'Your saved airports, units, theme, alert thresholds, an optional custom backend URL, and the most recent weather data are stored locally on your device (in app storage / browser-style local storage) so the App opens instantly and works offline. This data stays on the device; it is not sent to us except as the airport codes needed to fetch data (below). Cloud backup of this data is disabled.'
-        ]},
-        { h: 'What the backend receives', p: [
-          'When the App fetches data, it contacts the backend server. As with any internet request, the backend necessarily receives your device’s IP address and the airport ICAO code(s) and search terms you look up, plus standard request metadata (timestamp, user-agent). These may appear in transient server logs used for operating, debugging, rate-limiting, and protecting the service from abuse. We do not use this data to build advertising or marketing profiles, and we do not sell it.'
-        ]},
-        { h: 'Third-party data sources', p: [
-          'To answer your requests the backend queries third-party providers, which receive the relevant airport coordinates/ICAO needed to return data: NOAA Aviation Weather Center (METAR/TAF), Open-Meteo (wind forecast), autorouter.aero (NOTAMs, if enabled), IPMA (Portuguese automatic-station observations, for Synthetic Airfield Outlooks (SAO)), and the OurAirports dataset (airport/runway catalog). These providers have their own privacy practices, which we do not control.'
-        ]},
-        { h: 'Notifications', p: [
-          'If you enable weather alerts, the App schedules background checks on your device and posts local notifications. Notifications are generated on-device; we do not operate a push-messaging service that targets you.'
-        ]},
-        { h: 'Retention', p: [
-          'On-device data persists until you clear it (clear app data or uninstall). Server-side request logs are kept only as long as needed to operate and protect the service and are not used to identify individuals.'
-        ]},
-        { h: 'Children', p: [
-          'The App is a general-audience aviation utility and is not directed at children, and we do not knowingly collect personal information from children.'
-        ]},
-        { h: 'Your choices', p: [
-          'You can clear all on-device data at any time by clearing the App’s storage or uninstalling it. You can point the App at your own backend (Settings ▸ Backend URL). For questions or requests regarding your data, contact ' + CONTACT + '.'
-        ]},
-        { h: 'Changes', p: [
-          'We may update this Policy; the "effective" date shown in-app reflects the latest version. Material changes will be highlighted in the App.'
-        ]},
-        { h: 'Contact', p: [
-          'Privacy questions: ' + CONTACT + '.'
-        ]}
-      ]
-    }
-  };
-})();
+// Generated by scripts/sync-legal.mjs. Edit backend/legal/content.json.
+window.AV_LEGAL = {
+  "appName": "TAFCast",
+  "version": "1.1",
+  "effective": "2026-10-12",
+  "publicationStatus": "final",
+  "contact": "tafcast@outlook.com",
+  "jurisdiction": "Portugal",
+  "disclaimer": {
+    "title": "Safety disclaimer",
+    "sections": [
+      {
+        "h": "For situational awareness only",
+        "p": [
+          "TAFCast is for general aviation-weather awareness and educational reference only. It is not for navigation, flight planning, dispatch, or deciding whether a flight or manoeuvre is safe. It is not an official MET/AIS briefing service and is not approved, certified, or endorsed by an aviation authority."
+        ]
+      },
+      {
+        "h": "Obtain an official briefing",
+        "p": [
+          "Before any flight, obtain a complete, current briefing from the official or authorised MET/AIS sources appropriate to your location and route. TAFCast does not replace that briefing, aircraft documentation, applicable rules, or professional judgement. The pilot in command remains responsible for decisions and the safe conduct of the flight."
+        ]
+      },
+      {
+        "h": "Synthetic Airfield Outlook (SAO)",
+        "p": [
+          "An SAO is computer-generated advisory output, not an official ICAO forecast or TAF. It can be wrong and must not be used for flight decisions. Nearby surface-station observations do not necessarily describe conditions at the selected aerodrome."
+        ]
+      },
+      {
+        "h": "Display and calculation limits",
+        "p": [
+          "Data may be incomplete, incorrect, delayed, or unavailable. Cached or offline data are historical, not live. Check source, observation and forecast times and validity periods. A successful refresh does not mean the underlying observation is new.",
+          "NOTAM lists can be filtered or incomplete; an empty list does not establish that no restrictions exist. Runway wind components and any favoured-runway indicator are estimates, not runway-selection advice or aircraft-performance calculations. They do not account for every operational constraint.",
+          "Alerts can be delayed, missed, or disabled by network, device, permission, or operating-system restrictions. No alert does not mean safe conditions. User-defined thresholds are not certified safety limits."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Service & User Agreement",
+    "sections": [
+      {
+        "h": "1. Operator and scope",
+        "p": [
+          "TAFCast is a free project operated by Diogo Tavares Ferreira Pinto, an individual based in Lisbon, Portugal, not an incorporated company. Contact: tafcast@outlook.com. In these Terms, “we”, “us” and “our” mean that operator.",
+          "These Terms cover the TAFCast website, browser and installed web apps (including iOS), Android app, widgets, notifications, and associated backend services, together the “Service”."
+        ]
+      },
+      {
+        "h": "2. Acceptance and eligibility",
+        "p": [
+          "Select “I agree” to accept these Terms and the Safety Disclaimer. You can read them before accepting. Closing a screen, pressing Back, or reading a document is not acceptance. If you do not agree, do not use the Service. The Privacy Notice explains how personal data are processed; acknowledging it does not provide blanket consent.",
+          "The Service is available free of charge to individuals and organisations worldwide, for personal, educational, and professional reference, subject to these Terms and applicable law. No pilot licence or account is required. If local law requires a parent or guardian's authorisation for your use, obtain it. If accepting for an organisation, you must have authority to bind it. Professional access does not permit operational aviation use prohibited below."
+        ]
+      },
+      {
+        "h": "3. Permission to use",
+        "p": [
+          "We grant you a non-exclusive, worldwide, royalty-free permission to access and use the Service for the reference purposes described here while you comply with these Terms. Access is free; your own connectivity and device charges remain your responsibility.",
+          "This permission does not transfer ownership of our software or branding or allow you to sell, sublicense, impersonate, or commercially redistribute the Service without permission. Rights granted under applicable open-source or data licences remain unaffected. Any restrictions on reverse engineering or interoperability are subject to rights that applicable law does not allow us to restrict."
+        ]
+      },
+      {
+        "h": "4. Aviation safety and intended use",
+        "p": [
+          "The Safety Disclaimer forms part of these Terms. The Service is not an official MET/AIS source and must not be used for navigation, flight planning, dispatch, or flight-safety decisions. Always obtain the appropriate current official briefing. The Service does not assess airworthiness, aircraft limitations, pilot qualifications, runway suitability, or legal operating minima.",
+          "Synthetic Airfield Outlooks are illustrative model output, not official forecasts. Data gaps, stale caches, filtered notices, estimated wind components, and missed notifications are inherent limitations to consider. A displayed category, colour, threshold, or runway indicator is not a clearance, recommendation to fly, or assurance of safety."
+        ]
+      },
+      {
+        "h": "5. Service quality and mandatory rights",
+        "p": [
+          "We do not promise uninterrupted availability, complete geographic coverage, delivery of every alert, or that third-party data, translations, decoding, forecasts, or calculations will always be accurate or current. The Service is offered on an “as available” basis to the extent applicable law permits.",
+          "These descriptions of limitations do not exclude statutory guarantees, duties of care, or remedies that cannot lawfully be excluded. Any mandatory consumer rights concerning supply, conformity, updates, or remedies remain available where applicable."
+        ]
+      },
+      {
+        "h": "6. Responsibility and liability",
+        "p": [
+          "Responsibility for loss or damage is determined under applicable law. These Terms do not exclude or limit liability for death, personal injury, harm to health or moral integrity, fraud, intentional misconduct, gross negligence, or any other liability that cannot lawfully be excluded or limited, including applicable non-contractual liability for property damage.",
+          "You remain responsible for your own use and aviation decisions. That responsibility does not release us from our own legal obligations. We do not guarantee the conduct or availability of independent providers, but their involvement does not remove rights you have against us under mandatory law. Stopping use is not your exclusive legal remedy."
+        ]
+      },
+      {
+        "h": "7. Acceptable use",
+        "p": [
+          "Do not use the Service unlawfully, interfere with its operation, introduce malicious code, bypass access controls, or access systems without authorisation. Do not make automated or bulk requests that disrupt the Service or exceed published limits. Contact us to discuss bulk access.",
+          "Third-party data remain subject to their applicable licences. These Terms do not grant redistribution rights we do not hold. Applicable licences may independently give you rights to use underlying data; restrictions on access to our servers do not take those rights away."
+        ]
+      },
+      {
+        "h": "8. Third-party sources and platforms",
+        "p": [
+          "The Service uses sources including NOAA Aviation Weather Center, FAA, Open-Meteo, autorouter, IPMA, and OurAirports, depending on feature and availability. Attribution and source identification do not imply endorsement. Providers may change data, coverage, or availability.",
+          "Google Play, your browser, operating system, and any independently selected backend have their own terms for their services. They are not parties to this agreement. These Terms do not override applicable open-source licences or mandatory platform rights."
+        ]
+      },
+      {
+        "h": "9. Changes, suspension and discontinuation",
+        "p": [
+          "We may change the Service for maintenance, security, legal compliance, data-provider changes, or sustainable operation. For significant reductions or discontinuation, we will provide reasonable advance notice in the Service or on the website where practicable. Urgent security, legal, or abuse issues may require immediate restrictions. Restrictions will be proportionate to their reason.",
+          "Material changes to these Terms will be explained before they take effect and presented for renewed agreement. They do not retrospectively change rights relating to earlier events. Merely changing a date or continuing use will not be treated as renewed agreement. You may stop using the Service at any time. Applicable notice, termination, and other mandatory rights are preserved."
+        ]
+      },
+      {
+        "h": "10. Portuguese law and disputes",
+        "p": [
+          "These Terms are governed by Portuguese law. If you are a consumer, this choice does not deprive you of mandatory protections of the law of your habitual residence where those protections apply. Courts with jurisdiction are determined by applicable law; these Terms do not require consumers to bring claims exclusively in Portugal or waive applicable local court rights.",
+          "Please contact tafcast@outlook.com about a concern. Contacting us first is encouraged, not a condition for exercising legal rights. No compulsory arbitration or class-action waiver is imposed by these Terms."
+        ]
+      },
+      {
+        "h": "11. Contact and interpretation",
+        "p": [
+          "Contact: tafcast@outlook.com. If a provision is invalid or unenforceable, its treatment and the effect on the rest of the agreement are determined by applicable law. No provision is intended to reduce mandatory legal protections. These Terms do not create rights for independent data providers or app stores to enforce unrelated obligations against you."
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy Notice",
+    "sections": [
+      {
+        "h": "1. Controller and contact",
+        "p": [
+          "The controller is Diogo Tavares Ferreira Pinto, the individual operator based in Lisbon, Portugal, identified in Section 1 of the Terms of Service & User Agreement. Contact: tafcast@outlook.com. TAFCast is the project name, not a separate legal person."
+        ]
+      },
+      {
+        "h": "2. Overview",
+        "p": [
+          "TAFCast does not require an account and does not include advertising or third-party analytics/tracking SDKs in the app. Network requests still involve personal data such as IP addresses and request metadata. This notice covers the website, web apps, Android app, widgets, alerts, and the backend we operate."
+        ]
+      },
+      {
+        "h": "3. On-device information",
+        "p": [
+          "Saved airports, display preferences, alert settings, an optional backend address, cached data, and the accepted legal version and acceptance time are stored on your device. Airport identifiers and search queries are sent when requesting data; preferences and the acceptance record are not routinely uploaded to us.",
+          "Clear Android app storage or browser/site data to remove local information. Uninstalling an installed web app does not necessarily clear browser storage. Device or browser backup settings may affect copies outside the app. Deleting local data does not delete records held by hosting or other providers."
+        ]
+      },
+      {
+        "h": "4. Requests and support",
+        "p": [
+          "The website host and backend receive IP addresses, requested URLs, airport codes, search terms, timestamps and technical request metadata such as user-agent information. These may be recorded in infrastructure logs. IP-based counters are used to limit abusive traffic.",
+          "If you email us, we receive your email address, the message and attachments, and information needed to respond. Please do not send unnecessary sensitive information. No GPS permission is required to search airports."
+        ]
+      },
+      {
+        "h": "5. Purposes and legal bases",
+        "p": [
+          "We process technical request data to deliver the information you request and maintain a functioning service. Where necessary to perform our agreement with you, the basis is Article 6(1)(b) GDPR. Security, proportionate rate limiting, troubleshooting, and general correspondence rely on legitimate interests under Article 6(1)(f): operating and protecting a reliable service and responding to enquiries. Those interests must be balanced against your rights, particularly for children.",
+          "Where a specific legal duty requires processing, Article 6(1)(c) applies. We do not rely on acceptance of the Terms as consent for advertising or unrelated processing. If an optional feature requires consent, it must be separately requested and withdrawable. Necessary network information is required to deliver online requests; no account or marketing profile is required."
+        ]
+      },
+      {
+        "h": "6. Recipients and direct connections",
+        "p": [
+          "The website uses GitHub Pages. The backend and synthetic-outlook model service use Google Cloud Run in europe-southwest1. Hosting, infrastructure, and email service providers process information needed for their functions; support correspondence uses the Outlook contact address.",
+          "Backend requests to NOAA Aviation Weather Center, FAA, Open-Meteo, autorouter, IPMA-related model services, and airport datasets generally concern airports rather than the user's GPS location. Providers contacted by the backend normally see the server's network address. The Android app can also request FAA NOTAM information directly; the FAA then receives the device's IP address and request metadata.",
+          "The browser version loads React and Babel resources from unpkg.com, which receives network request information such as your IP address. The packaged Android version bundles those resources locally. App-store and operating-system providers process information under their own notices. If you choose another backend, its operator receives your requests and its own notice applies."
+        ]
+      },
+      {
+        "h": "7. International processing",
+        "p": [
+          "The backend services run in Google Cloud europe-southwest1, but logging, support, email, content delivery and provider operations can involve processing outside Portugal and the European Economic Area, including in the United States. An EU service region does not mean that all processing stays in the EU.",
+          "Google Cloud publishes transfer provisions in its Cloud Data Processing Addendum, including standard contractual clauses or an applicable alternative transfer solution: https://cloud.google.com/terms/data-processing-addendum/. GitHub describes its international processing and safeguards in https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement. Microsoft describes its international processing and safeguards for services including Outlook at https://www.microsoft.com/en-us/privacy/privacystatement. These describe the providers’ arrangements; they are not a claim that every service uses an identical mechanism.",
+          "For transfers we arrange, applicable data-protection law requires an appropriate basis, such as an applicable adequacy decision or contractual safeguards. Contact tafcast@outlook.com for information about the safeguards relevant to your data or to request a copy, subject to protection of confidential information. Direct connections to independent data and content providers are described in Section 6 and are also subject to their own privacy notices."
+        ]
+      },
+      {
+        "h": "8. Retention",
+        "p": [
+          "Local settings and caches remain until cleared, replaced, or removed by the device/browser. Backend rate-limit counters expire after a one-minute window and are periodically cleared; they are also lost on server restart. This is separate from infrastructure access logs.",
+          "As verified on 12 October 2026, the Google Cloud project routes ordinary application and request logs to its global _Default logging bucket, configured to retain them for 30 days. The separate _Required bucket retains specified administrative and system audit logs for 400 days; this is not a 400-day retention period for ordinary app requests. These periods concern Cloud Logging, not every provider or support record.",
+          "Our retention policy for ordinary support correspondence is deletion from the mailboxes and working copies we control within 90 days after the enquiry is resolved. If a correspondence record is necessary for a security investigation, it is handled under the security-record policy below.",
+          "Our retention policy for identifiable security-incident records that we separately preserve is deletion or anonymisation within 12 months after the incident is closed. We retain a restricted, relevant subset for longer only where necessary to comply with a legal obligation or establish, exercise or defend a specific legal claim; we review that need and delete it when the reason ends. These are operator retention rules, not statements that email deletion is automated.",
+          "GitHub controls retention of its own service records. Its published privacy statement uses purpose-based criteria, including contractual needs, legal obligations and dispute resolution, rather than a single visitor-log deletion deadline. See https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement. We do not assign an unverified number of days to GitHub’s records.",
+          "Deleting a message or working copy does not necessarily immediately remove provider recovery copies, backups or records independently retained by the provider. Microsoft describes its retention criteria, including service needs and legal obligations, at https://www.microsoft.com/en-us/privacy/privacystatement. Provider-managed records follow the applicable provider terms and settings; our 90-day support rule is not a promise that all provider copies are erased on that date."
+        ]
+      },
+      {
+        "h": "9. Your rights",
+        "p": [
+          "Subject to applicable conditions, you may request access, correction, erasure, restriction, and portability of your personal data, and object to processing based on legitimate interests. If processing relies on consent, you can withdraw it without affecting the lawfulness of earlier processing.",
+          "Email tafcast@outlook.com to exercise rights. We may request proportionate information to identify the relevant records and verify a request, but do not require an account or collect additional identification solely to make otherwise anonymous records identifiable. Requests are normally addressed within one month; lawful extensions and limitations will be explained.",
+          "You may complain to Portugal's Comissão Nacional de Proteção de Dados (CNPD), https://www.cnpd.pt/, or another competent supervisory authority, including where you habitually reside or work. You do not need to contact us first. Other mandatory privacy rights available in your location are preserved."
+        ]
+      },
+      {
+        "h": "10. Children and optional notifications",
+        "p": [
+          "TAFCast is open to a general audience, including learners; no age, account, or pilot licence is requested. Children should involve a parent or guardian where local law requires it and avoid sending personal information unnecessarily. Contact us with concerns about a child's data. The same technical requests described above can occur for younger users.",
+          "Where supported and enabled, weather alerts use device background checks and local notifications. Notification permission can be changed in device settings. These alerts are not guaranteed and are not a safety-monitoring service."
+        ]
+      },
+      {
+        "h": "11. Changes",
+        "p": [
+          "We will explain material changes to this notice in the Service or on the website. A revised notice does not itself authorise new processing requiring consent or another legal basis. Contact tafcast@outlook.com with privacy questions."
+        ]
+      }
+    ]
+  }
+};

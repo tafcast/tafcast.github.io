@@ -483,23 +483,25 @@
         <div style={{ flex: 1, overflowY: 'auto', padding: isAbout ? '16px 22px 20px' : (window.AV_NATIVE ? '20px 22px 20px' : 'calc(env(safe-area-inset-top, 0px) + 20px) 22px 20px') }}>
           <div style={{ font: `800 30px ${t.display}`, color: t.text, letterSpacing: -0.5 }}>TAFCast</div>
           <div style={{ font: `500 15px ${t.body}`, color: t.textDim, margin: '6px 0 26px', lineHeight: 1.45, textWrap: 'pretty' }}>
-            A quick pre-flight picture for your airports — METAR, TAF, wind, runways and NOTAMs in one place.
+            Aviation weather for general awareness and reference — METAR, TAF, wind, runways and NOTAMs in one place.
           </div>
-          {bullet('refresh', 'Live, free data', 'METAR/TAF from NOAA, wind from Open-Meteo, NOTAMs from autorouter. The last-seen data is cached on your device so the app opens instantly, even offline.')}
+          {bullet('refresh', 'Free access to weather data', 'METAR/TAF from NOAA, wind from Open-Meteo, and NOTAMs from FAA / autorouter. Cached data can be stale. Check observation times and validity periods; a refresh does not guarantee a new observation.')}
           {bullet('layers', 'Fields with no station', 'For Portuguese aerodromes with no official weather station, the app shows the nearest IPMA automatic-station observation and a model-generated, clearly-labelled SYNTHETIC AIRFIELD OUTLOOK (SAO) — illustrative only, never for flight decisions.')}
           {bullet('x', 'For situational awareness only', 'Not for navigation or flight planning. Always verify against official sources before flight. This app is not an official MET/AIS service, is not certified by any aviation authority, and must never be the sole basis for any flight decision — the pilot in command is always responsible.')}
           <div style={{ marginTop: 6, padding: '12px 14px', borderRadius: 12, background: t.inset, font: `500 12.5px ${t.body}`, color: t.textDim, lineHeight: 1.5 }}>
-            By tapping “{isAbout ? 'Done' : 'I agree'}”, you accept the <button onClick={onShowLegal} style={{ all: 'unset', cursor: 'pointer', color: t.accent, fontWeight: 700 }}>Terms of Use &amp; Privacy Policy</button>. Data is provided “as is”, with no warranty; the app is supplied without liability for any flight or operational decision.
+            {isAbout ? 'Read the ' : 'By tapping “I agree”, you accept the Terms and Safety Disclaimer and acknowledge the Privacy Notice. Read the '}
+            <button onClick={onShowLegal} style={{ all: 'unset', cursor: 'pointer', color: t.accent, fontWeight: 700 }}>Terms, Safety Disclaimer &amp; Privacy Notice</button>.
+            {' '}Mandatory legal rights remain unaffected. Alerts can fail and NOTAM lists can be incomplete. If you do not agree, close the app or browser tab without accepting.
           </div>
         </div>
         <div style={{ padding: '12px 22px 28px', borderTop: `1px solid ${t.hair}` }}>
-          <button onClick={onClose || onDone} style={{ all: 'unset', cursor: 'pointer', display: 'block', textAlign: 'center', width: '100%',
+          <button onClick={isAbout ? onClose : onDone} style={{ all: 'unset', cursor: 'pointer', display: 'block', textAlign: 'center', width: '100%',
             boxSizing: 'border-box', padding: '15px', borderRadius: 14, background: t.accent, color: '#fff', font: `700 16px ${t.body}` }}>
             {isAbout ? 'Done' : 'I agree'}
           </button>
           <button onClick={onShowLegal} style={{ all: 'unset', cursor: 'pointer', display: 'block', textAlign: 'center', width: '100%',
             marginTop: 10, font: `600 13px ${t.body}`, color: t.textDim }}>
-            Read Terms &amp; Privacy
+            Read Terms, Disclaimer &amp; Privacy
           </button>
         </div>
       </div>
@@ -543,8 +545,9 @@
             <React.Fragment>
               <div style={{ font: `800 24px ${t.display}`, color: t.text, letterSpacing: -0.4, margin: '20px 2px 2px' }}>{doc.title}</div>
               <div style={{ font: `500 12px ${t.mono}`, color: t.textFaint, margin: '0 2px 8px' }}>
-                {data.appName} · v{data.version} · effective {data.effective}
+                {data.appName} · v{data.version} · {data.publicationStatus === 'draft' ? 'proposed effective date' : 'effective'} {data.effective}
               </div>
+              {data.publicationStatus === 'draft' && <p role="note" style={{ color: t.text, padding: 12, border: `1px solid ${t.hair}`, borderRadius: 10 }}>DRAFT — not ready for publication. Some provider and retention details remain to be verified.</p>}
               {doc.sections.map((s, i) => (
                 <div key={i} style={{ marginTop: 16 }}>
                   <div style={{ font: `700 15px ${t.body}`, color: t.text, marginBottom: 4 }}>{s.h}</div>
@@ -555,7 +558,14 @@
               ))}
               <div style={{ marginTop: 24, padding: '12px 14px', borderRadius: 12, background: t.inset,
                 font: `500 12px ${t.body}`, color: t.textDim, lineHeight: 1.5 }}>
-                Also published online at <span style={{ font: `600 12px ${t.mono}`, color: t.textDim, wordBreak: 'break-all' }}>{hosted}</span>.
+                {window.AV_NATIVE ? 'These documents are bundled with the app and can be read offline.' : (
+                  <React.Fragment>
+                    Open a standalone copy:{' '}
+                    <a href="./terms.html" target="_blank" rel="noopener noreferrer" style={{ color: t.accent }}>Terms</a>{' · '}
+                    <a href="./privacy.html" target="_blank" rel="noopener noreferrer" style={{ color: t.accent }}>Privacy</a>{' · '}
+                    <a href="./disclaimer.html" target="_blank" rel="noopener noreferrer" style={{ color: t.accent }}>Safety disclaimer</a>
+                  </React.Fragment>
+                )}
               </div>
             </React.Fragment>
           )}

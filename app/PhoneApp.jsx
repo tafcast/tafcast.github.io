@@ -84,10 +84,14 @@
     const [showIntro, setShowIntro] = useState(() => {
       try { return localStorage.getItem('av_legal_accepted') !== LEGAL_VERSION; } catch (e) { return true; }
     });
-    const dismissIntro = () => {
-      try { localStorage.setItem('av_legal_accepted', LEGAL_VERSION); } catch (e) {}
+    const acceptIntro = () => {
+      try {
+        localStorage.setItem('av_legal_accepted_at', new Date().toISOString());
+        localStorage.setItem('av_legal_accepted', LEGAL_VERSION);
+      } catch (e) {}
       setShowIntro(false);
     };
+    const closeAbout = () => { if (sheet) setShowIntro(false); };
     const closeScreen = () => {
       setScreen(null);
     };
@@ -99,8 +103,9 @@
           return true;
         }
         if (showIntro) {
-          dismissIntro();
-          return true;
+          // Back can close About, but must never record first-run acceptance.
+          if (sheet) { closeAbout(); return true; }
+          return false; // Native wrapper backgrounds the app; onboarding stays pending.
         }
         if (screen) {
           closeScreen();
@@ -526,8 +531,8 @@
           {/* First-run onboarding + disclaimer (tops settings) */}
           {showIntro && (
             <div style={{ position: 'absolute', inset: 0, zIndex: 95, willChange: 'transform, opacity', animation: 'screenIn .20s cubic-bezier(.16,1,.3,1)' }}>
-              <window.Screens.Onboarding t={t} onDone={dismissIntro}
-                onClose={dismissIntro}
+              <window.Screens.Onboarding t={t} onDone={acceptIntro}
+                onClose={closeAbout}
                 isAbout={sheet}
                 onShowLegal={() => setLegalOpen(true)} />
             </div>
