@@ -625,7 +625,7 @@
     const isOfficial = window.AV?.isOfficialStation ? window.AV.isOfficialStation(ap.icao) : false;
     const hasOfficialMetar = !!(ap.metar && (ap.metarSource === 'OFFICIAL' || isOfficial));
     const hasIpma = !isOfficial && !!emaData;
-    const hasTaf = !!ap.taf;
+    const hasTaf = !!ap.taf || ap.tafStatus === 'unavailable';
     const hasSynth = !isOfficial && !!(ap.syntheticTaf && (ap.syntheticTaf.raw || ap.syntheticTaf.taf));
     const hasNearest = !!(ap.nearestStation && (ap.nearestStation.metar || ap.nearestStation.taf));
 
@@ -670,8 +670,12 @@
 
         case 'taf': return (
           <Card t={t}>
-            <SectionTitle t={t} badge="T" title="TAF" meta={ap.taf ? `ISS ${ap.taf.issued}` : ''} />
-            {raw ? (
+            <SectionTitle t={t} badge="T" title="TAF" meta={ap.taf ? `ISS ${ap.taf.issued}` : 'Temporarily unavailable'} />
+            {!ap.taf ? (
+              <div style={{ font: `500 14px ${t.body}`, color: t.textDim, lineHeight: 1.5 }}>
+                Could not retrieve the TAF. Retrying automatically. Check an official briefing source before flight.
+              </div>
+            ) : raw ? (
               <div style={{ font: `500 13.5px ${t.mono}`, color: t.text, lineHeight: 1.6, whiteSpace: 'pre-wrap',
                 background: t.inset, borderRadius: 12, padding: 14 }}>{ap.taf.raw}</div>
             ) : (

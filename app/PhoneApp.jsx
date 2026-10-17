@@ -180,6 +180,13 @@
     // Publish saved airports + backend URL + widget settings to the native widget.
     useEffect(() => { if (window.AV_syncWidget) window.AV_syncWidget(); }, [saved]);
     
+    const [tafRetry, setTafRetry] = useState(0);
+    useEffect(() => {
+      if (!saved.some(icao => apiData[icao]?.tafStatus === 'unavailable')) return;
+      const timer = setTimeout(() => setTafRetry(n => n + 1), 65000);
+      return () => clearTimeout(timer);
+    }, [apiData, saved, tafRetry]);
+
     // Refresh live data for saved airports on open / when the list changes.
     // Cached (already-good) data stays on screen until fresh data arrives, and a
     // failed fetch never clobbers good cached data — so the app works offline.
@@ -246,7 +253,7 @@
                ? prev : ({ ...prev, [icao]: { icao, error: true, networkError: true, name: icao } }));
           });
       });
-    }, [saved, nearest, apiOverride]);
+    }, [saved, nearest, apiOverride, tafRetry]);
 
     // ---- carousel ----
     const wrapRef = useRef(null);
