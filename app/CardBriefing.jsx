@@ -2,6 +2,17 @@
 (function () {
   const { useState, useEffect } = React;
   const AV = window.AV;
+  AV.activeSaoHours = function (s, now = Date.now()) {
+    const utc = v => typeof v === 'string' && /(?:Z|[+-]\d{2}:\d{2})$/.test(v) ? Date.parse(v) : NaN;
+    const end = utc(s?.validity_end);
+    if (!Number.isFinite(end) || now >= end) return [];
+    return (Array.isArray(s.hours) ? s.hours : []).filter(h => {
+      if (!h) return false;
+      const start = utc(h.valid_at), until = utc(h.valid_until);
+      return Number.isFinite(start) && Number.isFinite(until) && until > start &&
+        until - start <= 3600000 && until <= end && until > now;
+    });
+  };
 
   /* ---- Reorderable "islands" (the aerodrome cards) ----
      A single global order, persisted in localStorage, applied to every airport.
@@ -133,14 +144,15 @@
   }
 
   function NotamCard({ ap, t }) {
-    const notams = ap.notams || [];
+    const notams = Array.isArray(ap.notams) ? ap.notams.filter(n => n && typeof n === 'object') : [];
     const [expanded, setExpanded] = useState(false);
     if (!notams.length) {
+      const empty = Array.isArray(ap.notams) && ap.notams.length === 0 && ap.notamsStatus !== 'unavailable';
       return (
         <Card t={t}>
-          <SectionTitle t={t} badge="!" title="NOTAMs" meta="0 active" />
+          <SectionTitle t={t} badge="!" title="NOTAMs" meta={empty ? '0 active' : 'Unavailable'} />
           <div style={{ font: `500 14px ${t.body}`, color: t.textDim, lineHeight: 1.5 }}>
-            No active NOTAMs reported for this aerodrome.
+            {empty ? 'No active NOTAMs reported for this aerodrome.' : 'NOTAM data is currently unavailable. Check an official briefing source for active NOTAMs.'}
           </div>
         </Card>
       );
@@ -525,14 +537,29 @@
 
   // Advisory model-generated Synthetic Airfield Outlook for aerodromes with no official station.
   function SyntheticTafCard({ ap, t }) {
+    const [now, setNow] = useState(Date.now);
+    const [showNote, setShowNote] = useState(false);
+    const forecast = ap?.syntheticTaf;
+    useEffect(() => {
+      const refresh = () => setNow(Date.now());
+      const boundaries = [forecast?.validity_end, ...(forecast?.hours || []).map(h => h?.valid_until)]
+        .map(Date.parse).filter(v => Number.isFinite(v) && v > Date.now());
+      const timer = boundaries.length ? setTimeout(refresh, Math.min(2147483647, Math.max(1, Math.min(...boundaries) - Date.now()))) : null;
+      window.addEventListener('focus', refresh);
+      document.addEventListener('visibilitychange', refresh);
+      return () => { if (timer !== null) clearTimeout(timer); window.removeEventListener('focus', refresh); document.removeEventListener('visibilitychange', refresh); };
+    }, [forecast, now]);
     if (!ap || !ap.icao) return null;
     const isOfficial = window.AV?.isOfficialStation ? window.AV.isOfficialStation(ap.icao) : false;
     if (isOfficial) return null;
     const s = ap.syntheticTaf;
-    const [showNote, setShowNote] = useState(false);
     if (!s) return null;
-    const rawSao = (s.raw || s.taf || '').replace(/\bTAF\b/gi, 'SAO').trim();
-    if (!rawSao) return null;
+    const incomplete = s.status === 'incomplete' || s.status === 'expired';
+    const renderNow = Math.max(now, Date.now());
+    const currentHours = AV.activeSaoHours(s, renderNow);
+    const expired = incomplete && !(Date.parse(s.validity_end) > renderNow);
+    const rawSao = incomplete ? '' : (s.raw || s.taf || '').replace(/\bTAF\b/gi, 'SAO').trim();
+    if (!rawSao && !incomplete) return null;
     const o = s.obs || {};
     const amber = '#e5901a';
     return (
@@ -541,8 +568,36 @@
         <div style={{ font: `500 12.5px ${t.body}`, color: t.textDim, marginBottom: 10, lineHeight: 1.4 }}>
           Model forecast for {ap.icao}{o.station_name ? ` · neighbour obs: ${o.station_name}` : (s.station ? ` · neighbour obs: ${s.station}` : '')}.
         </div>
-        <div style={{ font: `500 13.5px ${t.mono}`, color: t.text, lineHeight: 1.6, whiteSpace: 'pre-wrap',
-          background: t.inset, borderRadius: 12, padding: 14 }}>{rawSao}</div>
+        {incomplete ? <div style={{ background: t.inset, borderRadius: 12, padding: 14, color: t.text }}>
+          {expired ? <p>Outlook expired or validity unavailable. Refresh for a current outlook.</p> : <>
+            <div style={{ font: `500 13.5px ${t.mono}`, lineHeight: 1.6, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
+              {(() => {
+                const n = v => typeof v === 'number' && Number.isFinite(v);
+                const pad = (v, size = 2) => String(v).padStart(size, '0');
+                const stamp = v => { const d = new Date(v); return pad(d.getUTCDate()) + pad(d.getUTCHours()) + pad(d.getUTCMinutes()); };
+                const lines = currentHours.map(h => {
+                  const groups = [];
+                  if (n(h.wind_speed) && h.wind_speed >= 0) {
+                    const speed = Math.round(h.wind_speed);
+                    if (speed === 0) groups.push('00000KT');
+                    else if (n(h.wind_dir) && h.wind_dir >= 0 && h.wind_dir <= 360) {
+                      const direction = Math.round(h.wind_dir) || 360;
+                      const gust = n(h.wind_gust) && h.wind_gust > h.wind_speed ? `G${pad(Math.round(h.wind_gust))}` : '';
+                      groups.push(`${pad(direction, 3)}${pad(speed)}${gust}KT`);
+                    }
+                  }
+                  if (n(h.vis_m) && h.vis_m >= 0) groups.push(pad(Math.min(9999, Math.round(h.vis_m)), 4));
+                  if (n(h.temp_c)) groups.push(`TEMP ${Math.round(h.temp_c)}°C`);
+                  return groups.length ? `${stamp(h.valid_at)}/${stamp(h.valid_until)} ${groups.join(' ')}` : null;
+                }).filter(Boolean);
+                return lines.length ? `SAO ${ap.icao}\n${lines.join('\n')}` : 'No current outlook available.';
+              })()}
+            </div>
+            <div style={{ font: `500 11px ${t.body}`, color: t.textDim, marginTop: 8 }}>UTC · Available parameters only</div>
+          </>}
+
+        </div> : <div style={{ font: `500 13.5px ${t.mono}`, color: t.text, lineHeight: 1.6, whiteSpace: 'pre-wrap',
+          background: t.inset, borderRadius: 12, padding: 14 }}>{rawSao}</div>}
         <div onClick={() => setShowNote(v => !v)} role="button"
           style={{ display: 'flex', gap: 8, marginTop: 12, padding: '10px 12px', borderRadius: 12, cursor: 'pointer',
           background: t.dark ? 'rgba(245,166,35,0.16)' : 'rgba(245,166,35,0.12)', border: '1px solid rgba(245,166,35,0.28)' }}>
@@ -599,6 +654,7 @@
                 : `No weather data could be found for ${ap.icao}.`}
             </div>
           </div>
+          <div data-island="notams"><NotamCard ap={ap} t={t} /></div>
         </div>
       );
     }
@@ -626,7 +682,7 @@
     const hasOfficialMetar = !!(ap.metar && (ap.metarSource === 'OFFICIAL' || isOfficial));
     const hasIpma = !isOfficial && !!emaData;
     const hasTaf = !!ap.taf || ap.tafStatus === 'unavailable';
-    const hasSynth = !isOfficial && !!(ap.syntheticTaf && (ap.syntheticTaf.raw || ap.syntheticTaf.taf));
+    const hasSynth = !isOfficial && !!(ap.syntheticTaf && (['incomplete', 'expired'].includes(ap.syntheticTaf.status) || ap.syntheticTaf.raw || ap.syntheticTaf.taf));
     const hasNearest = !!(ap.nearestStation && (ap.nearestStation.metar || ap.nearestStation.taf));
 
     // Which islands actually have something to show for this airport.

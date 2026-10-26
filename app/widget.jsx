@@ -135,7 +135,8 @@
     })();
 
     const hasTaf = ap.taf && ap.taf.raw;
-    const hasSynth = !isOfficial && ap.syntheticTaf && ap.syntheticTaf.raw;
+    const incompleteSynth = !isOfficial && ['incomplete', 'expired'].includes(ap.syntheticTaf?.status);
+    const hasSynth = !isOfficial && !incompleteSynth && ap.syntheticTaf && ap.syntheticTaf.raw;
     const hasNear = ap.nearestStation && ap.nearestStation.taf && ap.nearestStation.taf.raw;
 
     const rawTaf = hasTaf ? ap.taf.raw
@@ -145,7 +146,7 @@
 
     let tafBody;
     if (!rawTaf) {
-      tafBody = 'No forecast available.';
+      tafBody = incompleteSynth ? 'Airfield outlook incomplete: cloud and weather uncertain. Open the briefing for available hourly predictions.' : 'No forecast available.';
     } else if (mode === 'raw') {
       tafBody = rawTaf;
     } else {

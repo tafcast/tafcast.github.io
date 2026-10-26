@@ -202,32 +202,26 @@
                 if (data.metarSource === 'IPMA') data.metarSource = 'OFFICIAL';
               }
               if (window.AV.rememberAirports) window.AV.rememberAirports([{ icao, name: data.name, city: data.city, category: data.category, country: data.country }]);
-              setApiData(prev => {
-                if (!data.notams || !data.notams.length) {
-                  const existing = (prev[icao] && prev[icao].notams && prev[icao].notams.length)
-                    ? prev[icao].notams
-                    : (AV.airports[icao] && AV.airports[icao].notams);
-                  if (existing && existing.length) data.notams = existing;
-                }
-                return { ...prev, [icao]: data };
-              });
+              // Never replace an empty live result with bundled examples or old notices.
+              // Keep the response intact so the native fallback can still run.
+              setApiData(prev => ({ ...prev, [icao]: data }));
 
               // If no NOTAMs from backend and running in native Android app, query FAA directly via bridge
-              if ((!data.notams || !data.notams.length) && window.AndroidWidget && typeof window.AndroidWidget.fetchNotams === 'function') {
+              if (data.notamsStatus !== 'available' && (!data.notams || !data.notams.length) && window.AndroidWidget && typeof window.AndroidWidget.fetchNotams === 'function') {
                 setTimeout(() => {
                   try {
                     const rawJson = window.AndroidWidget.fetchNotams(icao);
                     if (rawJson) {
                       const parsed = typeof rawJson === 'string' ? JSON.parse(rawJson) : rawJson;
-                      const list = Array.isArray(parsed?.notamList) ? parsed.notamList : [];
-                      if (list.length > 0 && window.AV?.mapFnsNotam) {
+                      const list = parsed?.notamList;
+                      if (Array.isArray(list) && window.AV?.mapFnsNotam) {
                         const mapped = list.map(window.AV.mapFnsNotam);
                         setApiData(curr => {
                           const ap = curr[icao] || data;
-                          return { ...curr, [icao]: { ...ap, notams: mapped } };
+                          return { ...curr, [icao]: { ...ap, notams: mapped, notamsStatus: 'available' } };
                         });
                         // Sync to backend to keep server cache warm
-                        fetch(`${AV.apiBase()}/api/notams/${icao}`, {
+                        if (mapped.length) fetch(`${AV.apiBase()}/api/notams/${icao}`, {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify(mapped),
