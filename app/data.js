@@ -254,7 +254,7 @@
   // baked in at build time, then the production Cloud Run host.
   function apiBase() {
     try { const o = (localStorage.getItem('av_api_base') || '').trim(); if (o) return normalizeBase(o); } catch (e) {}
-    return normalizeBase(window.AV_API_BASE || 'https://proposed-assured-receivers-apparatus.trycloudflare.com');
+    return normalizeBase(window.AV_API_BASE || 'https://api.tafcast.com');
   }
 
   function rememberAirports(list) {
